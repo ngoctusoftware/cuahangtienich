@@ -1,58 +1,126 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# He thong Quan ly Ban hang (Laravel 11 + PHP 8.3)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Project nay chua toan bo **code ung dung** (models, controllers, migrations,
+routes, views) cho he thong quan ly ban hang gom 5 module:
 
-## About Laravel
+1. Quan ly nguoi dung (`app/Http/Controllers/Admin/UserController.php`)
+2. Quan ly phan quyen - Role/Permission (`RoleController.php`)
+3. Quan ly san pham + danh muc (`ProductController.php`, `CategoryController.php`)
+4. Quan ly don hang (`OrderController.php`)
+5. Quan ly thanh toan (`PaymentController.php` + `app/Services/Payment/*`)
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Va 2 giao dien:
+- **Website ban hang** (`/`, `/san-pham`, `/gio-hang`, `/thanh-toan`...): khach
+  xem san pham, them gio hang, dat hang, thanh toan online (VNPay/demo) hoac COD.
+- **Trang Admin** (`/admin`): quan tri toan bo du lieu, phan quyen theo vai tro.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+> Luu y: day la phan **source code ung dung** (khong bao gom bo khung Laravel
+> va thu vien vendor, vi moi truong tao file nay khong the tai Composer
+> package tu Packagist). Ban can tao 1 project Laravel trong moi va copy
+> code nay vao theo huong dan ben duoi.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
-
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+## Cai dat (tren may co PHP 8.3 + Composer + MySQL)
 
 ```bash
-composer require laravel/boost --dev
+# 1. Tao moi project Laravel 11
+composer create-project laravel/laravel sales-management "11.*"
+cd sales-management
 
-php artisan boost:install
+# 2. Giai nen/copy toan bo thu muc trong file zip nay de vao project,
+#    de ghi de len cac file/thu muc tuong ung:
+#    - app/            -> app/
+#    - bootstrap/app.php -> bootstrap/app.php (ghi de)
+#    - config/services.php -> config/services.php (ghi de hoac merge)
+#    - database/migrations -> database/migrations (xoa migration mac dinh trung ten neu co)
+#    - database/seeders    -> database/seeders
+#    - resources/views     -> resources/views (ghi de welcome.blade.php neu can)
+#    - routes/web.php      -> routes/web.php (ghi de)
+#    - routes/console.php  -> routes/console.php (ghi de)
+#    - .env.example        -> tham khao de dien vao .env
+
+# 3. Cai dat bien moi truong
+cp .env.example .env    # hoac dien thu cong vao .env da co san
+php artisan key:generate
+
+# 4. Cau hinh CSDL trong .env (DB_DATABASE, DB_USERNAME, DB_PASSWORD...)
+
+# 5. Chay migration + seed du lieu mau (role, permission, tai khoan admin, san pham mau)
+php artisan migrate --seed
+
+# 6. Tao symlink cho storage (de hien anh san pham upload len)
+php artisan storage:link
+
+# 7. Chay thu
+php artisan serve
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Truy cap:
+- Website ban hang: http://localhost:8000
+- Trang quan tri: http://localhost:8000/admin
 
-## Contributing
+## Tai khoan quan tri mac dinh (sau khi seed)
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```
+Email:    admin@shop.test
+Mat khau: password
+```
 
-## Code of Conduct
+**Hay doi mat khau nay ngay sau khi trien khai that.**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+## Phan quyen (Role & Permission)
 
-## Security Vulnerabilities
+- 3 vai tro mac dinh: `admin` (toan quyen), `staff` (quan ly san pham/don
+  hang/thanh toan), `customer` (khach mua hang).
+- 5 permission: `users.manage`, `roles.manage`, `products.manage`,
+  `orders.manage`, `payments.manage`.
+- Vao **Admin > Phan quyen** de tao them vai tro va tuy chinh quyen han.
+- Middleware `permission:<slug>` da duoc gan san trong `routes/web.php`.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+## Thanh toan tu dong
 
-## License
+- **COD**: mac dinh, khong can cong thanh toan.
+- **VNPay**: da viet san `app/Services/Payment/VnpayService.php` theo chuan
+  API VNPay (sandbox). Chi can dang ky tai khoan merchant sandbox tai
+  https://sandbox.vnpayment.vn va dien `VNPAY_TMN_CODE`, `VNPAY_HASH_SECRET`
+  vao `.env` la chay duoc that.
+- **Cong Demo**: khi chua co tai khoan VNPay that, he thong tu dong dung
+  `DemoGatewayService` (trang `/payment/demo/{code}`) de ban co the test toan
+  bo luong dat hang -> thanh toan -> cap nhat trang thai don hang tu dong ma
+  khong can tich hop gi them. Muon tich hop Momo/bank that, tao them 1 class
+  implement `PaymentGatewayInterface` tuong tu `VnpayService`.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Cau truc thu muc chinh
+
+```
+app/
+  Models/                Role, Permission, User, Category, Product, ProductImage,
+                          Order, OrderItem, Payment
+  Http/Controllers/
+    Admin/                Quan tri: Dashboard, User, Role, Category, Product, Order, Payment
+    Shop/                 Website: Home, Product, Cart, Checkout, Order, Payment
+    Auth/                 Dang ky/dang nhap khach hang
+  Http/Middleware/
+    EnsureUserIsAdmin.php  Chan khu vuc /admin
+    CheckPermission.php    Kiem tra permission theo route
+  Services/Payment/
+    PaymentGatewayInterface.php
+    VnpayService.php
+    DemoGatewayService.php
+database/
+  migrations/             6 file migrate du lieu
+  seeders/                Seed role/permission, tai khoan admin, du lieu mau
+resources/views/
+  admin/                  Giao dien quan tri (Bootstrap 5)
+  shop/                   Giao dien website ban hang (Bootstrap 5)
+  auth/                   Dang nhap/dang ky
+routes/web.php            Toan bo route website + admin
+```
+
+## Ghi chu / Buoc mo rong tiep theo
+
+- Co the them: danh gia san pham, ma giam gia/voucher, quan ly kho theo bien
+  the (size/mau), bao cao thong ke doanh thu chi tiet hon, gui email xac nhan
+  don hang (Laravel Notification), REST API cho mobile app.
+- Nen chay `php artisan pint` de chuan hoa code style va viet Feature Test
+  (`php artisan make:test`) cho cac luong quan trong: dat hang, thanh toan,
+  phan quyen truy cap admin.
