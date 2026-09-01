@@ -1,36 +1,30 @@
 @extends('shop.layouts.app')
 @section('title', 'San pham')
 @section('content')
-<div class="row">
-    <div class="col-md-3">
-        <div class="card shadow-sm p-3">
-            <h6>Danh muc</h6>
-            <ul class="list-unstyled">
-                <li class="mb-1"><a href="{{ route('products.index') }}" class="{{ !request('category') ? 'fw-bold' : '' }}">Tat ca</a></li>
-                @foreach ($categories as $cat)
-                    <li class="mb-1"><a href="{{ route('products.index', ['category'=>$cat->slug]) }}" class="{{ request('category')===$cat->slug ? 'fw-bold' : '' }}">{{ $cat->name }}</a></li>
-                @endforeach
-            </ul>
+<section class="shop-section">
+    <div class="container">
+        <div class="section-heading">
+            <h2>{{ request('q') ? 'Ket qua tim kiem: '.request('q') : 'Tat ca san pham' }}</h2>
+            <div class="rule"></div>
         </div>
-    </div>
-    <div class="col-md-9">
-        <div class="row g-3">
+
+        <div class="d-flex flex-wrap gap-2 justify-content-center mb-4">
+            <a href="{{ route('products.index') }}" class="cat-pill {{ !request('category') ? 'active' : '' }}">Tat ca</a>
+            @foreach ($categories as $cat)
+                <a href="{{ route('products.index', ['category'=>$cat->slug]) }}" class="cat-pill {{ request('category')===$cat->slug ? 'active' : '' }}">{{ $cat->name }}</a>
+            @endforeach
+        </div>
+
+        <div class="row g-4">
             @forelse ($products as $product)
-                <div class="col-6 col-lg-4">
-                    <div class="card product-card h-100 shadow-sm">
-                        <img src="{{ $product->thumbnail ? asset('storage/'.$product->thumbnail) : 'https://placehold.co/400x300?text=San+pham' }}" class="card-img-top">
-                        <div class="card-body">
-                            <h6 class="card-title">{{ $product->name }}</h6>
-                            <p class="text-danger fw-bold mb-2">{{ number_format($product->final_price) }}₫</p>
-                            <a href="{{ route('products.show', $product->slug) }}" class="btn btn-sm btn-outline-primary w-100">Xem chi tiet</a>
-                        </div>
-                    </div>
+                <div class="col-6 col-md-4 col-lg-3">
+                    @include('shop.products._card', ['product' => $product])
                 </div>
             @empty
-                <p class="text-muted">Khong tim thay san pham nao.</p>
+                <p class="text-center text-muted">Khong tim thay san pham nao.</p>
             @endforelse
         </div>
-        <div class="mt-4">{{ $products->links() }}</div>
+        <div class="mt-4 d-flex justify-content-center">{{ $products->links() }}</div>
     </div>
-</div>
+</section>
 @endsection

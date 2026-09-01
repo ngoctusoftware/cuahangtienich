@@ -1,3 +1,5 @@
+git push -u origin main
+
 # He thong Quan ly Ban hang (Laravel 11 + PHP 8.3)
 
 Project nay chua toan bo **code ung dung** (models, controllers, migrations,

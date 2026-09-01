@@ -2,58 +2,69 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <title>@yield('title', 'Trang chu')  | Shop Online</title>
+    <title>@yield('title', 'Trang chu')  | ShopOnline</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
-    <style>
-        .navbar-brand { font-weight:700; }
-        .product-card img { height:200px; object-fit:cover; }
-        footer { background:#1e2a3a; color:#c9d3de; }
-    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('/assets/css/site.css') }}">
+    @stack('styles')
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-    <div class="container">
-        <a class="navbar-brand" href="{{ route('shop.home') }}"><i class="bi bi-shop"></i> ShopOnline</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav1"><span class="navbar-toggler-icon"></span></button>
-        <div class="collapse navbar-collapse" id="nav1">
-            <ul class="navbar-nav me-auto">
-                <li class="nav-item"><a class="nav-link" href="{{ route('products.index') }}">San pham</a></li>
-            </ul>
-            <form class="d-flex me-2" method="GET" action="{{ route('products.index') }}">
-                <input class="form-control" type="search" name="q" placeholder="Tim san pham..." value="{{ request('q') }}">
-            </form>
-            <ul class="navbar-nav align-items-lg-center gap-2">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('cart.index') }}"><i class="bi bi-cart3"></i> Gio hang
-                        @if (session('cart') && count(session('cart')))
-                            <span class="badge bg-danger">{{ count(session('cart')) }}</span>
-                        @endif
-                    </a>
-                </li>
-                @auth
-                    @if (auth()->user()->isAdmin())
-                        <li class="nav-item"><a class="nav-link" href="{{ route('admin.dashboard') }}"><i class="bi bi-speedometer2"></i> Quan tri</a></li>
-                    @endif
-                    <li class="nav-item"><a class="nav-link" href="{{ route('orders.index') }}"><i class="bi bi-receipt"></i> Don hang cua toi</a></li>
-                    <li class="nav-item">
-                        <form action="{{ route('logout') }}" method="POST">
-                            @csrf
-                            <button class="btn btn-outline-secondary btn-sm">Dang xuat ({{ auth()->user()->name }})</button>
-                        </form>
-                    </li>
-                @else
-                    <li class="nav-item"><a class="btn btn-outline-primary btn-sm" href="{{ route('login') }}">Dang nhap</a></li>
-                    <li class="nav-item"><a class="btn btn-primary btn-sm" href="{{ route('register') }}">Dang ky</a></li>
-                @endauth
-            </ul>
-        </div>
-    </div>
-</nav>
 
-<div class="container mt-4">
+<div class="topbar">
+    <div class="container d-flex justify-content-between align-items-center text-danger py-2 d-flex justify-content-center">
+        <marquee behavior="" direction="">
+            <h5>
+                <strong>
+                    <i class="bi bi-fire"></i> 
+                    Chào mừng bạn đến với thế giới tiện ích
+                </strong>
+            </h5>
+        </marquee>
+        
+    </div>
+</div>
+
+<header class="site-header">
+    <div class="container d-flex flex-wrap align-items-center gap-3">
+        <a href="{{ route('shop.home') }}" class="brand-logo me-3">
+            <img src="{{ !empty($data) && !empty($data['logo']) ? asset($data['logo']) : '/assets/images/logo.png' }}" alt="" with="100px" height="100px">
+        </a>
+
+        <form class="search-form d-flex flex-grow-1 mx-auto" style="max-width:420px;" method="GET" action="{{ route('products.index') }}">
+            <input type="search" name="q" class="form-control" placeholder="Tim kiem..." value="{{ request('q') }}">
+            <button class="btn"><i class="bi bi-search"></i></button>
+        </form>
+
+        <nav class="site-nav d-flex align-items-center gap-3 ms-auto">
+            <a href="{{ route('shop.home') }}" class="nav-pill-home">Trang chu</a>
+            <a href="{{ route('products.index') }}">San pham</a>
+            @auth
+                <a href="{{ route('orders.index') }}">Don hang cua toi</a>
+            @else
+                <a href="{{ route('login') }}">Dang nhap</a>
+                <a href="{{ route('register') }}">Dang ky</a>
+            @endauth
+            <a href="{{ route('cart.index') }}" class="position-relative">
+                <i class="bi bi-cart3 fs-5"></i>
+                @if (session('cart') && count(session('cart')))
+                    <span class="badge rounded-pill bg-danger position-absolute top-0 start-100 translate-middle" style="font-size:.6rem;">{{ count(session('cart')) }}</span>
+                @endif
+            </a>
+            @auth
+                <form action="{{ route('logout') }}" method="POST" class="m-0">
+                    @csrf
+                    <button class="btn btn-sm btn-outline-secondary">Dang xuat</button>
+                </form>
+            @endauth
+        </nav>
+    </div>
+</header>
+
+{{-- <div class="container mt-4">
     @if (session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
@@ -67,14 +78,53 @@
             </ul>
         </div>
     @endif
+</div> --}}
 
-    @yield('content')
+@yield('content')
+
+<footer class="site-footer pt-5 pb-4">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-md-3">
+                <h6>Ve chung toi</h6>
+                <p class="small mb-1">ShopOnline la he thong ban hang online voi da dang san pham, gia tot, giao hang nhanh, thanh toan tien loi.</p>
+                <a href="{{ route('products.index') }}" class="small">Xem them <i class="bi bi-arrow-right"></i></a>
+            </div>
+            <div class="col-md-3">
+                <h6>Lien he</h6>
+                <p class="small mb-1"><i class="bi bi-geo-alt"></i> Ha Noi, Viet Nam</p>
+                <p class="small mb-1"><i class="bi bi-telephone"></i> 0900 000 000</p>
+                <p class="small mb-0"><i class="bi bi-envelope"></i> support@shoponline.test</p>
+            </div>
+            <div class="col-md-3">
+                <h6>Danh muc san pham</h6>
+                <ul class="list-unstyled small">
+                    <li><a href="{{ route('products.index') }}">Tat ca san pham</a></li>
+                    <li><a href="{{ route('cart.index') }}">Gio hang</a></li>
+                    <li><a href="{{ route('login') }}">Dang nhap / Dang ky</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h6>Ho tro thanh toan</h6>
+                <ul class="list-unstyled small">
+                    <li>Thanh toan khi nhan hang (COD)</li>
+                    <li>Thanh toan online qua VNPay</li>
+                    <li>Chuyen khoan ngan hang</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>
+<div class="footer-bottom text-center py-2">
+    &copy; {{ date('Y') }} ShopOnline - He thong quan ly ban hang Laravel
 </div>
 
-<footer class="mt-5 py-4">
-    <div class="container text-center small">&copy; {{ date('Y') }} ShopOnline - He thong quan ly ban hang Laravel</div>
-</footer>
+<div class="fab-stack">
+    <a href="https://www.facebook.com/ntsoftware" class="fab-btn chat"><i class="bi bi-facebook"></i> Chat Facebook</a>
+    <a href="tel:0765132999" class="fab-btn phone"><i class="bi bi-telephone-fill"></i>Nhà Bim Mộc</a>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+@stack('scripts')
 </body>
 </html>

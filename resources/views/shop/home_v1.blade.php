@@ -2,53 +2,50 @@
 @section('title', 'Trang chu')
 @section('content')
 
-<section class="hero-promo">
+<section class="hero">
     <div class="container">
-        <div class="row align-items-center g-4">
+        <div class="row align-items-center g-5">
             <div class="col-lg-7">
-                <div class="hero-promo-copy">
-                    <span class="hero-promo-eyebrow"><i class="bi bi-stars"></i> Chào năm học 2026 - 2027</span>
+                <div class="hero-dates">
+                    <i class="bi bi-calendar-event"></i> 19/08 – 05/09/2026
+                </div>
+                <h1 class="display-title">Chào khai giảng,<br>tiếp hành trang</h1>
+                <p class="lede">Ưu đãi đặc biệt mừng năm học 2026-2027 cho các chương trình ôn luyện toàn diện của TAK12 — món quà tiếp thêm tự tin cho các em vào năm học mới.</p>
 
-                    <h1>
-                        Chào khai giảng
-                        <span>Tiếp hành trang</span>
-                    </h1>
+                <div class="hero-promo">
+                    <span class="promo-line1">Áp dụng toàn bộ chương trình</span>
+                    <span class="promo-line2">Mua 1 tặng 1</span>
+                </div>
 
-                    <p class="hero-promo-dates">
-                        <i class="bi bi-calendar-event"></i>
-                        Áp dụng từ 19/08/2026 đến hết 05/09/2026
-                    </p>
+                <div class="hero-offers">
+                    <a href="https://tak12.com/info/vao-6" class="offer-item">
+                        <i class="bi bi-mortarboard"></i>
+                        <span>Ôn thi vào 6 — <strong>tặng TOEFL Primary</strong></span>
+                    </a>
+                    <a href="https://tak12.com/info/hoc-tot" class="offer-item">
+                        <i class="bi bi-book"></i>
+                        <span>Học tốt Tiếng Anh & Toán — <strong>tặng azVocab</strong></span>
+                    </a>
+                </div>
 
-                    <div class="hero-promo-offers">
-                        <div class="hero-promo-offer">
-                            <span class="label">Mua ôn thi vào 6</span>
-                            <span class="value">Tặng TOEFL Primary</span>
-                        </div>
-                        <div class="hero-promo-offer highlight">
-                            <span class="label">Ưu đãi duy nhất</span>
-                            <span class="value">Mua 1 tặng 1</span>
-                        </div>
-                        <div class="hero-promo-offer">
-                            <span class="label">Mua học tốt</span>
-                            <span class="value">Tặng azVocab</span>
-                        </div>
-                    </div>
-
-                    <div class="hero-promo-cta">
-                        <a href="#" class="btn btn-cta">
-                            <i class="bi bi-bag-check"></i> Ôn thi vào 6
-                        </a>
-                        <a href="#" class="btn-outline">
-                            Học tốt Tiếng Anh &amp; Toán
-                        </a>
-                    </div>
+                <div>
+                    <a class="btn btn-cta" target="_blank" href="https://tak12.com/news/n/2470/mua-1-tang-1-chao-khai-giang-tang-toefl-primary-azvocab/?ref=ttc7mm">
+                        <i class="bi bi-bag-check"></i> Xem ưu đãi
+                    </a>
+                    <a href="https://tak12.com/?ref=ttc7mm" target="_blank" class="btn btn-cta bg-success">
+                        <i class="bi bi-list"></i>
+                        Xem tất cả khóa học
+                    </a>
                 </div>
             </div>
 
-            <div class="col-lg-5 d-none d-lg-block">
-                <div class="hero-promo-visual">
-                    <img src="https://placehold.co/420x480/fdf1cf/8a3324?text=Hoc+sinh" alt="Học sinh TAK12 chào khai giảng">
-                    <div class="ribbon">Giảm<br>đến 50%</div>
+            <div class="col-lg-5">
+                <div class="hero-media">
+                    <img src="{{ asset('/assets/images/KM_TAK12.png') }}" class="hero-img img-fluid" alt="Học sinh TAK12 chào năm học mới">
+                    <div class="hero-badge">
+                        <span style="font-size:.65rem;">ƯU ĐÃI ĐẾN</span>
+                        <span style="font-size:1.15rem;">05/09</span>
+                    </div>
                 </div>
             </div>
         </div>

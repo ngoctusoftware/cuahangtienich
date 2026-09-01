@@ -1,10 +1,12 @@
 @extends('shop.layouts.app')
 @section('title', 'Dang ky')
 @section('content')
+<section class="shop-section">
+<div class="container">
 <div class="row justify-content-center">
     <div class="col-md-5">
-        <div class="card shadow-sm p-4">
-            <h4 class="mb-3 text-center">Dang ky tai khoan</h4>
+        <div class="bg-white rounded-4 shadow-sm p-4">
+            <h4 class="mb-3 text-center display-title">Dang ky tai khoan</h4>
             <form method="POST" action="{{ route('register') }}">
                 @csrf
                 <div class="mb-3">
@@ -27,10 +29,12 @@
                     <label class="form-label">Nhap lai mat khau</label>
                     <input type="password" name="password_confirmation" class="form-control" required>
                 </div>
-                <button class="btn btn-primary w-100">Dang ky</button>
+                <button class="btn btn-cta w-100">Dang ky</button>
             </form>
-            <p class="text-center mt-3 mb-0">Da co tai khoan? <a href="{{ route('login') }}">Dang nhap</a></p>
+            <p class="text-center mt-3 mb-0">Da co tai khoan? <a href="{{ route('login') }}" style="color:var(--brand-red)">Dang nhap</a></p>
         </div>
     </div>
 </div>
+</div>
+</section>
 @endsection

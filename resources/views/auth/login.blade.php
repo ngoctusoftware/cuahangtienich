@@ -1,10 +1,12 @@
 @extends('shop.layouts.app')
 @section('title', 'Dang nhap')
 @section('content')
+<section class="shop-section">
+<div class="container">
 <div class="row justify-content-center">
     <div class="col-md-5">
-        <div class="card shadow-sm p-4">
-            <h4 class="mb-3 text-center">Dang nhap</h4>
+        <div class="bg-white rounded-4 shadow-sm p-4">
+            <h4 class="mb-3 text-center display-title">Dang nhap</h4>
             <form method="POST" action="{{ route('login') }}">
                 @csrf
                 <div class="mb-3">
@@ -19,10 +21,12 @@
                     <input type="checkbox" name="remember" class="form-check-input" id="remember">
                     <label class="form-check-label" for="remember">Ghi nho dang nhap</label>
                 </div>
-                <button class="btn btn-primary w-100">Dang nhap</button>
+                <button class="btn btn-cta w-100">Dang nhap</button>
             </form>
-            <p class="text-center mt-3 mb-0">Chua co tai khoan? <a href="{{ route('register') }}">Dang ky ngay</a></p>
+            <p class="text-center mt-3 mb-0">Chua co tai khoan? <a href="{{ route('register') }}" style="color:var(--brand-red)">Dang ky ngay</a></p>
         </div>
     </div>
 </div>
+</div>
+</section>
 @endsection

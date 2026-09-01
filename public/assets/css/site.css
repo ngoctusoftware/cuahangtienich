@@ -1,0 +1,665 @@
+:root {
+    --brand-yellow: #f7b500;
+    --brand-yellow-dark: #dd9f00;
+    --brand-orange: #f2921f;
+    --brand-cream: #fdf6df;
+    --brand-pink-badge: #ec4a72;
+    --brand-title: #8a3324;
+    --brand-price: #c0392b;
+    --brand-ink: #4a3220;
+}
+
+body {
+    font-family: 'Nunito', sans-serif;
+    color: var(--brand-ink);
+    background: #fff;
+}
+
+h1,
+h2,
+h3,
+h4,
+.display-title {
+    font-family: 'Playfair Display', serif;
+}
+
+/* ---- Top utility bar ---- */
+.topbar {
+    background: var(--brand-yellow);
+    color: #4a3220;
+    font-size: .82rem;
+}
+
+.topbar a {
+    color: #4a3220;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.topbar a:hover {
+    color: #fff;
+}
+
+/* ---- Header ---- */
+.site-header {
+    background: #fff;
+    border-bottom: 1px solid #f5e6b8;
+}
+
+.brand-logo {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    color: var(--brand-ink);
+    text-decoration: none;
+}
+
+.brand-logo i {
+    color: var(--brand-yellow);
+}
+
+.search-form .form-control {
+    border-radius: 30px 0 0 30px;
+    border: 1px solid #f0e0a8;
+    background: #fffdf5;
+}
+
+.search-form .btn {
+    border-radius: 0 30px 30px 0;
+    background: var(--brand-yellow);
+    border-color: var(--brand-yellow);
+    color: #fff;
+}
+
+.nav-pill-home {
+    background: var(--brand-yellow);
+    color: #fff !important;
+    padding: .5rem 1.3rem;
+    border-radius: 30px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.nav-pill-home:hover {
+    background: var(--brand-yellow-dark);
+    color: #fff;
+}
+
+.site-nav a {
+    color: var(--brand-ink);
+    text-decoration: none;
+    font-weight: 600;
+    padding: .5rem .3rem;
+}
+
+.site-nav a:hover {
+    color: var(--brand-yellow-dark);
+}
+
+/* ---- Hero ---- */
+.hero {
+    background: linear-gradient(135deg, #fffaf0 0%, #fdf1cf 100%);
+    overflow: hidden;
+    position: relative;
+    height:500px;
+}
+
+.hero .eyebrow {
+    color: var(--brand-orange);
+    font-weight: 800;
+    letter-spacing: .03em;
+}
+
+.hero h1 {
+    font-size: 2.6rem;
+    font-weight: 700;
+    color: var(--brand-title);
+    line-height: 1.15;
+}
+
+.hero .btn-cta {
+    background: var(--brand-yellow);
+    border-color: var(--brand-yellow);
+    color: #fff;
+    border-radius: 30px;
+    padding: .7rem 1.8rem;
+    font-weight: 700;
+}
+
+.hero .btn-cta:hover {
+    background: var(--brand-yellow-dark);
+    color: #fff;
+}
+
+.hero-badge {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: var(--brand-orange);
+    color: #fff;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: 800;
+    line-height: 1.1;
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .15);
+    transform: rotate(-8deg);
+}
+
+.hero-img {
+    border-radius: 14px;
+    box-shadow: 0 15px 30px rgba(120, 80, 10, .15);
+}
+
+/* ---- Feature boxes (3 o noi bat duoi hero) ---- */
+.feature-box {
+    position: relative;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 2px solid var(--brand-yellow);
+    aspect-ratio: 16/9;
+}
+
+.feature-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.feature-box .caption {
+    position: absolute;
+    inset: 0;
+    background: rgba(30, 20, 5, .25);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .4);
+    padding: .5rem;
+}
+
+/* ---- Section heading ---- */
+.section-heading {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+.section-heading h2 {
+    color: var(--brand-title);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 1.5rem;
+    letter-spacing: .02em;
+}
+
+.section-heading .rule {
+    width: 70px;
+    height: 3px;
+    background: var(--brand-yellow);
+    margin: .6rem auto 1rem;
+}
+
+.section-heading p {
+    color: #8a7a5a;
+}
+
+.section-heading.on-dark h2 {
+    color: #fff;
+    text-shadow: 0 2px 6px rgba(0, 0, 0, .4);
+}
+
+.section-heading.on-dark p {
+    color: #fff;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .4);
+}
+
+.section-heading.on-dark .rule {
+    background: #fff;
+}
+
+/* ---- Product card ---- */
+.shop-section {
+    background: var(--brand-cream);
+    padding: 3rem 0;
+}
+
+.shop-section.alt {
+    background: #fff;
+}
+
+.shop-section.tinted {
+    background: linear-gradient(135deg, var(--brand-orange) 0%, var(--brand-yellow) 100%);
+    border-top: 4px solid var(--brand-yellow-dark);
+    border-bottom: 4px solid var(--brand-yellow-dark);
+}
+
+.product-card {
+    background: #fff;
+    border: 1px solid #f5e6b8;
+    border-radius: 10px;
+    overflow: visible;
+    position: relative;
+    transition: box-shadow .15s ease, transform .15s ease;
+}
+
+.product-card:hover {
+    box-shadow: 0 10px 22px rgba(120, 80, 10, .15);
+    transform: translateY(-3px);
+}
+
+.product-card .badge-discount {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 2;
+    background: var(--brand-pink-badge);
+    color: #fff;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: .75rem;
+    font-weight: 700;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, .15);
+}
+
+.product-card .card-img-wrap {
+    border-radius: 10px 10px 0 0;
+    overflow: hidden;
+    aspect-ratio: 1/1;
+}
+
+.product-card .card-img-wrap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.product-card .card-body {
+    text-align: center;
+    padding: 1rem .75rem;
+}
+
+.product-card .product-name {
+    color: var(--brand-pink-badge);
+    font-size: .92rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: block;
+    min-height: 2.6em;
+}
+
+.product-card .product-name:hover {
+    color: #c73a5c;
+}
+
+.product-card .price-old {
+    color: #a99a7a;
+    text-decoration: line-through;
+    font-size: .85rem;
+    margin-right: .4rem;
+}
+
+.product-card .price-new {
+    color: var(--brand-price);
+    font-weight: 800;
+    font-size: 1.05rem;
+}
+
+.product-card .btn-buy {
+    background: var(--brand-yellow);
+    border-color: var(--brand-yellow);
+    color: #fff;
+    border-radius: 30px;
+    font-weight: 700;
+    width: 100%;
+    margin-top: .6rem;
+}
+
+.product-card .btn-buy:hover {
+    background: var(--brand-yellow-dark);
+    color: #fff;
+}
+
+.btn-more {
+    display: inline-block;
+    padding: .55rem 1.6rem;
+    border-radius: 30px;
+    background: #fff;
+    border: 1px solid var(--brand-yellow);
+    color: var(--brand-ink);
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .88rem;
+}
+
+.btn-more:hover {
+    background: var(--brand-yellow);
+    color: #fff;
+}
+
+.cat-pill {
+    display: inline-block;
+    padding: .5rem 1.1rem;
+    border-radius: 30px;
+    background: #fff;
+    border: 1px solid #f0e0a8;
+    color: var(--brand-ink);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: .88rem;
+}
+
+.cat-pill.active,
+.cat-pill:hover {
+    background: var(--brand-yellow);
+    color: #fff;
+    border-color: var(--brand-yellow);
+}
+
+footer.site-footer {
+    background: #2e2a20;
+    color: #dcd3bd;
+}
+
+footer.site-footer a {
+    color: #dcd3bd;
+    text-decoration: none;
+}
+
+footer.site-footer a:hover {
+    color: var(--brand-yellow);
+}
+
+footer.site-footer h6 {
+    color: var(--brand-yellow);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: .9rem;
+}
+
+.footer-bottom {
+    background: var(--brand-yellow);
+    color: #4a3220;
+    font-size: .82rem;
+}
+
+/* ---- Hero promo banner (Chao khai giang / khuyen mai slide) ---- */
+.hero-promo {
+    position: relative;
+    overflow: hidden;
+    min-height: 460px;
+    padding: 3rem 0 2.5rem;
+    background:
+        radial-gradient(circle at 14% 20%, rgba(255, 255, 255, .16) 0, transparent 42%),
+        linear-gradient(120deg, var(--brand-orange) 0%, var(--brand-yellow) 68%, var(--brand-yellow-dark) 100%);
+    color: #fff;
+}
+
+.hero-promo::before,
+.hero-promo::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, .10);
+}
+
+.hero-promo::before {
+    width: 340px;
+    height: 340px;
+    top: -160px;
+    left: -90px;
+}
+
+.hero-promo::after {
+    width: 220px;
+    height: 220px;
+    bottom: -120px;
+    left: 30%;
+}
+
+.hero-promo .container {
+    position: relative;
+    z-index: 1;
+}
+
+.hero-promo-copy {
+    max-width: 620px;
+}
+
+.hero-promo-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: .4rem;
+    background: rgba(255, 255, 255, .18);
+    border: 1px solid rgba(255, 255, 255, .4);
+    color: #fff;
+    font-weight: 700;
+    font-size: .78rem;
+    letter-spacing: .04em;
+    padding: .35rem .9rem;
+    border-radius: 30px;
+    margin-bottom: 1rem;
+}
+
+.hero-promo h1 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.12;
+    font-size: 2.7rem;
+    text-shadow: 0 3px 10px rgba(120, 60, 0, .18);
+    margin-bottom: .35rem;
+}
+
+.hero-promo h1 span {
+    display: block;
+    font-size: 1.5rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    color: var(--brand-title);
+    background: #fff;
+    display: inline-block;
+    padding: .25rem .9rem;
+    border-radius: 8px;
+    margin-top: .5rem;
+}
+
+.hero-promo-dates {
+    color: #fff;
+    font-weight: 600;
+    font-size: .92rem;
+    opacity: .92;
+    margin: 1rem 0 1.5rem;
+}
+
+.hero-promo-offers {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.8rem;
+}
+
+.hero-promo-offer {
+    background: rgba(255, 255, 255, .92);
+    border-radius: 14px;
+    padding: .7rem 1.1rem;
+    color: var(--brand-ink);
+    text-align: center;
+    box-shadow: 0 8px 18px rgba(120, 60, 0, .12);
+    flex: 1 1 180px;
+}
+
+.hero-promo-offer .label {
+    display: block;
+    font-size: .72rem;
+    font-weight: 700;
+    color: #8a7a5a;
+    text-transform: uppercase;
+    letter-spacing: .02em;
+}
+
+.hero-promo-offer .value {
+    display: block;
+    font-family: 'Playfair Display', serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--brand-title);
+    margin-top: .15rem;
+}
+
+.hero-promo-offer.highlight {
+    flex: 1 1 160px;
+    background: var(--brand-title);
+    color: #fff;
+    transform: translateY(-8px);
+    box-shadow: 0 14px 26px rgba(60, 25, 10, .3);
+}
+
+.hero-promo-offer.highlight .label {
+    color: rgba(255, 255, 255, .75);
+}
+
+.hero-promo-offer.highlight .value {
+    color: #fff;
+    font-size: 1.4rem;
+}
+
+.hero-promo-cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .8rem;
+}
+
+.hero-promo-cta .btn-cta {
+    background: var(--brand-title);
+    border-color: var(--brand-title);
+    color: #fff;
+    border-radius: 30px;
+    padding: .75rem 1.7rem;
+    font-weight: 700;
+}
+
+.hero-promo-cta .btn-cta:hover {
+    background: #6f2519;
+    color: #fff;
+}
+
+.hero-promo-cta .btn-outline {
+    background: transparent;
+    border: 2px solid #fff;
+    color: #fff;
+    border-radius: 30px;
+    padding: .7rem 1.6rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.hero-promo-cta .btn-outline:hover {
+    background: #fff;
+    color: var(--brand-title);
+}
+
+.hero-promo-visual {
+    position: relative;
+    text-align: center;
+}
+
+.hero-promo-visual img {
+    max-height: 440px;
+    width: auto;
+    filter: drop-shadow(0 20px 24px rgba(60, 30, 5, .25));
+}
+
+.hero-promo-visual .ribbon {
+    position: absolute;
+    top: 8%;
+    right: 4%;
+    background: var(--brand-pink-badge);
+    color: #fff;
+    font-family: 'Playfair Display', serif;
+    font-weight: 800;
+    font-size: .95rem;
+    line-height: 1.1;
+    padding: .8rem 1rem;
+    border-radius: 50%;
+    width: 96px;
+    height: 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    transform: rotate(8deg);
+    box-shadow: 0 8px 18px rgba(0, 0, 0, .18);
+}
+
+@media (max-width: 991.98px) {
+    .hero-promo {
+        text-align: center;
+        padding: 2.5rem 0;
+    }
+
+    .hero-promo-copy {
+        max-width: 100%;
+    }
+
+    .hero-promo h1 {
+        font-size: 2.1rem;
+    }
+
+    .hero-promo-offers,
+    .hero-promo-cta {
+        justify-content: center;
+    }
+
+    .hero-promo-offer.highlight {
+        transform: none;
+        order: -1;
+        flex-basis: 100%;
+    }
+
+    .hero-promo-visual {
+        margin-top: 2rem;
+    }
+}
+
+/* ---- Floating buttons ---- */
+.fab-stack {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 1050;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.fab-btn {
+    display: flex;
+    align-items: center;
+    gap: .4rem;
+    padding: .55rem 1rem;
+    border-radius: 30px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: .85rem;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, .2);
+}
+
+.fab-btn.chat {
+    background: #1877f2;
+}
+
+.fab-btn.phone {
+    background: #e0392b;
+}
