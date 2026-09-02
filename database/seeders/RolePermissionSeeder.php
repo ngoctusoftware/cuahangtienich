@@ -4,41 +4,43 @@ namespace Database\Seeders;
 
 use App\Models\Permission;
 use App\Models\Role;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 
 class RolePermissionSeeder extends Seeder
 {
     public function run(): void
     {
-        $permissions = [
-            ['name' => 'Quan ly nguoi dung', 'slug' => 'users.manage'],
-            ['name' => 'Quan ly phan quyen', 'slug' => 'roles.manage'],
-            ['name' => 'Quan ly san pham', 'slug' => 'products.manage'],
-            ['name' => 'Quan ly don hang', 'slug' => 'orders.manage'],
-            ['name' => 'Quan ly thanh toan', 'slug' => 'payments.manage'],
+        $groups = [
+            'settings'  => ['view', 'update'],
+            'contents'  => ['view', 'create', 'update', 'delete'],
+            'categories'=> ['view', 'create', 'update', 'delete'],
+            'products'  => ['view', 'create', 'update', 'delete'],
+            'users'     => ['view', 'create', 'update', 'delete'],
+            'orders'    => ['view', 'update'],
+            'payments'  => ['view', 'update'],
+            'customers' => ['view', 'create', 'update', 'delete'],
+            'languages' => ['view', 'create', 'update', 'delete'],
         ];
 
-        foreach ($permissions as $p) {
-            Permission::firstOrCreate(['slug' => $p['slug']], $p);
+        $permissionIds = [];
+        foreach ($groups as $group => $actions) {
+            foreach ($actions as $action) {
+                $permission = Permission::updateOrCreate(
+                    ['slug' => "{$group}.{$action}"],
+                    ['name' => "{$group}.{$action}", 'group' => $group]
+                );
+                $permissionIds[] = $permission->id;
+            }
         }
 
-        $admin = Role::firstOrCreate(
-            ['slug' => 'admin'],
-            ['name' => 'Quan tri vien', 'description' => 'Toan quyen he thong']
-        );
-        $admin->permissions()->sync(Permission::pluck('id'));
+        $superAdmin = Role::updateOrCreate(['slug' => 'super-admin'], ['name' => 'Super Admin']);
+        $superAdmin->permissions()->sync($permissionIds);
 
-        $staff = Role::firstOrCreate(
-            ['slug' => 'staff'],
-            ['name' => 'Nhan vien', 'description' => 'Quan ly san pham, don hang, thanh toan']
+        $admin = User::updateOrCreate(
+            ['email' => 'admin@zekagency.vn'],
+            ['name' => 'Administrator', 'password' => bcrypt('Admin@123'), 'is_active' => true]
         );
-        $staff->permissions()->sync(
-            Permission::whereIn('slug', ['products.manage', 'orders.manage', 'payments.manage'])->pluck('id')
-        );
-
-        Role::firstOrCreate(
-            ['slug' => 'customer'],
-            ['name' => 'Khach hang', 'description' => 'Nguoi dung mua hang tren website']
-        );
+        $admin->roles()->syncWithoutDetaching([$superAdmin->id]);
     }
 }

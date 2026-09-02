@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Order;
 use App\Models\Payment;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -11,27 +10,18 @@ use Illuminate\View\View;
 
 class PaymentController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): View
     {
-        $query = Payment::query()->with('order');
-
-        if ($request->filled('status')) {
-            $query->where('status', $request->status);
-        }
-
-        $payments = $query->latest()->paginate(15)->withQueryString();
+        $payments = Payment::with('order')->latest()->paginate(15);
 
         return view('admin.payments.index', compact('payments'));
     }
 
-    /**
-     * Cho phep admin xac nhan thu cong (vd: chuyen khoan ngan hang) khi can.
-     */
-    public function markPaid(Payment $payment): RedirectResponse
+    public function updateStatus(Request $request, Payment $payment): RedirectResponse
     {
-        $payment->update(['status' => Payment::STATUS_SUCCESS, 'paid_at' => now()]);
-        $payment->order->update(['payment_status' => Order::PAYMENT_PAID]);
+        $data = $request->validate(['status' => 'required|in:pending,paid,failed,refunded']);
+        $payment->update($data);
 
-        return back()->with('success', 'Da xac nhan thanh toan.');
+        return back()->with('success', 'Đã cập nhật trạng thái thanh toán.');
     }
 }

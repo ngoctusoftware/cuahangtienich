@@ -4,49 +4,37 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
+// Tài khoản quản trị / nhân viên (đăng nhập vào Admin)
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'role_id', 'name', 'email', 'phone', 'address', 'password', 'is_active',
+    protected $fillable = ['name', 'email', 'phone', 'avatar', 'password', 'is_active'];
+
+    protected $hidden = ['password', 'remember_token'];
+
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'is_active' => 'boolean',
+        'password' => 'hashed',
     ];
 
-    protected $hidden = [
-        'password', 'remember_token',
-    ];
-
-    protected function casts(): array
+    public function roles(): BelongsToMany
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-            'is_active' => 'boolean',
-        ];
-    }
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function orders(): HasMany
-    {
-        return $this->hasMany(Order::class);
+        return $this->belongsToMany(Role::class, 'role_user');
     }
 
     public function hasPermission(string $slug): bool
     {
-        return $this->role !== null && $this->role->hasPermission($slug);
+        return $this->roles->pluck('permissions')->flatten()->pluck('slug')->contains($slug);
     }
 
-    public function isAdmin(): bool
+    public function hasRole(string $slug): bool
     {
-        return $this->role && in_array($this->role->slug, ['admin', 'staff']);
+        return $this->roles->pluck('slug')->contains($slug);
     }
 }

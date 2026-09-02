@@ -3,90 +3,50 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use App\Models\Product;
+use App\Services\CartService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
-/**
- * Gio hang duoc luu trong session, khong can bang du lieu rieng.
- * Cau truc session('cart') = [ product_id => ['qty' => int] ]
- */
 class CartController extends Controller
 {
+    public function __construct(protected CartService $cartService)
+    {
+    }
+
     public function index(): View
     {
-        $cart = $this->getCartWithProducts();
-
-        return view('shop.cart.index', ['items' => $cart, 'total' => $this->cartTotal($cart)]);
+        return view('cart.index', [
+            'items' => $this->cartService->all(),
+            'total' => $this->cartService->total(),
+        ]);
     }
 
-    public function add(Request $request, Product $product): RedirectResponse
+    public function add(Request $request): RedirectResponse
     {
-        $qty = max(1, (int) $request->input('qty', 1));
-        $cart = session('cart', []);
+        $data = $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'quantity' => 'nullable|integer|min:1',
+        ]);
 
-        $cart[$product->id] = [
-            'qty' => ($cart[$product->id]['qty'] ?? 0) + $qty,
-        ];
+        $this->cartService->add($data['product_id'], $data['quantity'] ?? 1);
 
-        session(['cart' => $cart]);
-
-        return back()->with('success', 'Da them san pham vao gio hang.');
+        return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
     }
 
-    public function update(Request $request, int $productId): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        $qty = max(0, (int) $request->input('qty', 1));
-        $cart = session('cart', []);
+        $data = $request->validate(['product_id' => 'required|integer', 'quantity' => 'required|integer|min:0']);
+        $this->cartService->update($data['product_id'], $data['quantity']);
 
-        if ($qty === 0) {
-            unset($cart[$productId]);
-        } else {
-            $cart[$productId]['qty'] = $qty;
-        }
-
-        session(['cart' => $cart]);
-
-        return back()->with('success', 'Da cap nhat gio hang.');
+        return back();
     }
 
-    public function remove(int $productId): RedirectResponse
+    public function remove(Request $request): RedirectResponse
     {
-        $cart = session('cart', []);
-        unset($cart[$productId]);
-        session(['cart' => $cart]);
+        $data = $request->validate(['product_id' => 'required|integer']);
+        $this->cartService->remove($data['product_id']);
 
-        return back()->with('success', 'Da xoa san pham khoi gio hang.');
-    }
-
-    private function getCartWithProducts(): array
-    {
-        $cart = session('cart', []);
-        if (empty($cart)) {
-            return [];
-        }
-
-        $products = Product::whereIn('id', array_keys($cart))->get()->keyBy('id');
-        $items = [];
-
-        foreach ($cart as $productId => $data) {
-            if (! isset($products[$productId])) {
-                continue;
-            }
-            $product = $products[$productId];
-            $items[] = [
-                'product' => $product,
-                'qty' => $data['qty'],
-                'subtotal' => $product->final_price * $data['qty'],
-            ];
-        }
-
-        return $items;
-    }
-
-    private function cartTotal(array $items): float
-    {
-        return array_sum(array_column($items, 'subtotal'));
+        return back();
     }
 }

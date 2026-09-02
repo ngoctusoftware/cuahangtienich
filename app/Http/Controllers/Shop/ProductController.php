@@ -3,39 +3,53 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
-use App\Models\Product;
-use Illuminate\Http\Request;
+use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Services\LanguageService;
+use App\Services\ProductService;
 use Illuminate\View\View;
 
 class ProductController extends Controller
 {
-    public function index(Request $request): View
-    {
-        $query = Product::query()->active()->with('category');
-
-        if ($request->filled('category')) {
-            $query->whereHas('category', fn ($q) => $q->where('slug', $request->category));
-        }
-
-        if ($request->filled('q')) {
-            $query->where('name', 'like', '%'.$request->q.'%');
-        }
-
-        $products = $query->paginate(12)->withQueryString();
-        $categories = Category::where('is_active', true)->get();
-
-        return view('shop.products.index', compact('products', 'categories'));
+    public function __construct(
+        protected ProductService $productService,
+        protected CategoryRepositoryInterface $categoryRepository,
+        protected LanguageService $languageService,
+    ) {
     }
 
     public function show(string $slug): View
     {
-        $product = Product::where('slug', $slug)->active()->firstOrFail();
-        $related = Product::active()
-            ->where('category_id', $product->category_id)
-            ->where('id', '!=', $product->id)
-            ->take(4)->get();
+        $product = $this->productService->detail($slug);
+        abort_if(!$product, 404);
 
-        return view('shop.products.show', compact('product', 'related'));
+        return view('products.show', compact('product'));
+    }
+
+    public function byCategory(string $slug): View
+    {
+        $languageId = $this->languageService->currentLanguageId();
+        $category = $this->categoryRepository->findBySlug($slug, $languageId);
+        abort_if(!$category, 404);
+
+        $products = $this->productService->byCategory($category->id);
+        $allCategories = $this->categoryRepository->getTree($languageId);
+
+        return view('products.index', compact('products', 'category', 'allCategories'));
+    }
+
+    public function newest(): View
+    {
+        $products = $this->productService->homepageSections()['newest'];
+        $allCategories = $this->categoryRepository->getTree($this->languageService->currentLanguageId());
+
+        return view('products.index', ['products' => $products, 'category' => null, 'allCategories' => $allCategories]);
+    }
+
+    public function bestseller(): View
+    {
+        $products = $this->productService->homepageSections()['bestseller'];
+        $allCategories = $this->categoryRepository->getTree($this->languageService->currentLanguageId());
+
+        return view('products.index', ['products' => $products, 'category' => null, 'allCategories' => $allCategories]);
     }
 }
