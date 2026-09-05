@@ -1,6 +1,11 @@
 <aside class="admin-sidebar">
     <div class="sidebar-brand">
-        <i class="fas fa-bolt"></i> <span>{{ $siteName ?? 'ZEK ADMIN' }}</span>
+        @if($siteLogo ?? false)
+            <img src="{{ asset('storage/'.$siteLogo) }}" alt="{{ $siteName }}">
+        @else
+            <span class="brand-mark"><i class="fas fa-bolt"></i></span>
+        @endif
+        <span>{{ $siteName ?? 'ZEK ADMIN' }}</span>
     </div>
     <nav class="sidebar-nav">
         <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
@@ -27,6 +32,9 @@
         </a>
         <a href="{{ route('admin.orders.index') }}" class="{{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
             <i class="fas fa-receipt"></i> Đơn hàng
+            @isset($sidebarPendingOrders)
+                @if($sidebarPendingOrders > 0)<span class="badge-count">{{ $sidebarPendingOrders }}</span>@endif
+            @endisset
         </a>
         <a href="{{ route('admin.payments.index') }}" class="{{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
             <i class="fas fa-credit-card"></i> Thanh toán
@@ -46,6 +54,9 @@
         </a>
         <a href="{{ route('admin.roles.index') }}" class="{{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
             <i class="fas fa-key"></i> Phân quyền
+        </a>
+        <a href="{{ route('admin.profile.edit') }}" class="{{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+            <i class="fas fa-id-badge"></i> Tài khoản của tôi
         </a>
     </nav>
 </aside>

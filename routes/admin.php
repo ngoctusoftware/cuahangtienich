@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\UserController;
@@ -33,6 +34,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware('auth')->group(function () {
         Route::post('/logout', [AdminAuthController::class, 'logout'])->name('logout');
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+
+        // Hồ sơ cá nhân của người đang đăng nhập (mọi vai trò đều xem/sửa được của chính mình)
+        Route::get('profile', [ProfileController::class, 'edit'])->name('profile.edit');
+        Route::put('profile', [ProfileController::class, 'update'])->name('profile.update');
 
         // Cấu hình chung
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index')->middleware('permission:settings.view');

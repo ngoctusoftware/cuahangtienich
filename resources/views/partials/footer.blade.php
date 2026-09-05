@@ -20,9 +20,11 @@
             <div class="col-lg-3 col-md-4">
                 <h6 class="text-uppercase text-white mb-3">Danh mục</h6>
                 <ul class="list-unstyled footer-links">
-                    @foreach($menuCategories ?? [] as $cat)
-                        <li><a href="{{ route('products.byCategory', $cat->translation()?->slug) }}">{{ $cat->translation()?->name }}</a></li>
-                    @endforeach
+                    @if (!empty($menuCategories))
+                        @foreach($menuCategories ?? [] as $cat)
+                            <li><a href="{{ route('products.byCategory', $cat->translation()?->slug) }}">{{ $cat->translation()?->name }}</a></li>
+                        @endforeach
+                    @endif
                 </ul>
             </div>
             <div class="col-lg-2 col-md-4">

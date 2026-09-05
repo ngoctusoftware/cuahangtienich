@@ -58,12 +58,14 @@
                 <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">Trang chủ</a></li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown">Sản phẩm</a>
-                    <ul class="dropdown-menu">
-                        @foreach($menuCategories ?? [] as $cat)
-                            <li><a class="dropdown-item" href="{{ route('products.byCategory', $cat->translation()?->slug) }}">
-                                {{ $cat->translation()?->name }}
-                            </a></li>
-                        @endforeach
+                    <ul class="dropdown-menu">                               
+                        @if (!empty($menuCategories))
+                            @foreach($menuCategories ?? [] as $cat)
+                                <li><a class="dropdown-item" href="{{ route('products.byCategory', $cat->translation()?->slug) }}">
+                                    {{ $cat->translation()?->name }}
+                                </a></li>
+                            @endforeach                            
+                        @endif
                     </ul>
                 </li>
                 <li class="nav-item"><a class="nav-link" href="{{ route('products.newest') }}">Sản phẩm mới</a></li>

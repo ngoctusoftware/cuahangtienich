@@ -32,8 +32,7 @@ class ProductController extends Controller
         abort_if(!$category, 404);
 
         $products = $this->productService->byCategory($category->id);
-        $allCategories = $this->categoryRepository->getTree($languageId);
-
+        $allCategories = $this->categoryRepository->getTree($languageId);        
         return view('products.index', compact('products', 'category', 'allCategories'));
     }
 

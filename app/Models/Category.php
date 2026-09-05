@@ -37,6 +37,7 @@ class Category extends Model
     {
         $languageId ??= app(\App\Services\LanguageService::class)->currentLanguageId();
 
-        return $this->translations->firstWhere('language_id', $languageId);
+        return $this->translations->firstWhere('language_id', $languageId)
+            ?? $this->translations->first();
     }
 }

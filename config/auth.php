@@ -42,6 +42,17 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Thêm guard này
+        'customer' => [
+            'driver' => 'session',
+            'provider' => 'customers',
+        ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+        ],
     ],
 
     /*
@@ -64,13 +75,14 @@ return [
     'providers' => [
         'users' => [
             'driver' => 'eloquent',
-            'model' => env('AUTH_MODEL', User::class),
+            'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        // Thêm provider này, trỏ tới model Customer của bạn
+        'customers' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Customer::class, // đổi đúng namespace model Customer nếu khác
+        ],
     ],
 
     /*
