@@ -12,15 +12,7 @@
             // 'cta_link' => route('products.newest'),
             'image' => asset('images/banner/inet.jpeg'),
             'bg_class' => 'bg-slide-1',
-        ],
-        [
-            'title' => 'FLASH SALE 9/9<br>GIẢM ĐẾN 60%',
-            'description' => 'Săn deal khủng dịp 9/9, hàng ngàn sản phẩm giảm giá sốc, số lượng có hạn, nhanh tay đặt hàng ngay hôm nay.',
-            'cta_text' => 'ĐĂNG KÝ NGAY',
-            // 'cta_link' => route('promotions.flashsale'),
-            'image' => asset('images/banner/cloudfly.png'),
-            'bg_class' => 'bg-slide-2',
-        ],
+        ],      
         [
             'title' => 'FLASH SALE 9/9<br>GIẢM ĐẾN 60%',
             'description' => 'Săn deal khủng dịp 9/9, hàng ngàn sản phẩm giảm giá sốc, số lượng có hạn, nhanh tay đặt hàng ngay hôm nay.',
