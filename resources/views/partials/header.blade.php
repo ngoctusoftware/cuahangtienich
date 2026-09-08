@@ -79,7 +79,7 @@
                         {{-- Chuyển đổi ngôn ngữ --}}
                     <li class="nav-item dropdown action-dropdown language-item">
                         <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-bars"></i>
+                            {{-- <i class="fas fa-bars"></i> --}}
                             @foreach($languages ?? [] as $lang)
                                 @if($lang->code === app()->getLocale()) {{ $lang->name }} @endif
                             @endforeach
