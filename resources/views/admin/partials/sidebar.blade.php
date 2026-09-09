@@ -1,11 +1,6 @@
 <aside class="admin-sidebar">
-    <div class="sidebar-brand">
-        @if($siteLogo ?? false)
-            <img src="{{ asset('storage/'.$siteLogo) }}" alt="{{ $siteName }}">
-        @else
-            <span class="brand-mark"><i class="fas fa-bolt"></i></span>
-        @endif
-        <span>{{ $siteName ?? 'ZEK ADMIN' }}</span>
+    <div class="sidebar-brand d-flex justify-content-center">
+        <img src="{{ asset('images/admin_logo.png') }}" alt="{{ $siteName }}" width="160px" height="160px" onerror="this.style.display='none'">
     </div>
     <nav class="sidebar-nav">
         <a href="{{ route('admin.dashboard') }}" class="{{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">

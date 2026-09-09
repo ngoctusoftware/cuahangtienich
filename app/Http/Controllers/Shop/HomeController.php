@@ -4,17 +4,19 @@ namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
 use App\Models\Content;
+use App\Models\Setting;
 use App\Services\ProductService;
 use Illuminate\View\View;
 
 class HomeController extends Controller
 {
-    public function __construct(protected ProductService $productService)
-    {
+    public function __construct(protected ProductService $productService) {
+
     }
 
-    public function index(): View
-    {
+    public function index(): View {
+        
+        $settings = Setting::all()->pluck('value', 'key')->toArray();        
         $sections = $this->productService->homepageSections();
 
         // Testimonials & tin tức có thể quản lý qua bảng "contents" (type=testimonial/news) ở Admin (Phase 3)
@@ -24,10 +26,11 @@ class HomeController extends Controller
             ['name' => 'Mr. Nam Trần', 'role'    => 'Khách hàng', 'content'            => 'Giá cả hợp lý, đóng gói cẩn thận, rất hài lòng.', 'avatar'                   => asset('images/avatars/3.jpg')],
         ];        
         $news = Content::with('translations')->where('type', 'news')->where('is_active', true)->latest()->limit(3)->get();
-
-        return view('home.index', array_merge($sections, [
+        $data =  [
             'testimonials' => $testimonials,
-            'news' => $news,
-        ]));
+            'news'         => $news,
+            'settings'     => $settings,
+        ];
+        return view('home.index', array_merge($sections, $data));
     }
 }

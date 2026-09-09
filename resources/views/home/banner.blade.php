@@ -1,38 +1,3 @@
-{{--
-    HERO CAROUSEL - Bootstrap 5 Carousel
-    Layout: 2 cột / slide (theo mẫu banner "DỊCH VỤ SEO TỔNG THỂ")
-      - Cột trái : Eyebrow text, Tiêu đề 2 dòng (nhỏ + to), mô tả, nút CTA dạng pill (icon + số điện thoại hoặc text)
-      - Cột phải : Ảnh minh họa (isometric/illustration) có bóng phản chiếu mờ phía dưới
-      - Nền     : Gradient xanh dương + hoạ tiết vòng tròn/chấm bi trang trí
-
-    Cách dùng:
-    @include('components.hero-carousel', ['slides' => $heroSlides])
-
-    $heroSlides là mảng, ví dụ:
-    $heroSlides = [
-        [
-            'eyebrow'      => 'DỊCH VỤ SEO TỔNG THỂ',
-            'title'        => 'CHUYÊN NGHIỆP',
-            'description'  => 'Giúp thu hút khách hàng đến website, giúp các doanh nghiệp cải thiện khả năng hiển thị trực tuyến, tăng lưu lượng truy cập tự nhiên và xếp hạng từ khóa cao hơn!',
-            'cta_type'     => 'phone',              // 'phone' hoặc 'link'
-            'cta_text'     => '0934 626 963',
-            'cta_link'     => 'tel:0934626963',
-            'image'        => asset('images/hero-seo-illustration.png'),
-            'bg_class'     => 'bg-slide-1',
-        ],
-        [
-            'eyebrow'      => 'ƯU ĐÃI THÁNG 9',
-            'title'        => 'GIẢM ĐẾN 60%',
-            'description'  => 'Săn deal khủng dịp 9/9, hàng ngàn sản phẩm giảm giá sốc, số lượng có hạn, nhanh tay đặt hàng ngay hôm nay.',
-            'cta_type'     => 'link',
-            'cta_text'     => 'ĐĂNG KÝ NGAY',
-            'cta_link'     => route('promotions.flashsale'),
-            'image'        => asset('images/hero-banner-2.png'),
-            'bg_class'     => 'bg-slide-2',
-        ],
-    ];
---}}
-
 <section class="hero-carousel-section">
     <div id="heroCarousel" class="carousel slide carousel-fade" data-bs-ride="carousel" data-bs-interval="5000">
 
@@ -55,7 +20,6 @@
             @foreach($slides as $index => $slide)
                 <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
                     <div class="hero-slide {{ $slide['bg_class'] ?? '' }}">
-
                         {{-- Hoạ tiết trang trí: vòng tròn + chấm bi --}}
                         <span class="deco-ring deco-ring-1"></span>
                         <span class="deco-ring deco-ring-2"></span>

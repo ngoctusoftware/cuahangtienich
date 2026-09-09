@@ -62,7 +62,7 @@
                             <div class="col-6 col-md-4 col-lg-3">
                                 <a href="{{ route('product.show', $product->translation()?->slug) }}" class="text-decoration-none text-dark">
                                     <div class="product-card">
-                                        <img src="{{ $product->thumbnail ? asset('storage/'.$product->thumbnail) : asset('images/product-placeholder.jpg') }}" class="product-thumb" alt="{{ $product->translation()?->name }}">
+                                        <img src="{{ $product->thumbnail ? asset('images/'.$product->thumbnail) : asset('images/product-placeholder.jpg') }}" class="product-thumb" alt="{{ $product->translation()?->name }}">
                                         <div class="p-3">
                                             <div class="product-name">{{ $product->translation()?->name }}</div>
                                             <div class="product-price mt-1">
@@ -159,7 +159,7 @@
                 <div class="col-md-4">
                     <div class="news-card">
                         @if($item->image)
-                            <img src="{{ asset('storage/'.$item->image) }}" class="news-thumb" alt="">
+                            <img src="{{ asset('images/'.$item->image) }}" class="news-thumb" alt="">
                         @endif
                         <div class="p-3">
                             <div class="fw-bold">{{ $item->translation()?->title }}</div>

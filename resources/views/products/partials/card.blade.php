@@ -3,7 +3,7 @@
 <div class="col-lg-3 col-md-4 col-6">
     <div class="product-card">
         <a @if($translation) href="{{ route('products.show', ['slug' => $translation->slug]) }}" @endif class="product-thumb">
-            <img src="{{ $product->thumbnail ? asset('storage/'.$product->thumbnail) : asset('images/product-placeholder.jpg') }}"
+            <img src="{{ $product->thumbnail ? asset('images/'.$product->thumbnail) : asset('images/product-placeholder.jpg') }}"
                  class="img-fluid" alt="{{ $translation?->name }}">
             @if($product->sale_price)
                 <span class="badge-sale">

@@ -5,24 +5,24 @@
 @section('content')
     <?php 
         $heroSlides = [
-        [
-            'title' => 'GIẢI PHÁP MUA SẮM<br>TOÀN DIỆN CHO BẠN',
-            'description' => 'ZEK SHOP mang đến hàng ngàn sản phẩm chất lượng với mức giá tốt nhất, giao hàng nhanh toàn quốc, hỗ trợ đổi trả và thanh toán linh hoạt.',
-            'cta_text' => 'MUA SẮM NGAY',
-            // 'cta_link' => route('products.newest'),
-            'image' => asset('images/banner/inet.jpeg'),
-            'bg_class' => 'bg-slide-1',
-        ],      
-        [
-            'title' => 'FLASH SALE 9/9<br>GIẢM ĐẾN 60%',
-            'description' => 'Săn deal khủng dịp 9/9, hàng ngàn sản phẩm giảm giá sốc, số lượng có hạn, nhanh tay đặt hàng ngay hôm nay.',
-            'cta_text' => 'ĐĂNG KÝ NGAY',
-            // 'cta_link' => route('promotions.flashsale'),
-            'image' => asset('images/banner/cloudfly.png'),
-            'bg_class' => 'bg-slide-2',
-        ],
-    ];
-            ?>
+            [
+                'title' => 'GIẢI PHÁP MUA SẮM<br>TOÀN DIỆN CHO BẠN',
+                'description' => 'ZEK SHOP mang đến hàng ngàn sản phẩm chất lượng với mức giá tốt nhất, giao hàng nhanh toàn quốc, hỗ trợ đổi trả và thanh toán linh hoạt.',
+                'cta_text' => 'MUA SẮM NGAY',
+                // 'cta_link' => route('products.newest'),
+                'image' => asset('images/banner/inet.jpeg'),
+                'bg_class' => 'bg-slide-1',
+            ],
+            [
+                'title' => 'FLASH SALE 9/9<br>GIẢM ĐẾN 60%',
+                'description' => 'Săn deal khủng dịp 9/9, hàng ngàn sản phẩm giảm giá sốc, số lượng có hạn, nhanh tay đặt hàng ngay hôm nay.',
+                'cta_text' => 'ĐĂNG KÝ NGAY',
+                // 'cta_link' => route('promotions.flashsale'),
+                'image' => asset('images/banner/cloudfly.png'),
+                'bg_class' => 'bg-slide-2',
+            ],
+        ];
+                ?>
     {{-- HERO CAROUSEL --}}
     {{-- @include('home.banner') --}}
     @include('home.banner', ['slides' => $heroSlides])
@@ -169,7 +169,7 @@
                 @foreach(($news ?? []) as $item)
                     <div class="col-md-4">
                         <div class="news-card">
-                            <img src="{{ $item->image ? asset('storage/' . $item->image) : asset('images/news-placeholder.jpg') }}"
+                            <img src="{{ $item->image ? asset('images/' . $item->image) : asset('images/news-placeholder.jpg') }}"
                                 class="img-fluid rounded" alt="">
                             <h5 class="mt-3">{{ $item->translation()?->title }}</h5>
                             <small class="text-muted">{{ $item->created_at->format('d/m/Y') }}</small>

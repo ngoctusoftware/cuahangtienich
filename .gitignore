@@ -4,7 +4,7 @@
 /public/hot
 /public/storage
 /public/assets/upload
-/storage/*.key
+/images/*.key
 /vendor
 .env
 .env.backup
@@ -23,4 +23,4 @@ public/.htaccess
 /resources/views/includes/template
 
 /public/assets/img/
-/storage/framework/views
+/storage

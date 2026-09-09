@@ -14,7 +14,7 @@
             <tbody>
                 @foreach($products as $p)
                     <tr>
-                        <td><img src="{{ $p->thumbnail ? asset('storage/'.$p->thumbnail) : asset('images/product-placeholder.jpg') }}" width="48" height="48" style="object-fit:cover;border-radius:6px"></td>
+                        <td><img src="{{ $p->thumbnail ? asset('images/'.$p->thumbnail) : asset('images/product-placeholder.jpg') }}" width="48" height="48" style="object-fit:cover;border-radius:6px"></td>
                         <td>{{ $p->translation()?->name }}</td>
                         <td>{{ $p->category->translation()?->name }}</td>
                         <td>{{ number_format($p->price) }}₫</td>

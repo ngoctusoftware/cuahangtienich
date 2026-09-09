@@ -1,11 +1,9 @@
 <header class="site-header">
     {{-- Tầng trên: logo / tìm kiếm / liên hệ --}}
     <div class="header-top">
-        <div class="container d-flex align-items-center justify-content-between flex-wrap gap-3">
+        <div class="container d-flex align-items-center justify-content-between flex-wrap gap-3">            
             <a class="brand d-flex align-items-center" href="{{ route('home') }}">
-                <img src="{{ !empty($settings['site_logo']) ? asset($settings['site_logo']) : '/images/logo.png' }}"
-                    alt="{{ !empty($settings['site_name']) ? $settings['site_name'] : env('APP_NAME') }}" width="100px"
-                    height="auto" onerror="this.style.display='none'">
+                <img src="{{ !empty($settings['site_logo']) ? asset($settings['site_logo']) : '/images/logo.png' }}" alt="{{ !empty($settings['site_name']) ? $settings['site_name'] : env('APP_NAME') }}" width="100px" height="auto" onerror="this.style.display='none'">                        
             </a>
 
             {{-- Ô tìm kiếm: đổi action bên dưới thành route tìm kiếm thực tế của bạn --}}
@@ -18,17 +16,15 @@
                 <div class="contact-item">
                     <i class="fas fa-phone-volume"></i>
                     <div class="contact-text">
-                        <span class="contact-value text-dark">
-                            {{ !empty($settings['hotline']) ? $settings['hotline'] : '1900 0000' }}
-                        </span>
+                        {{-- <span class="contact-label">HOTLINE</span> --}}
+                        <span class="contact-value">0982.995.195</span>
                     </div>
                 </div>
                 <div class="contact-item">
                     <i class="fas fa-envelope"></i>
                     <div class="contact-text">
-                        <span class="contact-value text-dark">
-                            {{ !empty($settings['email']) ? $settings['email'] : 'info@yourwebsite.com' }}
-                        </span>
+                        {{-- <span class="contact-label">EMAIL</span> --}}
+                        <span class="contact-value">ductho2495@gmail.com</span>
                     </div>
                 </div>
             </div>
@@ -54,7 +50,7 @@
                                         href="{{ route('products.byCategory', $cat->translation()?->slug) }}">
                                         {{ $cat->translation()?->name }}
                                     </a>
-                                </li>
+                                </li>                                
                             @empty
                                 <li><span class="dropdown-item-text text-muted">Chưa có danh mục</span></li>
                             @endforelse
@@ -78,9 +74,9 @@
                         {{-- Chuyển đổi ngôn ngữ --}}
                     <li class="nav-item dropdown action-dropdown language-item">
                         <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            {{-- <i class="fas fa-bars"></i> --}}
                             @foreach($languages ?? [] as $lang)
-                                {{ dd($lang) }}
-                                @if($lang->code === app()->getLocale()) {{ $lang->flag_icon ?? '' }} @endif
+                                @if($lang->code === app()->getLocale()) {{ $lang->name }} @endif
                             @endforeach
                         </a>
                         <ul class="dropdown-menu">
@@ -162,25 +158,3 @@
         </div>
     </nav>
 </header>
-<style>
-    .contact-item .fa-phone-volume, .contact-item .fa-envelope {
-        display: inline-block;
-        animation: shake 0.4s ease-in-out infinite;
-    }
-
-    @keyframes shake {
-
-        0%,
-        100% {
-            transform: rotate(0deg);
-        }
-
-        25% {
-            transform: rotate(-10deg);
-        }
-
-        75% {
-            transform: rotate(10deg);
-        }
-    }
-</style>

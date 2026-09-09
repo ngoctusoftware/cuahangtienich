@@ -116,7 +116,7 @@ class ProductController extends Controller
             return null;
         }
 
-        // Lưu ảnh vào storage/app/public/products, truy cập qua asset('storage/products/...')
+        // Lưu ảnh vào images/app/public/products, truy cập qua asset('images/products/...')
         return $request->file('thumbnail')->store('products', 'public');
     }
 

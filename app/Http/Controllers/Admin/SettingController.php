@@ -12,9 +12,14 @@ use Illuminate\View\View;
 class SettingController extends Controller
 {
     protected array $fields = [
-        'site_name' => 'Tên website', 'site_logo' => 'Logo (đường dẫn ảnh)',
-        'hotline' => 'Số điện thoại', 'email' => 'Email', 'address' => 'Địa chỉ',
-        'working_hours' => 'Giờ làm việc', 'zalo_link' => 'Link Zalo', 'messenger_link' => 'Link Messenger',
+        'site_name'      => 'Tên website', 
+        'site_logo'      => 'Logo (đường dẫn ảnh)',
+        'hotline'        => 'Số điện thoại', 
+        'email'          => 'Email', 
+        'address'        => 'Địa chỉ',
+        'working_hours'  => 'Giờ làm việc', 
+        'zalo_link'      => 'Link Zalo', 
+        'messenger_link' => 'Link Messenger',
     ];
 
     public function __construct(protected SettingService $settingService)
