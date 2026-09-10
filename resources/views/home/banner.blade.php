@@ -81,11 +81,11 @@
         {{-- Controls --}}
         @if(count($slides) > 1)
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-            <span class="hero-control-icon"><i class="bi bi-chevron-left"></i></span>
+            <span class="hero-control-icon"><i class="fa fa-arrow-left" aria-hidden="true"></i></span>
             <span class="visually-hidden">Previous</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-            <span class="hero-control-icon"><i class="bi bi-chevron-right"></i></span>
+            <span class="hero-control-icon"><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
             <span class="visually-hidden">Next</span>
         </button>
         @endif

@@ -58,7 +58,7 @@ body {
 
 .header-search {
     flex: 1 1 380px;
-    max-width: 460px;
+    max-width: 550px;
     display: flex;
     border: 1px solid #e3ddd4;
     border-radius: 6px;
@@ -174,9 +174,9 @@ body {
 }
 
 /* Dropdown (danh mục / tài khoản / ngôn ngữ) luôn nền trắng đục vì nổi trên nội dung trang */
-.main-nav .dropdown-menu {    
-    border: none;    
-    box-shadow: 0 12px 30px rgba(30, 21, 51, .18);    
+.main-nav .dropdown-menu {
+    border: none;
+    box-shadow: 0 12px 30px rgba(30, 21, 51, .18);
     margin-top: 0;
     animation: dropIn .18s ease;
     width: 213px !important;
@@ -754,7 +754,8 @@ body {
     cursor: pointer;
 }
 
----------------------------------------------  CSS Language -----------------------------------------
+--------------------------------------------- CSS Language -----------------------------------------
+
 /* ===== Dropdown danh mục sản phẩm ===== */
 .language-item .dropdown-menu {
     width: 280px;
@@ -823,4 +824,27 @@ body {
 /* Xóa divider riêng nếu không dùng */
 .language-item .dropdown-divider {
     display: none;
+}
+
+/* -------------------------------------------------------------------------- */
+.contact-item .fa-phone-volume,
+.contact-item .fa-envelope {
+    display: inline-block;
+    animation: shake 0.4s ease-in-out infinite;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-10deg);
+    }
+
+    75% {
+        transform: rotate(10deg);
+    }
 }

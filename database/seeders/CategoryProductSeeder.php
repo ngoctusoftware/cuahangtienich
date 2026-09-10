@@ -13,7 +13,7 @@ class CategoryProductSeeder extends Seeder
     public function run(): void
     {
         $language = Language::where('code', 'vi')->firstOrFail();
-        $categories = ['Dien thoai', 'Laptop', 'Phu kien', 'Dong ho thong minh'];
+        $categories = ['Điện thoại', 'Máy tính bảng', 'Phụ kiện', 'Đồng hồ thông minh'];
 
         foreach ($categories as $name) {
             $slug = Str::slug($name);

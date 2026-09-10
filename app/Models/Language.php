@@ -6,7 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class Language extends Model
 {
-    protected $fillable = ['code', 'name', 'flag_icon', 'is_default', 'is_active', 'sort_order'];
+    protected $fillable = [
+        'code',
+        'name',
+        'name_en',
+        'locale',
+        'direction',
+        'flag_icon',
+        'is_default',
+        'is_active',
+        'sort_order',
+    ];
 
     protected $casts = [
         'is_default' => 'boolean',

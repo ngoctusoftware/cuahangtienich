@@ -43,55 +43,57 @@
             </button>
             <div class="collapse navbar-collapse" id="mainMenu">
                 <ul class="navbar-nav align-items-lg-stretch w-100">
-                    <li class="nav-item dropdown category-item">
-                        <a class="nav-link category-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="fas fa-bars"></i> DANH MỤC SẢN PHẨM
-                        </a>
-                        <ul class="dropdown-menu">
-                            @forelse($menuCategories ?? [] as $cat)
-                                <li>
-                                    <a class="dropdown-item"
-                                        href="{{ route('products.byCategory', $cat->translation()?->slug) }}">
-                                        {{ $cat->translation()?->name }}
-                                    </a>
-                                </li>
-                            @empty
-                                <li><span class="dropdown-item-text text-muted">Chưa có danh mục</span></li>
-                            @endforelse
-                        </ul>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('home') }}">TRANG CHỦ</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('page.show', 'about-us') }}">GIỚI THIỆU</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('products.newest') }}">TIN TỨC</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('products.bestseller') }}">TUYỂN DỤNG</a>
-                    </li>
-                    <li class="nav-item"><a class="nav-link" href="{{ route('page.show', 'contact') }}">LIÊN HỆ</a>
-                    </li>
+                    @foreach($headerMenuItems ?? [] as $menuItem)
+                        @if($menuItem->is_category)
+                            <li class="nav-item dropdown category-item">
+                                <a class="nav-link category-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                                    @if($menuItem->icon)<i class="{{ $menuItem->icon }}"></i>@endif
+                                    {{ $menuItem->translation()?->label }}
+                                </a>
+                                <ul class="dropdown-menu">
+                                    @forelse($menuCategories ?? [] as $cat)
+                                        <li><a class="dropdown-item" href="{{ route('products.byCategory', $cat->translation()?->slug) }}">{{ $cat->translation()?->name }}</a></li>
+                                    @empty
+                                        <li><span class="dropdown-item-text text-muted">{{ app()->getLocale() === 'en' ? 'No categories' : 'Chưa có danh mục' }}</span></li>
+                                    @endforelse
+                                </ul>
+                            </li>
+                        @else
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ $menuItem->url ?? '#' }}">
+                                    @if($menuItem->icon)<i class="{{ $menuItem->icon }}"></i>@endif
+                                    {{ $menuItem->translation()?->label }}
+                                </a>
+                            </li>
+                        @endif
+                    @endforeach
 
+                    {{-- Giỏ hàng --}}
                     <li class="nav-item ms-lg-auto d-flex align-items-lg-stretch header-actions">
-                        {{-- Giỏ hàng --}}
                         <a href="{{ route('cart.index') }}" class="action-link cart-link">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-badge">{{ $cartCount ?? 0 }}</span>
                         </a>
-                        {{-- Chuyển đổi ngôn ngữ --}}
+                    {{-- Chuyển đổi ngôn ngữ --}}
                     <li class="nav-item dropdown action-dropdown language-item">
+                        @php
+                            $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
+                                ?? collect($languages ?? [])->firstWhere('is_default', true);
+                        @endphp
                         <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            @foreach($languages ?? [] as $lang)
-                                {{ dd($lang) }}
-                                @if($lang->code === app()->getLocale()) {{ $lang->flag_icon ?? '' }} @endif
-                            @endforeach
+                            @if ($currentLanguage)
+                                <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
+                                    alt="{{ $currentLanguage->name }}" style="width:30px; height:auto; border-radius:3px;"
+                                    onerror="this.style.display='none'">
+                            @endif
                         </a>
                         <ul class="dropdown-menu">
-                            @foreach($languages ?? [] as $key => $lang)
-                                @if ($key > 0 && $key < count($languages) - 1)
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                @endif
+                            @foreach ($languages ?? [] as $lang)
                                 <li>
-                                    <a class="dropdown-item" href="{{ route('lang.switch', $lang->code) }}">
+                                    <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
+                                        <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
+                                            alt="{{ $lang->name }}" style="width:30px; height:auto; border-radius:3px;"
+                                            onerror="this.style.display='none'">
                                         {{ $lang->name }}
                                     </a>
                                 </li>
@@ -125,32 +127,6 @@
                                 </li>
                             </ul>
                         </li>
-
-                        {{-- <div class="dropdown action-dropdown">
-                            <button class="action-link dropdown-toggle" data-bs-toggle="dropdown">
-                                <i class="far fa-user"></i>
-                                <span class="d-none d-xl-inline">{{ auth('customer')->user()->name }}</span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-menu-end">
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('customer.orders') }}">
-                                        <i class="fas fa-shopping-bag fa-sm"></i>
-                                        <span style="font-size:14px;">Đơn hàng của tôi</span>
-                                    </a>
-                                </li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <form method="POST" action="{{ route('customer.logout') }}">@csrf
-                                        <button class="dropdown-item">
-                                            <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                            <span style="font-size:14px;">Đăng xuất</span>
-                                        </button>
-                                    </form>
-                                </li>
-                            </ul>
-                        </div> --}}
                     @else
                         <a href="{{ route('customer.login') }}" class="action-link">
                             <i class="far fa-user"></i>
@@ -162,25 +138,3 @@
         </div>
     </nav>
 </header>
-<style>
-    .contact-item .fa-phone-volume, .contact-item .fa-envelope {
-        display: inline-block;
-        animation: shake 0.4s ease-in-out infinite;
-    }
-
-    @keyframes shake {
-
-        0%,
-        100% {
-            transform: rotate(0deg);
-        }
-
-        25% {
-            transform: rotate(-10deg);
-        }
-
-        75% {
-            transform: rotate(10deg);
-        }
-    }
-</style>

@@ -11,6 +11,9 @@
         <a href="{{ route('admin.settings.index') }}" class="{{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
             <i class="fas fa-sliders-h"></i> Cấu hình chung
         </a>
+        <a href="{{ route('admin.header-menu.index') }}" class="{{ request()->routeIs('admin.header-menu.*') ? 'active' : '' }}">
+            <i class="fas fa-bars"></i> Menu header
+        </a>
         <a href="{{ route('admin.contents.index') }}" class="{{ request()->routeIs('admin.contents.*') ? 'active' : '' }}">
             <i class="fas fa-file-alt"></i> Quản lý nội dung
         </a>

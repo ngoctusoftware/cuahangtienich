@@ -8,16 +8,31 @@
         @if($language->exists) @method('PUT') @endif
         <div class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Mã ngôn ngữ (vi, en...)</label>
+                <label class="form-label">Mã ngôn ngữ (vi, en, ja...)</label>
                 <input type="text" name="code" class="form-control" value="{{ old('code', $language->code) }}" required>
             </div>
             <div class="col-md-4">
-                <label class="form-label">Tên hiển thị</label>
+                <label class="form-label">Tên bản địa</label>
                 <input type="text" name="name" class="form-control" value="{{ old('name', $language->name) }}" required>
             </div>
             <div class="col-md-4">
                 <label class="form-label">Thứ tự</label>
                 <input type="number" name="sort_order" class="form-control" value="{{ old('sort_order', $language->sort_order) }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Tên tiếng Anh</label>
+                <input type="text" name="name_en" class="form-control" value="{{ old('name_en', $language->name_en) }}">
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Locale (vi-VN, en-US...)</label>
+                <input type="text" name="locale" class="form-control" value="{{ old('locale', $language->locale) }}" required>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">Hướng chữ</label>
+                <select name="direction" class="form-select" required>
+                    <option value="ltr" {{ old('direction', $language->direction ?: 'ltr') === 'ltr' ? 'selected' : '' }}>Trái sang phải (LTR)</option>
+                    <option value="rtl" {{ old('direction', $language->direction) === 'rtl' ? 'selected' : '' }}>Phải sang trái (RTL)</option>
+                </select>
             </div>
             <div class="col-md-6">
                 <div class="form-check">

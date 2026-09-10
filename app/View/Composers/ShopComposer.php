@@ -2,6 +2,7 @@
 
 namespace App\View\Composers;
 
+use App\Models\HeaderMenuItem;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
 use App\Services\CartService;
 use App\Services\LanguageService;
@@ -17,8 +18,7 @@ class ShopComposer
         protected LanguageService $languageService,
         protected CategoryRepositoryInterface $categoryRepository,
         protected CartService $cartService,
-    ) {
-    }
+    ) {}
 
     public function compose(View $view): void
     {
@@ -26,11 +26,15 @@ class ShopComposer
         // dd($this->categoryRepository->getTree($this->languageService->currentLanguageId()));
 
         $view->with([
-            'siteName'       => $settings['site_name'] ?? 'ZEK SHOP',
-            'setting'        => fn ($key, $default = null) => $settings[$key] ?? $default,
-            'languages'      => $this->languageService->active(),
+            'siteName' => $settings['site_name'] ?? 'ZEK SHOP',
+            'setting' => fn ($key, $default = null) => $settings[$key] ?? $default,
+            'languages' => $this->languageService->active(),
             'menuCategories' => $this->categoryRepository->getTree($this->languageService->currentLanguageId()),
-            'cartCount'      => collect($this->cartService->all())->sum('quantity'),
+            'headerMenuItems' => HeaderMenuItem::with('translations')
+                ->where('is_active', true)
+                ->orderBy('sort_order')
+                ->get(),
+            'cartCount' => collect($this->cartService->all())->sum('quantity'),
         ]);
     }
 }

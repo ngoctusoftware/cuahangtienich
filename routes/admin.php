@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\CustomerController;
 use App\Http\Controllers\Admin\CustomerGroupController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\HeaderMenuController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\OrderController;
 use App\Http\Controllers\Admin\PaymentController;
@@ -42,6 +43,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Cấu hình chung
         Route::get('settings', [SettingController::class, 'index'])->name('settings.index')->middleware('permission:settings.view');
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update')->middleware('permission:settings.update');
+
+        // Menu header đa ngôn ngữ
+        Route::resource('header-menu', HeaderMenuController::class)->parameters(['header-menu' => 'headerMenuItem'])->except(['show'])
+            ->middleware('permission:settings.view');
 
         // Nội dung (CMS)
         Route::resource('contents', ContentController::class)->except(['show'])

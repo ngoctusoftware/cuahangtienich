@@ -20,7 +20,7 @@ class LanguageController extends Controller
 
     public function create(): View
     {
-        return view('admin.languages.form', ['language' => new Language()]);
+        return view('admin.languages.form', ['language' => new Language]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -56,12 +56,15 @@ class LanguageController extends Controller
     protected function validated(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
-            'code' => 'required|string|max:10|unique:languages,code,' . $ignoreId,
-            'name' => 'required|string|max:255',
+            'code' => 'required|string|max:20|unique:languages,code,'.$ignoreId,
+            'name' => 'required|string|max:100',
+            'name_en' => 'nullable|string|max:100',
+            'locale' => 'required|string|max:20|unique:languages,locale,'.$ignoreId,
+            'direction' => 'required|in:ltr,rtl',
             'flag_icon' => 'nullable|string',
             'is_default' => 'nullable|boolean',
             'is_active' => 'nullable|boolean',
-            'sort_order' => 'nullable|integer',
+            'sort_order' => 'nullable|integer|min:0',
         ]);
     }
 }

@@ -35,9 +35,11 @@
                     <p class="text-muted">Không có sản phẩm nào.</p>
                 @endforelse
             </div>
-            <div class="mt-4">
-                {{ $products->links() }}
-            </div>
+            @if ($products instanceof \Illuminate\Contracts\Pagination\Paginator)
+                <div class="mt-4">
+                    {{ $products->links() }}
+                </div>
+            @endif
         </div>
     </div>
 </div>

@@ -12,7 +12,8 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             AdminUserSeeder::class,
             LanguageSeeder::class,
-            CategoryProductSeeder::class,
+            HeaderMenuSeeder::class,
+            // CategoryProductSeeder::class,
             BannerSeeder::class,
         ]);
     }
