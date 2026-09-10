@@ -101,8 +101,8 @@
     }
 
     .min-vh-hero {
-        min-height: 460px;
-        padding: 50px 0;
+        min-height: 560px;
+        padding: 60px 0;
         position: relative;
         z-index: 2;
     }
@@ -112,7 +112,8 @@
         color: #fff;
         position: relative;
         overflow: hidden;
-        height: 500px;
+        height: auto;
+        min-height: 620px;
     }
 
     /* đổi màu nền cho từng slide nếu cần */

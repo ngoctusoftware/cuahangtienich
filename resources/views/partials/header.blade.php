@@ -1,25 +1,27 @@
 <header class="site-header">
     {{-- Tầng trên: logo / tìm kiếm / liên hệ --}}
     <div class="header-top">
-        <div class="container d-flex align-items-center justify-content-between flex-wrap gap-3">
-            <a class="brand d-flex align-items-center" href="{{ route('home') }}">
-                <img src="{{ !empty($settings['site_logo']) ? asset($settings['site_logo']) : '/images/logo.png' }}"
-                    alt="{{ !empty($settings['site_name']) ? $settings['site_name'] : env('APP_NAME') }}" width="100px"
-                    height="auto" onerror="this.style.display='none'">
-            </a>
-
-            {{-- Ô tìm kiếm: đổi action bên dưới thành route tìm kiếm thực tế của bạn --}}
-            <form class="header-search" action="{{ url('/tim-kiem') }}" method="GET">
-                <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request('q') }}">
-                <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
-            </form>
-
-            <div class="header-contact d-none d-lg-flex">
+        <div class="container d-flex flex-column flex-lg-row align-items-lg-center justify-content-lg-between gap-3">
+            <div class="header-top-row1 d-flex align-items-center gap-3">
+                <a class="brand d-flex align-items-center" href="{{ route('home') }}">
+                    <img src="{{ !empty($settings['site_logo']) ? asset($settings['site_logo']) : '/images/logo.png' }}"
+                        alt="{{ !empty($settings['site_name']) ? $settings['site_name'] : env('APP_NAME') }}" width="100px"
+                        height="auto" onerror="this.style.display='none'">
+                </a>                
+            </div>
+            <div class="header-top-search d-flex align-items-center gap-3">
+                {{-- Ô tìm kiếm: đổi action bên dưới thành route tìm kiếm thực tế của bạn --}}
+                <form class="header-search" action="{{ url('/tim-kiem') }}" method="GET">
+                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request('q') }}">
+                    <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
+                </form>
+            </div>
+            <div class="header-contact d-flex">
                 <div class="contact-item">
                     <i class="fas fa-phone-volume"></i>
                     <div class="contact-text">
                         <span class="contact-value text-dark">
-                            {{ !empty($settings['hotline']) ? $settings['hotline'] : '1900 0000' }}
+                            {{ !empty($settings['hotline']) ? $settings['hotline'] : 'Chưa có số điện thoại' }}
                         </span>
                     </div>
                 </div>
@@ -27,7 +29,7 @@
                     <i class="fas fa-envelope"></i>
                     <div class="contact-text">
                         <span class="contact-value text-dark">
-                            {{ !empty($settings['email']) ? $settings['email'] : 'info@yourwebsite.com' }}
+                            {{ !empty($settings['email']) ? $settings['email'] : 'Chưa có email' }}
                         </span>
                     </div>
                 </div>
@@ -204,61 +206,3 @@
         </div>
     </nav>
 </header>
-
-{{-- ============================================================
-     CSS bổ sung cho phần "header-actions-mobile"
-     - Ở mobile: hiển thị cart / ngôn ngữ / tài khoản ngay cạnh nút hamburger
-       (đúng vị trí cũ như ảnh 1), không còn nằm trong menu sổ xuống nữa.
-     - Ở desktop (>=992px): ẩn khối này đi, giữ nguyên layout cũ trong navbar-nav.
-     Các class dùng lại: action-link, cart-badge, action-dropdown, language-toggle
-     nên sẽ tự kế thừa style đã có sẵn của bạn cho icon/badge.
-============================================================ --}}
-<style>
-    .main-nav .container {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .header-actions-mobile {
-        align-items: center;
-        gap: 14px;
-    }
-
-    .header-actions-mobile .action-link,
-    .header-actions-mobile .language-toggle {
-        display: inline-flex;
-        align-items: center;
-        position: relative;
-    }
-
-    .header-actions-mobile .dropdown-menu {
-        min-width: 160px;
-    }
-
-    @media (max-width: 991.98px) {
-        .main-nav .container {
-            justify-content: space-between;
-        }
-
-        .navbar-toggler {
-            order: 1;
-        }
-
-        .header-actions-mobile {
-            order: 2;
-            margin-left: auto;
-        }
-
-        .navbar-collapse {
-            order: 3;
-            flex-basis: 100%;
-        }
-    }
-
-    @media (min-width: 992px) {
-        .header-actions-mobile {
-            display: none !important;
-        }
-    }
-</style>

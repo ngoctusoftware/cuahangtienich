@@ -12,7 +12,7 @@
             <tbody>
                 @foreach($contents as $c)
                     <tr>
-                        <td><code>{{ $c->key }}</code></td>
+                        <td>{{ $c->key }}</td>
                         <td>{{ $c->type }}</td>
                         <td>{{ $c->translation()?->title }}</td>
                         <td>{!! $c->is_active ? '<span class="badge bg-success">Hiển thị</span>' : '<span class="badge bg-secondary">Ẩn</span>' !!}</td>

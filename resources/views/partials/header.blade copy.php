@@ -41,6 +41,70 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
+            {{-- Chỉ hiển thị ở mobile, nằm ngay cạnh nút hamburger — đúng "vị trí cũ" --}}
+            <div class="header-actions-mobile d-flex d-lg-none align-items-center">
+                <a href="{{ route('cart.index') }}" class="action-link cart-link">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-badge">{{ $cartCount ?? 0 }}</span>
+                </a>
+
+                <div class="dropdown action-dropdown language-item">
+                    @php
+                        $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
+                            ?? collect($languages ?? [])->firstWhere('is_default', true);
+                    @endphp
+                    <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        @if ($currentLanguage)
+                            <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
+                                alt="{{ $currentLanguage->name }}" style="width:26px; height:auto; border-radius:3px;"
+                                onerror="this.style.display='none'">
+                        @endif
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end">
+                        @foreach ($languages ?? [] as $lang)
+                            <li>
+                                <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
+                                    <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
+                                        alt="{{ $lang->name }}" style="width:26px; height:auto; border-radius:3px;"
+                                        onerror="this.style.display='none'">
+                                    {{ $lang->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+
+                @auth('customer')
+                    <div class="dropdown action-dropdown">
+                        <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                            <i class="far fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li>
+                                <a class="dropdown-item" href="{{ route('customer.orders') }}">
+                                    <i class="fas fa-shopping-bag fa-sm"></i>
+                                    <span style="font-size:14px;">Đơn hàng của tôi</span>
+                                </a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                                <form method="POST" action="{{ route('customer.logout') }}">@csrf
+                                    <button class="dropdown-item">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                        <span style="font-size:14px;">Đăng xuất</span>
+                                    </button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
+                @else
+                    <a href="{{ route('customer.login') }}" class="action-link">
+                        <i class="far fa-user"></i>
+                    </a>
+                @endauth
+            </div>
+
             <div class="collapse navbar-collapse" id="mainMenu">
                 <ul class="navbar-nav align-items-lg-stretch w-100">
                     @foreach($headerMenuItems ?? [] as $menuItem)
@@ -68,14 +132,16 @@
                         @endif
                     @endforeach
 
-                    {{-- Giỏ hàng --}}
-                    <li class="nav-item ms-lg-auto d-flex align-items-lg-stretch header-actions">
+                    {{-- Giỏ hàng — chỉ hiển thị ở desktop, mobile đã có ở header-actions-mobile bên trên --}}
+                    <li class="nav-item ms-lg-auto d-none d-lg-flex align-items-lg-stretch header-actions">
                         <a href="{{ route('cart.index') }}" class="action-link cart-link">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-badge">{{ $cartCount ?? 0 }}</span>
                         </a>
-                    {{-- Chuyển đổi ngôn ngữ --}}
-                    <li class="nav-item dropdown action-dropdown language-item">
+                    </li>
+
+                    {{-- Chuyển đổi ngôn ngữ — chỉ hiển thị ở desktop --}}
+                    <li class="nav-item dropdown action-dropdown language-item d-none d-lg-block">
                         @php
                             $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
                                 ?? collect($languages ?? [])->firstWhere('is_default', true);
@@ -100,9 +166,10 @@
                             @endforeach
                         </ul>
                     </li>
-                    {{-- Tài khoản --}}
+
+                    {{-- Tài khoản — chỉ hiển thị ở desktop --}}
                     @auth('customer')
-                        <li class="nav-item dropdown action-dropdown language-item">
+                        <li class="nav-item dropdown action-dropdown language-item d-none d-lg-block">
                             <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="far fa-user"></i>
                                 <span class="d-none d-xl-inline">{{ auth('customer')->user()->name }}</span>
@@ -128,13 +195,13 @@
                             </ul>
                         </li>
                     @else
-                        <a href="{{ route('customer.login') }}" class="action-link">
+                        <a href="{{ route('customer.login') }}" class="action-link d-none d-lg-inline-flex">
                             <i class="far fa-user"></i>
                         </a>
                     @endauth
-                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
+
