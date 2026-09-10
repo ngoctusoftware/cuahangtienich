@@ -41,70 +41,6 @@
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainMenu">
                 <span class="navbar-toggler-icon"></span>
             </button>
-
-            {{-- Chỉ hiển thị ở mobile, nằm ngay cạnh nút hamburger — đúng "vị trí cũ" --}}
-            <div class="header-actions-mobile d-flex d-lg-none align-items-center">
-                <a href="{{ route('cart.index') }}" class="action-link cart-link">
-                    <i class="fas fa-shopping-cart"></i>
-                    <span class="cart-badge">{{ $cartCount ?? 0 }}</span>
-                </a>
-
-                <div class="dropdown action-dropdown language-item">
-                    @php
-                        $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
-                            ?? collect($languages ?? [])->firstWhere('is_default', true);
-                    @endphp
-                    <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                        @if ($currentLanguage)
-                            <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
-                                alt="{{ $currentLanguage->name }}" style="width:26px; height:auto; border-radius:3px;"
-                                onerror="this.style.display='none'">
-                        @endif
-                    </a>
-                    <ul class="dropdown-menu dropdown-menu-end">
-                        @foreach ($languages ?? [] as $lang)
-                            <li>
-                                <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
-                                    <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
-                                        alt="{{ $lang->name }}" style="width:26px; height:auto; border-radius:3px;"
-                                        onerror="this.style.display='none'">
-                                    {{ $lang->name }}
-                                </a>
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
-
-                @auth('customer')
-                    <div class="dropdown action-dropdown">
-                        <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
-                            <i class="far fa-user"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end">
-                            <li>
-                                <a class="dropdown-item" href="{{ route('customer.orders') }}">
-                                    <i class="fas fa-shopping-bag fa-sm"></i>
-                                    <span style="font-size:14px;">Đơn hàng của tôi</span>
-                                </a>
-                            </li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form method="POST" action="{{ route('customer.logout') }}">@csrf
-                                    <button class="dropdown-item">
-                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        <span style="font-size:14px;">Đăng xuất</span>
-                                    </button>
-                                </form>
-                            </li>
-                        </ul>
-                    </div>
-                @else
-                    <a href="{{ route('customer.login') }}" class="action-link">
-                        <i class="far fa-user"></i>
-                    </a>
-                @endauth
-            </div>
-
             <div class="collapse navbar-collapse" id="mainMenu">
                 <ul class="navbar-nav align-items-lg-stretch w-100">
                     @foreach($headerMenuItems ?? [] as $menuItem)
@@ -132,16 +68,14 @@
                         @endif
                     @endforeach
 
-                    {{-- Giỏ hàng — chỉ hiển thị ở desktop, mobile đã có ở header-actions-mobile bên trên --}}
-                    <li class="nav-item ms-lg-auto d-none d-lg-flex align-items-lg-stretch header-actions">
+                    {{-- Giỏ hàng --}}
+                    <li class="nav-item ms-lg-auto d-flex align-items-lg-stretch header-actions">
                         <a href="{{ route('cart.index') }}" class="action-link cart-link">
                             <i class="fas fa-shopping-cart"></i>
                             <span class="cart-badge">{{ $cartCount ?? 0 }}</span>
                         </a>
-                    </li>
-
-                    {{-- Chuyển đổi ngôn ngữ — chỉ hiển thị ở desktop --}}
-                    <li class="nav-item dropdown action-dropdown language-item d-none d-lg-block">
+                    {{-- Chuyển đổi ngôn ngữ --}}
+                    <li class="nav-item dropdown action-dropdown language-item">
                         @php
                             $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
                                 ?? collect($languages ?? [])->firstWhere('is_default', true);
@@ -166,10 +100,9 @@
                             @endforeach
                         </ul>
                     </li>
-
-                    {{-- Tài khoản — chỉ hiển thị ở desktop --}}
+                    {{-- Tài khoản --}}
                     @auth('customer')
-                        <li class="nav-item dropdown action-dropdown language-item d-none d-lg-block">
+                        <li class="nav-item dropdown action-dropdown language-item">
                             <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
                                 <i class="far fa-user"></i>
                                 <span class="d-none d-xl-inline">{{ auth('customer')->user()->name }}</span>
@@ -195,70 +128,13 @@
                             </ul>
                         </li>
                     @else
-                        <a href="{{ route('customer.login') }}" class="action-link d-none d-lg-inline-flex">
+                        <a href="{{ route('customer.login') }}" class="action-link">
                             <i class="far fa-user"></i>
                         </a>
                     @endauth
+                    </li>
                 </ul>
             </div>
         </div>
     </nav>
 </header>
-
-{{-- ============================================================
-     CSS bổ sung cho phần "header-actions-mobile"
-     - Ở mobile: hiển thị cart / ngôn ngữ / tài khoản ngay cạnh nút hamburger
-       (đúng vị trí cũ như ảnh 1), không còn nằm trong menu sổ xuống nữa.
-     - Ở desktop (>=992px): ẩn khối này đi, giữ nguyên layout cũ trong navbar-nav.
-     Các class dùng lại: action-link, cart-badge, action-dropdown, language-toggle
-     nên sẽ tự kế thừa style đã có sẵn của bạn cho icon/badge.
-============================================================ --}}
-<style>
-    .main-nav .container {
-        display: flex;
-        align-items: center;
-        flex-wrap: wrap;
-    }
-
-    .header-actions-mobile {
-        align-items: center;
-        gap: 14px;
-    }
-
-    .header-actions-mobile .action-link,
-    .header-actions-mobile .language-toggle {
-        display: inline-flex;
-        align-items: center;
-        position: relative;
-    }
-
-    .header-actions-mobile .dropdown-menu {
-        min-width: 160px;
-    }
-
-    @media (max-width: 991.98px) {
-        .main-nav .container {
-            justify-content: space-between;
-        }
-
-        .navbar-toggler {
-            order: 1;
-        }
-
-        .header-actions-mobile {
-            order: 2;
-            margin-left: auto;
-        }
-
-        .navbar-collapse {
-            order: 3;
-            flex-basis: 100%;
-        }
-    }
-
-    @media (min-width: 992px) {
-        .header-actions-mobile {
-            display: none !important;
-        }
-    }
-</style>

@@ -58,7 +58,7 @@ body {
 
 .header-search {
     flex: 1 1 380px;
-    max-width: 460px;
+    max-width: 550px;
     display: flex;
     border: 1px solid #e3ddd4;
     border-radius: 6px;
@@ -175,14 +175,12 @@ body {
 
 /* Dropdown (danh mục / tài khoản / ngôn ngữ) luôn nền trắng đục vì nổi trên nội dung trang */
 .main-nav .dropdown-menu {
-    background: var(--hdr-warning);
     border: none;
-    /* border-radius: 8px; */
     box-shadow: 0 12px 30px rgba(30, 21, 51, .18);
-    /* padding: 8px; */
     margin-top: 0;
     animation: dropIn .18s ease;
-    max-width: 150px !important;
+    width: 213px !important;
+    border-radius: 0 0 5px 5px;
 }
 
 .main-nav .dropdown-item {
@@ -271,9 +269,49 @@ body {
     }
 }
 
-/* Toggler mobile: icon tối màu vì nằm trên nền trắng/cam sáng */
+/* Toggler mobile */
 .main-nav .navbar-toggler {
-    border-color: rgba(0, 0, 0, .2);
+    display: none;
+    border: 1px solid rgba(255, 255, 255, .45);
+    border-radius: 4px;
+    padding: 8px 10px;
+}
+
+.main-nav .navbar-toggler:focus {
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+}
+
+.main-nav .navbar-toggler-icon {
+    width: 15px;
+    height: 20px;
+    background-image: none;
+    position: relative;
+}
+
+.main-nav .navbar-toggler-icon::before,
+.main-nav .navbar-toggler-icon::after,
+.main-nav .navbar-toggler-icon {
+    background-color: transparent;
+}
+
+.main-nav .navbar-toggler-icon::before,
+.main-nav .navbar-toggler-icon::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: #fff;
+    box-shadow: 0 6px 0 #fff;
+}
+
+.main-nav .navbar-toggler-icon::before {
+    top: 2px;
+}
+
+.main-nav .navbar-toggler-icon::after {
+    top: 8px;
+    box-shadow: none;
 }
 
 /* Responsive */
@@ -290,10 +328,87 @@ body {
         margin-top: 10px;
     }
 
-    .main-nav .navbar-collapse {
+    .main-nav {
+        position: sticky;
+        top: 0;
+        min-height: 56px;
+        z-index: 1040;
+    }
+
+    .main-nav .container {
+        min-height: 56px;
+        justify-content: flex-start;
+    }
+
+    .main-nav .navbar-toggler {
+        display: block;
+        position: relative;
+        z-index: 1043;
+    }
+
+    .main-nav:has(.navbar-collapse.show) .navbar-toggler,
+    .main-nav:has(.navbar-collapse.collapsing) .navbar-toggler {
+        position: fixed;
+        top: 16px;
+        left: calc(min(86vw, 320px) - 52px);
         background: #fff;
-        margin-top: 0;
-        box-shadow: 0 12px 30px rgba(30, 21, 51, .14);
+        border-color: #e5e0da;
+    }
+
+    .main-nav:has(.navbar-collapse.show) .navbar-toggler-icon::before,
+    .main-nav:has(.navbar-collapse.show) .navbar-toggler-icon::after,
+    .main-nav:has(.navbar-collapse.collapsing) .navbar-toggler-icon::before,
+    .main-nav:has(.navbar-collapse.collapsing) .navbar-toggler-icon::after {
+        top: 8px;
+        background: var(--hdr-text);
+        box-shadow: none;
+    }
+
+    .main-nav:has(.navbar-collapse.show) .navbar-toggler-icon::before,
+    .main-nav:has(.navbar-collapse.collapsing) .navbar-toggler-icon::before {
+        transform: rotate(45deg);
+    }
+
+    .main-nav:has(.navbar-collapse.show) .navbar-toggler-icon::after,
+    .main-nav:has(.navbar-collapse.collapsing) .navbar-toggler-icon::after {
+        transform: rotate(-45deg);
+    }
+
+    .main-nav .navbar-collapse {
+        display: block !important;
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(86vw, 320px);
+        height: 100vh !important;
+        padding: 68px 0 24px;
+        overflow-y: auto;
+        background: #fff;
+        box-shadow: 10px 0 30px rgba(30, 21, 51, .2);
+        transform: translateX(-105%);
+        transition: transform .25s ease;
+        visibility: hidden;
+        z-index: 1042;
+    }
+
+    .main-nav .navbar-collapse.show,
+    .main-nav .navbar-collapse.collapsing {
+        transform: translateX(0);
+        visibility: visible;
+    }
+
+    .main-nav:has(.navbar-collapse.show)::after,
+    .main-nav:has(.navbar-collapse.collapsing)::after {
+        content: "";
+        position: fixed;
+        inset: 0;
+        background: rgba(20, 18, 29, .45);
+        z-index: 1041;
+    }
+
+    .main-nav .navbar-nav {
+        align-items: stretch;
+        flex-direction: column;
+        width: 100%;
     }
 
     .main-nav .nav-item {
@@ -302,7 +417,20 @@ body {
 
     .main-nav .nav-link,
     .action-link {
+        display: flex;
+        align-items: center;
+        min-height: 52px;
+        width: 100%;
+        padding: 14px 22px !important;
         color: var(--hdr-text) !important;
+    }
+
+    .main-nav .nav-link:hover,
+    .main-nav .nav-link:focus,
+    .main-nav .action-link:hover,
+    .main-nav .action-link:focus {
+        color: var(--hdr-text) !important;
+        background: rgba(74, 44, 29, .08);
     }
 
     .category-item .category-toggle {
@@ -311,6 +439,25 @@ body {
 
     .header-actions {
         flex-direction: column;
+        margin-left: 0 !important;
+    }
+
+    .main-nav .dropdown-menu {
+        position: static !important;
+        float: none;
+        width: 100% !important;
+        border-top: 1px solid #f3e8da;
+        border-radius: 0;
+        box-shadow: none;
+        animation: none;
+    }
+
+    .main-nav .dropdown-item {
+        padding: 12px 34px;
+    }
+
+    .main-nav .category-item .dropdown-menu::before {
+        display: none;
     }
 }
 
@@ -635,4 +782,218 @@ body {
 
 .product-title {
     font-weight: 800;
+}
+
+/* ------------------------------------ CSS Mới ----------------------------------------------- */
+
+/* Header chính - thanh cam */
+.navbar {
+    background: linear-gradient(90deg, #f0a04b, #e8935c);
+    padding: 0;
+}
+
+.navbar .btn-menu-danhmuc {
+    background-color: #d98c3f;
+    /* đậm hơn 1 chút để nổi bật nút đang active */
+    color: #fff;
+    font-weight: 600;
+    padding: 15px 20px;
+    border: none;
+}
+
+.navbar .nav-link {
+    color: #000 !important;
+    font-weight: 600;
+    padding: 15px 15px;
+}
+
+.navbar .nav-link:hover {
+    color: var(--hdr-amber) !important;
+}
+
+
+/* ===== Dropdown danh mục sản phẩm ===== */
+.category-item .dropdown-menu {
+    width: 280px;
+    max-width: none !important;
+    background: #fff;
+    border-radius: 0 0 5px 5px;
+    border-top: 3px solid var(--hdr-amber-dark);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .14), 0 4px 12px rgba(0, 0, 0, .08);
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Header nhỏ phía trên dropdown */
+.category-item .dropdown-menu::before {
+    /* content: "TẤT CẢ DANH MỤC"; */
+    display: block;
+    padding: 10px 16px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    color: var(--hdr-amber-dark);
+    background: #fff9f3;
+    border-bottom: 1px solid #f3e8da;
+}
+
+/* Mỗi item danh mục */
+.category-item .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    border-left: 3px solid transparent;
+    transition: background .15s, transform .12s, border-color .15s;
+    border-bottom: 1px solid #f3ece4;
+}
+
+.category-item .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.category-item .dropdown-item:hover,
+.category-item .dropdown-item:focus {
+    background: #fff5eb;
+    border-left-color: var(--hdr-amber);
+    color: var(--hdr-amber-dark);
+    transform: translateX(3px);
+}
+
+/* Mũi tên nhỏ bên phải */
+.category-item .dropdown-item::after {
+    content: "›";
+    margin-left: auto;
+    font-size: 16px;
+    color: #ccc;
+    transition: color .15s;
+}
+
+.category-item .dropdown-item:hover::after {
+    color: var(--hdr-amber);
+}
+
+/* Xóa divider riêng nếu không dùng */
+.category-item .dropdown-divider {
+    display: none;
+}
+
+/* Icon giỏ hàng, user, ngôn ngữ bên phải */
+.navbar .icon-cart,
+.navbar .icon-user {
+    color: #fff;
+    font-size: 18px;
+    margin-right: 15px;
+}
+
+.navbar .badge-cart {
+    background-color: #d9534f;
+    color: #fff;
+    border-radius: 50%;
+    font-size: 11px;
+    padding: 2px 6px;
+}
+
+.navbar .lang-select {
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+--------------------------------------------- CSS Language -----------------------------------------
+
+/* ===== Dropdown danh mục sản phẩm ===== */
+.language-item .dropdown-menu {
+    width: 280px;
+    max-width: none !important;
+    background: #fff;
+    border-radius: 0 0 5px 5px !important;
+    border-top: 3px solid var(--hdr-amber-dark);
+    box-shadow: 0 16px 40px rgba(0, 0, 0, .14), 0 4px 12px rgba(0, 0, 0, .08);
+    padding: 0;
+    overflow: hidden;
+}
+
+/* Header nhỏ phía trên dropdown */
+.language-item .dropdown-menu::before {
+    /* content: "TẤT CẢ DANH MỤC"; */
+    display: block;
+    padding: 10px 16px 8px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .8px;
+    color: var(--hdr-amber-dark);
+    background: #fff9f3;
+    border-bottom: 1px solid #f3e8da;
+}
+
+/* Mỗi item danh mục */
+.language-item .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #333;
+    border-left: 3px solid transparent;
+    transition: background .15s, transform .12s, border-color .15s;
+    border-bottom: 1px solid #f3ece4;
+    max-width: 200px;
+}
+
+.language-item .dropdown-item:last-child {
+    border-bottom: none;
+}
+
+.language-item .dropdown-item:hover,
+.language-item .dropdown-item:focus {
+    background: #fff5eb;
+    border-left-color: var(--hdr-amber);
+    color: var(--hdr-amber-dark);
+    transform: translateX(3px);
+}
+
+/* Mũi tên nhỏ bên phải */
+.language-item .dropdown-item::after {
+    content: "›";
+    margin-left: auto;
+    font-size: 16px;
+    color: #ccc;
+    transition: color .15s;
+}
+
+.language-item .dropdown-item:hover::after {
+    color: var(--hdr-amber);
+}
+
+/* Xóa divider riêng nếu không dùng */
+.language-item .dropdown-divider {
+    display: none;
+}
+
+/* -------------------------------------------------------------------------- */
+.contact-item .fa-phone-volume,
+.contact-item .fa-envelope {
+    display: inline-block;
+    animation: shake 0.4s ease-in-out infinite;
+}
+
+@keyframes shake {
+
+    0%,
+    100% {
+        transform: rotate(0deg);
+    }
+
+    25% {
+        transform: rotate(-10deg);
+    }
+
+    75% {
+        transform: rotate(10deg);
+    }
 }
