@@ -1,27 +1,27 @@
 <header class="site-header">
     {{-- Tầng trên: logo / tìm kiếm / liên hệ --}}
     <div class="header-top">
-        <div class="container d-flex flex-column flex-lg-row align-items-lg-center justify-content-lg-between gap-3">
-            <div class="header-top-row1 d-flex align-items-center gap-3">
+        <div class="header-top-inner container">
+            <div class="header-top-row1">
                 <a class="brand d-flex align-items-center" href="{{ route('home') }}">
                     <img src="{{ !empty($settings['site_logo']) ? asset($settings['site_logo']) : '/images/logo.png' }}"
                         alt="{{ !empty($settings['site_name']) ? $settings['site_name'] : env('APP_NAME') }}" width="100px"
                         height="auto" onerror="this.style.display='none'">
-                </a>                
-            </div>
-            <div class="header-top-search d-flex align-items-center gap-3">
+                </a>
+
                 {{-- Ô tìm kiếm: đổi action bên dưới thành route tìm kiếm thực tế của bạn --}}
                 <form class="header-search" action="{{ url('/tim-kiem') }}" method="GET">
                     <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request('q') }}">
                     <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
                 </form>
             </div>
-            <div class="header-contact d-flex">
+
+            <div class="header-contact">
                 <div class="contact-item">
                     <i class="fas fa-phone-volume"></i>
                     <div class="contact-text">
                         <span class="contact-value text-dark">
-                            {{ !empty($settings['hotline']) ? $settings['hotline'] : 'Chưa có số điện thoại' }}
+                            {{ !empty($settings['hotline']) ? $settings['hotline'] : '1900 0000' }}
                         </span>
                     </div>
                 </div>
@@ -29,7 +29,7 @@
                     <i class="fas fa-envelope"></i>
                     <div class="contact-text">
                         <span class="contact-value text-dark">
-                            {{ !empty($settings['email']) ? $settings['email'] : 'Chưa có email' }}
+                            {{ !empty($settings['email']) ? $settings['email'] : 'info@yourwebsite.com' }}
                         </span>
                     </div>
                 </div>
