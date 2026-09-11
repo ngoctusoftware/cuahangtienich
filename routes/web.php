@@ -5,6 +5,7 @@ use App\Http\Controllers\Shop\CartController;
 use App\Http\Controllers\Shop\CheckoutController;
 use App\Http\Controllers\Shop\HomeController;
 use App\Http\Controllers\Shop\LanguageController;
+use App\Http\Controllers\Shop\PageController;
 use App\Http\Controllers\Shop\ProductController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::get('/ngon-ngu/{code}', [LanguageController::class, 'switch'])->name('lan
 // Sản phẩm & danh mục
 Route::get('/san-pham-moi', [ProductController::class, 'newest'])->name('products.newest');
 Route::get('/ban-chay', [ProductController::class, 'bestseller'])->name('products.bestseller');
+Route::get('/tim-kiem', [ProductController::class, 'search'])->name('products.search');
 Route::get('/danh-muc/{slug}', [ProductController::class, 'byCategory'])->name('products.byCategory');
 Route::get('/san-pham/{slug}', [ProductController::class, 'show'])->name('products.show');
 
@@ -54,4 +56,4 @@ Route::prefix('tai-khoan')->name('customer.')->group(function () {
 });
 
 // Trang nội dung tĩnh (giới thiệu, liên hệ, chính sách...) lấy từ bảng "contents"
-Route::get('/trang/{key}', [\App\Http\Controllers\Shop\PageController::class, 'show'])->name('page.show');
+Route::get('/trang/{key}', [PageController::class, 'show'])->name('page.show');

@@ -10,17 +10,16 @@ class ProductService
     public function __construct(
         protected ProductRepositoryInterface $productRepository,
         protected LanguageService $languageService,
-    ) {
-    }
+    ) {}
 
     public function homepageSections(): array
     {
         $languageId = $this->languageService->currentLanguageId();
 
         return [
-            'featured'   => $this->productRepository->getFeatured($languageId),
+            'featured' => $this->productRepository->getFeatured($languageId),
             'bestseller' => $this->productRepository->getBestseller($languageId),
-            'newest'     => $this->productRepository->getNewest($languageId),
+            'newest' => $this->productRepository->getNewest($languageId),
         ];
     }
 
@@ -32,5 +31,10 @@ class ProductService
     public function byCategory(int $categoryId, int $perPage = 20)
     {
         return $this->productRepository->getByCategory($categoryId, $this->languageService->currentLanguageId(), $perPage);
+    }
+
+    public function search(string $query, int $perPage = 20)
+    {
+        return $this->productRepository->search($query, $this->languageService->currentLanguageId(), $perPage);
     }
 }

@@ -25,20 +25,7 @@
                 ?>
     {{-- HERO CAROUSEL --}}
     {{-- @include('home.banner') --}}
-    @include('home.banner', ['slides' => $heroSlides])
-
-    {{-- ĐƯỢC TIN TƯỞNG BỞI --}}
-    <section class="trusted-section py-4">
-        <div class="container">
-            <h6 class="text-uppercase text-center fw-bold mb-4">Được khách hàng tin tưởng</h6>
-            <div class="d-flex flex-wrap justify-content-center align-items-center gap-5 brand-logos">
-                @for ($i = 1; $i <= 8; $i++)
-                    <img src="{{ asset('images/brands/brand-' . $i . '.png') }}" alt="brand" height="36"
-                        onerror="this.remove()">
-                @endfor
-            </div>
-        </div>
-    </section>
+    @include('home.banner', ['slides' => $heroSlides]) 
 
     {{-- SẢN PHẨM NỔI BẬT --}}
     <section class="products-section py-5">

@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Services\LanguageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Product extends Model
 {
@@ -43,7 +45,7 @@ class Product extends Model
 
     public function translation(?int $languageId = null): ?ProductTranslation
     {
-        $languageId ??= app(\App\Services\LanguageService::class)->currentLanguageId();
+        $languageId ??= app(LanguageService::class)->currentLanguageId();
 
         return $this->translations->firstWhere('language_id', $languageId);
     }
@@ -51,5 +53,16 @@ class Product extends Model
     public function getFinalPriceAttribute(): float
     {
         return (float) ($this->sale_price ?? $this->price);
+    }
+
+    public function getThumbnailUrlAttribute(): string
+    {
+        if (! $this->thumbnail) {
+            return asset('images/product-placeholder.jpg');
+        }
+
+        return Str::startsWith($this->thumbnail, ['http://', 'https://'])
+            ? $this->thumbnail
+            : asset('images/'.$this->thumbnail);
     }
 }

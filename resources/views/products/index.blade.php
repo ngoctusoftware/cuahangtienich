@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', ($category?->translation()?->name ?? 'Sản phẩm') . ' - ' . ($siteName ?? 'ZEK SHOP'))
+@section('title', (($searchQuery ?? null) ? 'Tìm kiếm: ' . $searchQuery : ($category?->translation()?->name ?? 'Sản phẩm')) . ' - ' . ($siteName ?? 'ZEK SHOP'))
 
 @section('content')
 <div class="container py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
-            <li class="breadcrumb-item active">{{ $category?->translation()?->name ?? 'Sản phẩm' }}</li>
+            <li class="breadcrumb-item active">{{ ($searchQuery ?? null) ? 'Tìm kiếm: ' . $searchQuery : ($category?->translation()?->name ?? 'Sản phẩm') }}</li>
         </ol>
     </nav>
 
@@ -32,7 +32,7 @@
                 @forelse($products as $product)
                     @include('products.partials.card', ['product' => $product])
                 @empty
-                    <p class="text-muted">Không có sản phẩm nào.</p>
+                    <p class="text-muted">{{ ($searchQuery ?? null) ? 'Không tìm thấy sản phẩm phù hợp.' : 'Không có sản phẩm nào.' }}</p>
                 @endforelse
             </div>
             @if ($products instanceof \Illuminate\Contracts\Pagination\Paginator)

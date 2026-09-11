@@ -3,9 +3,9 @@
         <button id="sidebarToggle" class="btn btn-sm d-lg-none topbar-icon-btn" type="button">
             <i class="fas fa-bars"></i>
         </button>
-        <form class="search-box d-none d-md-block">
+        <form class="search-box d-none d-md-block" method="GET" action="{{ route('admin.search') }}">
             <i class="fas fa-search"></i>
-            <input type="text" placeholder="Tìm kiếm...">
+            <input type="search" name="q" value="{{ request('q') }}" placeholder="Tìm sản phẩm, danh mục, hóa đơn..." aria-label="Tìm kiếm" autocomplete="off">
         </form>
     </div>
     <div class="d-flex align-items-center gap-2">

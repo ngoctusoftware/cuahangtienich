@@ -16,7 +16,7 @@
     <div class="row g-5">
         <div class="col-lg-6">
             <div class="product-gallery">
-                <img id="mainImage" src="{{ $product->thumbnail ? asset('images/'.$product->thumbnail) : asset('images/product-placeholder.jpg') }}" class="img-fluid rounded mb-3 main-image">
+                <img id="mainImage" src="{{ $product->thumbnail_url }}" class="img-fluid rounded mb-3 main-image">
                 <div class="d-flex gap-2 flex-wrap">
                     @foreach($product->images as $img)
                         <img src="{{ asset('images/'.$img->path) }}" class="thumb-image" onclick="document.getElementById('mainImage').src=this.src">

@@ -66,6 +66,22 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
             ->paginate($perPage);
     }
 
+    public function search(string $query, int $languageId, int $perPage = 20)
+    {
+        return $this->model->with('translations', 'category.translations')
+            ->where('is_active', true)
+            ->where(function ($products) use ($query, $languageId) {
+                $products->where('sku', 'like', "%{$query}%")
+                    ->orWhereHas('translations', function ($translations) use ($query, $languageId) {
+                        $translations->where('language_id', $languageId)
+                            ->where('name', 'like', "%{$query}%");
+                    });
+            })
+            ->latest()
+            ->paginate($perPage)
+            ->withQueryString();
+    }
+
     /**
      * Lấy dữ liệu từ cache (tag 'products'), tự phục hồi nếu cache bị hỏng.
      *

@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
             AdminUserSeeder::class,
             LanguageSeeder::class,
             HeaderMenuSeeder::class,
-            // CategoryProductSeeder::class,
+            CategoryProductSeeder::class,
             BannerSeeder::class,
         ]);
     }

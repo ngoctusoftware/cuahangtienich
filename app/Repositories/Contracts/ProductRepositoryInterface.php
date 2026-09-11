@@ -15,4 +15,6 @@ interface ProductRepositoryInterface extends RepositoryInterface
     public function getNewest(int $languageId, int $limit = 8): Collection;
 
     public function getByCategory(int $categoryId, int $languageId, int $perPage = 20);
+
+    public function search(string $query, int $languageId, int $perPage = 20);
 }

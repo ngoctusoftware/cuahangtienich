@@ -74,7 +74,7 @@
             <div class="panel-header">Sản phẩm bán chạy nhất</div>
             <div class="panel-body text-center">
                 @if($topProduct)
-                    <img src="{{ $topProduct->thumbnail ? asset('images/'.$topProduct->thumbnail) : asset('images/product-placeholder.jpg') }}"
+                    <img src="{{ $topProduct->thumbnail_url }}"
                          class="popular-product-thumb mb-3" alt="">
                     <div class="fw-bold text-white">{{ $topProduct->translation()?->name ?? $topProduct->sku }}</div>
                     <div class="stars my-1">
@@ -127,7 +127,7 @@
                 @forelse($lowStockProducts as $p)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span class="d-flex align-items-center gap-2">
-                            <img src="{{ $p->thumbnail ? asset('images/'.$p->thumbnail) : asset('images/product-placeholder.jpg') }}" class="thumb-mini">
+                            <img src="{{ $p->thumbnail_url }}" class="thumb-mini">
                             {{ $p->translation()?->name ?? $p->sku }}
                         </span>
                         <span class="badge bg-danger">Còn {{ $p->stock }}</span>
