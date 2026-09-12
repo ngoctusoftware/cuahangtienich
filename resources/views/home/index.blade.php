@@ -6,66 +6,24 @@
         $heroSlides = $banners->map(function ($banner) {
             $translation = $banner->translation();
             return [
-            'eyebrow' => $translation?->eyebrow ?? $banner->eyebrow,
-            'title' => $translation?->title ?? $banner->title,
-            'description' => $translation?->description ?? $banner->description,
-            'cta_text' => $translation?->cta_text ?? $banner->cta_text,
-            'cta_link' => $translation?->resolved_link ?? $banner->resolved_link,
-            'cta_type' => $banner->cta_type,
-            'image' => $banner->image_url,
-            'bg_class' => $banner->bg_class,
+                'eyebrow' => $translation?->eyebrow ?? $banner->eyebrow,
+                'title' => $translation?->title ?? $banner->title,
+                'description' => $translation?->description ?? $banner->description,
+                'cta_text' => $translation?->cta_text ?? $banner->cta_text,
+                'cta_link' => $translation?->resolved_link ?? $banner->resolved_link,
+                'cta_type' => $banner->cta_type,
+                'image' => $banner->image_url,
+                'bg_class' => $banner->bg_class,
             ];
         })->all();
     @endphp
     {{-- HERO CAROUSEL --}}
     @include('home.banner', ['slides' => $heroSlides])
-
-    <section class="home-benefits" aria-label="Cam kết của cửa hàng">
-        <div class="container">
-            <div class="home-benefits-grid">
-                @foreach($benefits as $benefit)
-                    @php($translation = $benefit->translation())
-                    <div class="home-benefit">
-                        <span class="home-benefit-icon"><i class="{{ $benefit->icon }}"></i></span>
-                        <div class="home-benefit-copy">
-                            <strong>{{ $translation?->title }}</strong>
-                            <span>{{ $translation?->description }}</span>
-                        </div>
-                    </div>
-                @endforeach
-            </div>
-        </div>
-    </section>
-
+    
+    {{-- ============================================= Cam kết cửa hàng ============================================ --}}
+    @include('home.benefits', ['benefits' => $benefits])
     {{-- SẢN PHẨM NỔI BẬT --}}
-    <section class="products-section py-5">
-        <div class="container">
-            <div class="d-flex align-items-end justify-content-between gap-3 mb-4">
-                <div class="section-heading section-heading-left">
-                    <span class="d-block text-uppercase fw-bold text-primary small mb-2">Được yêu thích nhất</span>
-                    <h2>SẢN PHẨM NỔI BẬT</h2>
-                    <p>Những lựa chọn được khách hàng tin yêu và săn đón mỗi ngày.</p>
-                    <span class="heading-underline"></span>
-                </div>
-            </div>
-            <div class="home-product-carousel-wrapper">
-                <div class="home-product-carousel" data-product-carousel>
-                    @forelse(($featured ?? []) as $product)
-                        @include('products.partials.card', ['product' => $product])
-                    @empty
-                        <p class="text-center text-muted">Chưa có sản phẩm nổi bật.</p>
-                    @endforelse
-                </div>
-                <div class="home-product-carousel-controls" aria-label="Điều hướng sản phẩm nổi bật">
-                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm nổi bật trước"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm nổi bật tiếp theo"><i class="fas fa-chevron-right"></i></button>
-                </div>
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-                <a href="{{ route('products.featured') }}" class="btn btn-outline-primary">Xem tất cả sản phẩm nổi bật</a>
-            </div>
-        </div>
-    </section>
+    @include('home.featured_products')
 
     {{-- SẢN PHẨM BÁN CHẠY --}}
     <section class="products-section bg-light py-5">
@@ -86,12 +44,15 @@
                     @endforelse
                 </div>
                 <div class="home-product-carousel-controls" aria-label="Điều hướng sản phẩm bán chạy">
-                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm bán chạy trước"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm bán chạy tiếp theo"><i class="fas fa-chevron-right"></i></button>
+                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm bán chạy trước"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm bán chạy tiếp theo"><i
+                            class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
             <div class="d-flex justify-content-center mt-3">
-                <a href="{{ route('products.bestseller') }}" class="btn btn-outline-primary">Xem tất cả sản phẩm bán chạy</a>
+                <a href="{{ route('products.bestseller') }}" class="btn btn-outline-primary">Xem tất cả sản phẩm bán
+                    chạy</a>
             </div>
         </div>
     </section>
@@ -115,8 +76,10 @@
                     @endforelse
                 </div>
                 <div class="home-product-carousel-controls" aria-label="Điều hướng sản phẩm mới">
-                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm mới trước"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm mới tiếp theo"><i class="fas fa-chevron-right"></i></button>
+                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm mới trước"><i
+                            class="fas fa-chevron-left"></i></button>
+                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm mới tiếp theo"><i
+                            class="fas fa-chevron-right"></i></button>
                 </div>
             </div>
             <div class="d-flex justify-content-center mt-3">
@@ -137,21 +100,21 @@
                     </div>
                     <div class="why-list">
                         @forelse($benefits as $benefit)
-                            @php($translation = $benefit->translation())
-                            <article class="why-item">
-                                <span class="why-item-icon" aria-hidden="true">
-                                    <i class="{{ $benefit->icon ?: 'fas fa-check' }}"></i>
-                                </span>
-                                <div class="why-item-content">
-                                    <h3>{{ $translation?->title }}</h3>
-                                    @if($translation?->description)
-                                        <p>{{ $translation->description }}</p>
-                                    @endif
-                                </div>
-                                <span class="why-item-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
-                            </article>
+                        @php($translation = $benefit->translation())
+                        <article class="why-item">
+                            <span class="why-item-icon" aria-hidden="true">
+                                <i class="{{ $benefit->icon ?: 'fas fa-check' }}"></i>
+                            </span>
+                            <div class="why-item-content">
+                                <h3>{{ $translation?->title }}</h3>
+                                @if($translation?->description)
+                                    <p>{{ $translation->description }}</p>
+                                @endif
+                            </div>
+                            <span class="why-item-arrow" aria-hidden="true"><i class="fas fa-arrow-right"></i></span>
+                        </article>
                         @empty
-                            <p class="text-muted">Chưa có thông tin cam kết.</p>
+                        <p class="text-muted">Chưa có thông tin cam kết.</p>
                         @endforelse
                     </div>
                 </div>
@@ -160,7 +123,7 @@
                         <span class="why-visual-orb why-visual-orb-one"></span>
                         <span class="why-visual-orb why-visual-orb-two"></span>
                         <img src="{{ asset('images/why-choose.png') }}" class="img-fluid" alt="Cam kết mua sắm an tâm"
-                        onerror="this.style.display='none'">
+                            onerror="this.style.display='none'">
                         <div class="why-visual-card">
                             <i class="fas fa-heart"></i>
                             <strong>An tâm lựa chọn</strong>
@@ -236,18 +199,18 @@
 @endsection
 
 @push('scripts')
-<script>
-    document.querySelectorAll('[data-product-carousel]').forEach((carousel) => {
-        const controls = carousel.parentElement?.querySelectorAll('[data-carousel-direction]');
-        controls?.forEach((control) => {
-            control.addEventListener('click', () => {
-                const distance = carousel.clientWidth * 0.85;
-                carousel.scrollBy({
-                    left: control.dataset.carouselDirection === 'next' ? distance : -distance,
-                    behavior: 'smooth',
+    <script>
+        document.querySelectorAll('[data-product-carousel]').forEach((carousel) => {
+            const controls = carousel.parentElement?.querySelectorAll('[data-carousel-direction]');
+            controls?.forEach((control) => {
+                control.addEventListener('click', () => {
+                    const distance = carousel.clientWidth * 0.85;
+                    carousel.scrollBy({
+                        left: control.dataset.carouselDirection === 'next' ? distance : -distance,
+                        behavior: 'smooth',
+                    });
                 });
             });
         });
-    });
-</script>
+    </script>
 @endpush
