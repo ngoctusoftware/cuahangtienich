@@ -12,13 +12,15 @@ class RolePermissionSeeder extends Seeder
     public function run(): void
     {
         $groups = [
-            'settings'  => ['view', 'update'],
-            'contents'  => ['view', 'create', 'update', 'delete'],
-            'categories'=> ['view', 'create', 'update', 'delete'],
-            'products'  => ['view', 'create', 'update', 'delete'],
-            'users'     => ['view', 'create', 'update', 'delete'],
-            'orders'    => ['view', 'update'],
-            'payments'  => ['view', 'update'],
+            'settings' => ['view', 'update'],
+            'contents' => ['view', 'create', 'update', 'delete'],
+            'banners' => ['view', 'create', 'update', 'delete'],
+            'store-benefits' => ['view', 'create', 'update', 'delete'],
+            'categories' => ['view', 'create', 'update', 'delete'],
+            'products' => ['view', 'create', 'update', 'delete'],
+            'users' => ['view', 'create', 'update', 'delete'],
+            'orders' => ['view', 'update'],
+            'payments' => ['view', 'update'],
             'customers' => ['view', 'create', 'update', 'delete'],
             'languages' => ['view', 'create', 'update', 'delete'],
         ];

@@ -1,5 +1,8 @@
 @extends('admin.layouts.app')
 @section('title', $product->exists ? 'Sửa sản phẩm' : 'Thêm sản phẩm')
+@push('scripts')
+    <script src="{{ asset('js/c_editor.js') }}"></script>
+@endpush
 @section('content')
 <div class="form-card">
     <h4 class="mb-4">{{ $product->exists ? 'Sửa sản phẩm' : 'Thêm sản phẩm' }}</h4>
@@ -24,11 +27,11 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mô tả ngắn</label>
-                        <textarea name="translations[{{ $lang->id }}][short_description]" class="form-control" rows="2">{{ old("translations.{$lang->id}.short_description", $trans->short_description ?? '') }}</textarea>
+                        <textarea name="translations[{{ $lang->id }}][short_description]" class="form-control experiences" rows="2">{{ old("translations.{$lang->id}.short_description", $trans->short_description ?? '') }}</textarea>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mô tả chi tiết</label>
-                        <textarea name="translations[{{ $lang->id }}][description]" class="form-control" rows="6">{{ old("translations.{$lang->id}.description", $trans->description ?? '') }}</textarea>
+                        <textarea name="translations[{{ $lang->id }}][description]" class="form-control experiences" rows="6">{{ old("translations.{$lang->id}.description", $trans->description ?? '') }}</textarea>
                     </div>
                 </div>
             @endforeach

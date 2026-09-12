@@ -12,8 +12,8 @@
             @endif
         </a>
         <div class="product-info">
-            <h6 class="product-name">
-                <a @if($translation) href="{{ route('products.show', ['slug' => $translation->slug]) }}" @endif>{{ $translation?->name }}</a>
+            <h6 class="product-name" title="{{ $translation?->name }}">
+                <a @if($translation) href="{{ route('products.show', ['slug' => $translation->slug]) }}" @endif title="{{ $translation?->name }}">{{ $translation?->name }}</a>
             </h6>
             <div class="product-price">
                 @if($product->sale_price)

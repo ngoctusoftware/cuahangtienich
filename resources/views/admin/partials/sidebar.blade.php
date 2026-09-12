@@ -17,6 +17,12 @@
         <a href="{{ route('admin.contents.index') }}" class="{{ request()->routeIs('admin.contents.*') ? 'active' : '' }}">
             <i class="fas fa-file-alt"></i> Quản lý nội dung
         </a>
+        <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
+            <i class="fas fa-images"></i> Quản lý banner
+        </a>
+        <a href="{{ route('admin.store-benefits.index') }}" class="{{ request()->routeIs('admin.store-benefits.*') ? 'active' : '' }}">
+            <i class="fas fa-circle-check"></i> Lý do nên chọn
+        </a>
         <a href="{{ route('admin.languages.index') }}" class="{{ request()->routeIs('admin.languages.*') ? 'active' : '' }}">
             <i class="fas fa-language"></i> Ngôn ngữ
         </a>

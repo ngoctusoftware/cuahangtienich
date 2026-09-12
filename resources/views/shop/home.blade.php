@@ -64,7 +64,7 @@
                                     <div class="product-card">
                                         <img src="{{ $product->thumbnail_url }}" class="product-thumb" alt="{{ $product->translation()?->name }}">
                                         <div class="p-3">
-                                            <div class="product-name">{{ $product->translation()?->name }}</div>
+                                            <div class="product-name" title="{{ $product->translation()?->name }}">{{ $product->translation()?->name }}</div>
                                             <div class="product-price mt-1">
                                                 @if($product->sale_price)
                                                     <span class="text-danger fw-bold">{{ number_format($product->sale_price) }}₫</span>

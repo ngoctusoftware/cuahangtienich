@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Http\Controllers\Controller;
+use App\Models\Banner;
 use App\Models\Content;
 use App\Models\Language;
 use App\Models\Setting;
+use App\Models\StoreBenefit;
 use App\Services\ProductService;
 use Illuminate\View\View;
 
@@ -19,6 +21,8 @@ class HomeController extends Controller
         $listLanguages = Language::orderBy('name', 'asc')->get();
         $settings = Setting::all()->pluck('value', 'key')->toArray();
         $sections = $this->productService->homepageSections();
+        $banners = Banner::with('translations')->where('is_active', true)->orderBy('sort_order')->get();
+        $benefits = StoreBenefit::with('translations')->where('is_active', true)->orderBy('sort_order')->get();
 
         // Testimonials & tin tức có thể quản lý qua bảng "contents" (type=testimonial/news) ở Admin (Phase 3)
         $testimonials = [
@@ -32,6 +36,8 @@ class HomeController extends Controller
             'news' => $news,
             'settings' => $settings,
             'languages' => $listLanguages,
+            'banners' => $banners,
+            'benefits' => $benefits,
         ];
 
         return view('home.index', array_merge($sections, $data));

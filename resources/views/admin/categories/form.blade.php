@@ -1,5 +1,8 @@
 @extends('admin.layouts.app')
 @section('title', $category->exists ? 'Sửa danh mục' : 'Thêm danh mục')
+@push('scripts')
+    <script src="{{ asset('js/c_editor.js') }}"></script>
+@endpush
 @section('content')
 <div class="form-card">
     <h4 class="mb-4">{{ $category->exists ? 'Sửa danh mục' : 'Thêm danh mục' }}</h4>
@@ -25,7 +28,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Mô tả</label>
-                        <textarea name="translations[{{ $lang->id }}][description]" class="form-control" rows="3">{{ old("translations.{$lang->id}.description", $trans->description ?? '') }}</textarea>
+                        <textarea name="translations[{{ $lang->id }}][description]" class="form-control experiences" rows="3">{{ old("translations.{$lang->id}.description", $trans->description ?? '') }}</textarea>
                     </div>
                 </div>
             @endforeach

@@ -1,5 +1,8 @@
 @extends('admin.layouts.app')
 @section('title', $content->exists ? 'Sửa nội dung' : 'Thêm nội dung')
+@push('scripts')
+    <script src="{{ asset('js/c_editor.js') }}"></script>
+@endpush
 @section('content')
 <div class="form-card">
     <h4 class="mb-4">{{ $content->exists ? 'Sửa nội dung' : 'Thêm nội dung' }}</h4>
@@ -42,7 +45,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Nội dung</label>
-                        <textarea name="translations[{{ $lang->id }}][body]" class="form-control" rows="8">{{ old("translations.{$lang->id}.body", $trans->body ?? '') }}</textarea>
+                        <textarea name="translations[{{ $lang->id }}][body]" class="form-control experiences" rows="8">{{ old("translations.{$lang->id}.body", $trans->body ?? '') }}</textarea>
                     </div>
                 </div>
             @endforeach

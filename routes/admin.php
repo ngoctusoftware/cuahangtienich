@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\BannerController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ContentController;
 use App\Http\Controllers\Admin\CustomerController;
@@ -14,6 +15,7 @@ use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\StoreBenefitController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
@@ -53,6 +55,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Nội dung (CMS)
         Route::resource('contents', ContentController::class)->except(['show'])
             ->middleware('permission:contents.view');
+
+        // Banner trang chủ
+        Route::resource('banners', BannerController::class)->except(['show'])
+            ->middleware('permission:banners.view');
+
+        // Cam kết của cửa hàng
+        Route::resource('store-benefits', StoreBenefitController::class)->except(['show'])
+            ->middleware('permission:store-benefits.view');
 
         // Ngôn ngữ
         Route::resource('languages', LanguageController::class)->except(['show'])

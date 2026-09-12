@@ -1,0 +1,73 @@
+/* Shared warm, modern button theme for the standalone shop layout. */
+:root {
+    --button-primary: #b85c38;
+    --button-primary-hover: #96462c;
+    --button-ink: #3d2a22;
+    --button-border: #d9c2b5;
+}
+
+.btn {
+    border-radius: 10px;
+    font-weight: 650;
+    transition: background-color .2s ease, border-color .2s ease, color .2s ease,
+        box-shadow .2s ease, transform .2s ease;
+}
+
+.btn-primary {
+    background: var(--button-primary);
+    border-color: var(--button-primary);
+    color: #fff !important;
+    box-shadow: 0 5px 14px rgba(184, 92, 56, .22);
+}
+
+.btn-primary:hover {
+    background: var(--button-primary-hover);
+    border-color: var(--button-primary-hover);
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+.btn-dark {
+    background: var(--button-ink);
+    border-color: var(--button-ink);
+    color: #fff !important;
+}
+
+.btn-dark:hover {
+    background: #241914;
+    border-color: #241914;
+    color: #fff !important;
+    transform: translateY(-1px);
+}
+
+.btn-light {
+    background: #fff8f2;
+    border-color: #ead8ca;
+    color: var(--button-ink) !important;
+}
+
+.btn-light:hover {
+    background: #f3e3d5;
+    border-color: #d9b9a5;
+    color: var(--button-ink) !important;
+}
+
+.btn-outline-secondary {
+    color: #765f53;
+    border-color: var(--button-border);
+}
+
+.btn-outline-secondary:hover {
+    background: #f4e9e1;
+    border-color: #bf9d8b;
+    color: var(--button-ink);
+}
+
+.product-name {
+    display: block;
+    line-height: 1.35;
+    margin-bottom: 6px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

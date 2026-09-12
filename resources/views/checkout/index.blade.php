@@ -2,6 +2,10 @@
 
 @section('title', 'Thanh toán - ' . ($siteName ?? 'ZEK SHOP'))
 
+@push('scripts')
+    <script src="{{ asset('js/c_editor.js') }}"></script>
+@endpush
+
 @section('content')
 <div class="container py-5">
     <h2 class="mb-4">Thông tin thanh toán</h2>
@@ -19,11 +23,11 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Địa chỉ nhận hàng</label>
-                    <textarea name="address" class="form-control" rows="3" required>{{ old('address', auth('customer')->user()->address ?? '') }}</textarea>
+                    <textarea name="address" class="form-control experiences" rows="3" required>{{ old('address', auth('customer')->user()->address ?? '') }}</textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Ghi chú</label>
-                    <textarea name="note" class="form-control" rows="2"></textarea>
+                    <textarea name="note" class="form-control experiences" rows="2"></textarea>
                 </div>
 
                 <h5 class="mt-4 mb-3">Phương thức thanh toán</h5>
