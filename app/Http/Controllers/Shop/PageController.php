@@ -8,6 +8,17 @@ use Illuminate\View\View;
 
 class PageController extends Controller
 {
+    public function about(): View
+    {
+        $content = Content::with('translations')
+            ->where('key', 'about-us')
+            ->where('type', 'page')
+            ->where('is_active', true)
+            ->firstOrFail();
+
+        return view('pages.about', compact('content'));
+    }
+
     public function show(string $key): View
     {
         $content = Content::with('translations')->where('key', $key)->where('is_active', true)->firstOrFail();

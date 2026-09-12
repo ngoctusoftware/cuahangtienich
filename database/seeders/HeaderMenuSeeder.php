@@ -14,7 +14,7 @@ class HeaderMenuSeeder extends Seeder
         $items = [
             ['key' => 'categories', 'icon' => 'fas fa-bars', 'is_category' => true, 'link_value' => null, 'sort_order' => 10, 'labels' => ['vi' => 'DANH MỤC SẢN PHẨM', 'en' => 'PRODUCT CATEGORIES']],
             ['key' => 'home', 'icon' => null, 'is_category' => false, 'link_value' => 'home', 'sort_order' => 20, 'labels' => ['vi' => 'TRANG CHỦ', 'en' => 'HOME']],
-            ['key' => 'about', 'icon' => null, 'is_category' => false, 'link_type' => 'url', 'link_value' => '/trang/about-us', 'sort_order' => 30, 'labels' => ['vi' => 'GIỚI THIỆU', 'en' => 'ABOUT US']],
+            ['key' => 'about', 'icon' => null, 'is_category' => false, 'link_type' => 'route', 'link_value' => 'about', 'sort_order' => 30, 'labels' => ['vi' => 'GIỚI THIỆU', 'en' => 'ABOUT US']],
             ['key' => 'news', 'icon' => null, 'is_category' => false, 'link_value' => 'products.newest', 'sort_order' => 40, 'labels' => ['vi' => 'TIN TỨC', 'en' => 'NEWS']],
             ['key' => 'recruitment', 'icon' => null, 'is_category' => false, 'link_value' => 'products.bestseller', 'sort_order' => 50, 'labels' => ['vi' => 'TUYỂN DỤNG', 'en' => 'RECRUITMENT']],
             ['key' => 'contact', 'icon' => null, 'is_category' => false, 'link_type' => 'url', 'link_value' => '/trang/contact', 'sort_order' => 60, 'labels' => ['vi' => 'LIÊN HỆ', 'en' => 'CONTACT']],

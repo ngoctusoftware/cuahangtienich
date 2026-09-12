@@ -23,6 +23,7 @@ Route::get('/ngon-ngu/{code}', [LanguageController::class, 'switch'])->name('lan
 // Sản phẩm & danh mục
 Route::get('/san-pham-moi', [ProductController::class, 'newest'])->name('products.newest');
 Route::get('/ban-chay', [ProductController::class, 'bestseller'])->name('products.bestseller');
+Route::get('/noi-bat', [ProductController::class, 'featured'])->name('products.featured');
 Route::get('/tim-kiem', [ProductController::class, 'search'])->name('products.search');
 Route::get('/danh-muc/{slug}', [ProductController::class, 'byCategory'])->name('products.byCategory');
 Route::get('/san-pham/{slug}', [ProductController::class, 'show'])->name('products.show');
@@ -56,4 +57,5 @@ Route::prefix('tai-khoan')->name('customer.')->group(function () {
 });
 
 // Trang nội dung tĩnh (giới thiệu, liên hệ, chính sách...) lấy từ bảng "contents"
+Route::get('/gioi-thieu', [PageController::class, 'about'])->name('about');
 Route::get('/trang/{key}', [PageController::class, 'show'])->name('page.show');

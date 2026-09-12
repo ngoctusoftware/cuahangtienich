@@ -11,7 +11,7 @@
             <div class="col-lg-3 col-md-4">
                 <h6 class="text-uppercase text-white mb-3">Về chúng tôi</h6>
                 <ul class="list-unstyled footer-links">
-                    <li><a href="{{ route('page.show', 'gioi-thieu') }}">Giới thiệu</a></li>
+                    <li><a href="{{ route('about') }}">Giới thiệu</a></li>
                     <li><a href="{{ route('page.show', 'tuyen-dung') }}">Tuyển dụng</a></li>
                     <li><a href="{{ route('page.show', 'chinh-sach-bao-mat') }}">Chính sách bảo mật</a></li>
                     <li><a href="{{ route('page.show', 'chinh-sach-doi-tra') }}">Chính sách đổi trả</a></li>

@@ -7,7 +7,7 @@ use App\Models\Content;
 use App\Models\Language;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -21,7 +21,7 @@ class ContentController extends Controller
 
     public function create(): View
     {
-        return view('admin.contents.form', ['content' => new Content(), 'languages' => Language::where('is_active', true)->get()]);
+        return view('admin.contents.form', ['content' => new Content, 'languages' => Language::where('is_active', true)->get()]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -36,6 +36,7 @@ class ContentController extends Controller
         ]);
 
         $this->syncTranslations($content, $data['translations']);
+        Cache::tags(['contents'])->flush();
 
         return redirect()->route('admin.contents.index')->with('success', 'Đã thêm nội dung.');
     }
@@ -59,6 +60,7 @@ class ContentController extends Controller
         ]);
 
         $this->syncTranslations($content, $data['translations']);
+        Cache::tags(['contents'])->flush();
 
         return redirect()->route('admin.contents.index')->with('success', 'Đã cập nhật nội dung.');
     }
@@ -66,6 +68,7 @@ class ContentController extends Controller
     public function destroy(Content $content): RedirectResponse
     {
         $content->delete();
+        Cache::tags(['contents'])->flush();
 
         return back()->with('success', 'Đã xoá nội dung.');
     }
@@ -73,7 +76,7 @@ class ContentController extends Controller
     protected function validated(Request $request, ?int $ignoreId = null): array
     {
         return $request->validate([
-            'key' => 'required|string|unique:contents,key,' . $ignoreId,
+            'key' => 'required|string|unique:contents,key,'.$ignoreId,
             'type' => 'required|in:page,block,news',
             'image' => 'nullable|image|max:2048',
             'translations' => 'required|array',

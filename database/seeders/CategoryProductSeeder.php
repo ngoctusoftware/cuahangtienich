@@ -14,10 +14,11 @@ class CategoryProductSeeder extends Seeder
     public function run(): void
     {
         $language = Language::where('code', 'vi')->firstOrFail();
+        $englishLanguage = Language::where('code', 'en')->firstOrFail();
         $categoryName = 'Thời trang';
         $categorySlug = Str::slug($categoryName);
 
-        DB::transaction(function () use ($language, $categoryName, $categorySlug): void {
+        DB::transaction(function () use ($language, $englishLanguage, $categoryName, $categorySlug): void {
             $category = Category::whereHas('translations', function ($query) use ($language, $categorySlug): void {
                 $query->where('language_id', $language->id)->where('slug', $categorySlug);
             })->first() ?? Category::create(['is_active' => true]);
@@ -54,6 +55,35 @@ class CategoryProductSeeder extends Seeder
                 'Thắt lưng da thủ công',
             ];
             $colors = ['Đen', 'Trắng', 'Be', 'Xanh navy', 'Hồng phấn'];
+            $styleTranslations = [
+                'Áo thun cotton basic' => 'Basic Cotton T-Shirt',
+                'Áo sơ mi công sở' => 'Office Shirt',
+                'Áo khoác dáng ngắn' => 'Cropped Jacket',
+                'Quần jeans slim fit' => 'Slim Fit Jeans',
+                'Quần kaki ống đứng' => 'Straight-Leg Khaki Pants',
+                'Quần short năng động' => 'Casual Shorts',
+                'Váy liền thanh lịch' => 'Elegant Dress',
+                'Chân váy chữ A' => 'A-Line Skirt',
+                'Đầm dự tiệc cao cấp' => 'Premium Party Dress',
+                'Áo len dệt kim' => 'Knitted Sweater',
+                'Áo polo cổ bẻ' => 'Collared Polo Shirt',
+                'Áo blazer form rộng' => 'Oversized Blazer',
+                'Quần jogger thể thao' => 'Sport Jogger Pants',
+                'Đầm maxi đi biển' => 'Beach Maxi Dress',
+                'Set đồ mặc nhà' => 'Loungewear Set',
+                'Áo hoodie unisex' => 'Unisex Hoodie',
+                'Giày sneaker thời trang' => 'Fashion Sneakers',
+                'Túi đeo chéo da mềm' => 'Soft Leather Crossbody Bag',
+                'Mũ lưỡi trai phong cách' => 'Stylish Baseball Cap',
+                'Thắt lưng da thủ công' => 'Handcrafted Leather Belt',
+            ];
+            $colorTranslations = [
+                'Đen' => 'Black',
+                'Trắng' => 'White',
+                'Be' => 'Beige',
+                'Xanh navy' => 'Navy Blue',
+                'Hồng phấn' => 'Blush Pink',
+            ];
             $imageUrls = [
                 'https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?auto=format&fit=crop&w=800&q=80',
                 'https://images.unsplash.com/photo-1603252110481-7ba873bf42ab?auto=format&fit=crop&w=800&q=80',
@@ -114,6 +144,18 @@ class CategoryProductSeeder extends Seeder
                             'description' => 'Sản phẩm thời trang '.$productName.' chất lượng tốt, phù hợp sử dụng hằng ngày.',
                             'meta_title' => $productName,
                             'meta_description' => 'Mua '.$productName.' chính hãng tại cửa hàng.',
+                        ]
+                    );
+                    $englishName = $styleTranslations[$style].' - '.$colorTranslations[$color];
+                    $product->translations()->updateOrCreate(
+                        ['language_id' => $englishLanguage->id],
+                        [
+                            'name' => $englishName,
+                            'slug' => Str::slug($englishName).'-'.$number,
+                            'short_description' => 'A '.$englishName.' that is easy to style for everyday wear.',
+                            'description' => 'The '.$englishName.' is made with quality materials and is suitable for everyday use.',
+                            'meta_title' => $englishName,
+                            'meta_description' => 'Buy the '.$englishName.' from our store.',
                         ]
                     );
                     $skus[] = $sku;

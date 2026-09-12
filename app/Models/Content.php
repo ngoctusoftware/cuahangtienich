@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\LanguageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -18,8 +19,9 @@ class Content extends Model
 
     public function translation(?int $languageId = null): ?ContentTranslation
     {
-        $languageId ??= app(\App\Services\LanguageService::class)->currentLanguageId();
+        $languageId ??= app(LanguageService::class)->currentLanguageId();
 
-        return $this->translations->firstWhere('language_id', $languageId);
+        return $this->translations->firstWhere('language_id', $languageId)
+            ?? $this->translations->first();
     }
 }

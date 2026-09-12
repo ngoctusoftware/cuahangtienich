@@ -128,46 +128,6 @@
         font-weight: 700;
     }
 
-    .home-product-carousel {
-        display: flex;
-        flex-wrap: nowrap;
-        gap: 1.5rem;
-        margin-right: calc(var(--bs-gutter-x) * -.5);
-        overflow-x: auto;
-        padding: .5rem .5rem 1.25rem;
-        scroll-behavior: smooth;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: thin;
-    }
-
-    .home-product-carousel > [class*="col-"] {
-        flex: 0 0 calc(25% - 1.125rem);
-        max-width: calc(25% - 1.125rem);
-        scroll-snap-align: start;
-    }
-
-    .home-product-carousel-controls {
-        display: flex;
-        gap: .5rem;
-    }
-
-    .home-product-carousel-controls button {
-        align-items: center;
-        background: #fff;
-        border: 1px solid #e4def5;
-        border-radius: 50%;
-        color: var(--home-primary);
-        display: inline-flex;
-        height: 38px;
-        justify-content: center;
-        width: 38px;
-    }
-
-    .home-product-carousel-controls button:hover {
-        background: var(--home-primary);
-        color: #fff;
-    }
-
     .home-page .why-section {
         background: #fff;
     }
@@ -232,11 +192,6 @@
 
         .home-benefit {
             padding: 14px 8px;
-        }
-
-        .home-product-carousel > [class*="col-"] {
-            flex-basis: min(78vw, 300px);
-            max-width: min(78vw, 300px);
         }
     }
 </style>
@@ -303,27 +258,18 @@
     {{-- SẢN PHẨM NỔI BẬT --}}
     <section class="products-section py-5">
         <div class="container">
-            <div class="d-flex align-items-end justify-content-between gap-3 mb-4">
-                <div class="section-heading section-heading-left">
-                    <span class="d-block text-uppercase fw-bold text-primary small mb-2">Được yêu thích nhất</span>
-                    <h2>SẢN PHẨM NỔI BẬT</h2>
-                    <p>Những lựa chọn được khách hàng tin yêu và săn đón mỗi ngày.</p>
-                    <span class="heading-underline"></span>
-                </div>
-                <div class="home-product-carousel-controls flex-shrink-0">
-                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm nổi bật trước"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm nổi bật tiếp theo"><i class="fas fa-chevron-right"></i></button>
-                </div>
+            <div class="section-heading text-center mb-5">
+                <span class="d-block text-uppercase fw-bold text-primary small mb-2">Được yêu thích nhất</span>
+                <h2>SẢN PHẨM NỔI BẬT</h2>
+                <p>Những lựa chọn được khách hàng tin yêu và săn đón mỗi ngày.</p>
+                <span class="heading-underline"></span>
             </div>
-            <div class="home-product-carousel" data-product-carousel>
+            <div class="row g-4">
                 @forelse(($featured ?? []) as $product)
                     @include('products.partials.card', ['product' => $product])
                 @empty
                     <p class="text-center text-muted">Chưa có sản phẩm nổi bật.</p>
                 @endforelse
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-                <a href="{{ route('products.featured') }}" class="btn btn-outline-primary">Xem tất cả sản phẩm nổi bật</a>
             </div>
         </div>
     </section>
@@ -331,26 +277,20 @@
     {{-- SẢN PHẨM BÁN CHẠY --}}
     <section class="products-section bg-light py-5">
         <div class="container">
-            <div class="d-flex align-items-end justify-content-between gap-3 mb-4">
-                <div class="section-heading section-heading-left">
-                    <h2>SẢN PHẨM BÁN CHẠY</h2>
-                    <p>Top sản phẩm đang tạo nên xu hướng mới nhất.</p>
-                    <span class="heading-underline"></span>
-                </div>
-                <div class="home-product-carousel-controls flex-shrink-0">
-                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm bán chạy trước"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm bán chạy tiếp theo"><i class="fas fa-chevron-right"></i></button>
-                </div>
+            <div class="section-heading text-center mb-5">
+                <h2>SẢN PHẨM BÁN CHẠY</h2>
+                <p>Top sản phẩm đang tạo nên xu hướng mới nhất.</p>
+                <span class="heading-underline"></span>
             </div>
-            <div class="home-product-carousel" data-product-carousel>
+            <div class="row g-4">
                 @forelse(($bestseller ?? []) as $product)
                     @include('products.partials.card', ['product' => $product])
                 @empty
                     <p class="text-center text-muted">Chưa có sản phẩm bán chạy.</p>
                 @endforelse
             </div>
-            <div class="d-flex justify-content-center mt-3">
-                <a href="{{ route('products.bestseller') }}" class="btn btn-outline-primary">Xem tất cả sản phẩm bán chạy</a>
+            <div class="text-center mt-4">
+                <a href="{{ route('products.bestseller') }}" class="btn btn-outline-primary">Xem tất cả</a>
             </div>
         </div>
     </section>
@@ -358,26 +298,17 @@
     {{-- SẢN PHẨM MỚI --}}
     <section class="products-section py-5">
         <div class="container">
-            <div class="d-flex align-items-end justify-content-between gap-3 mb-4">
-                <div class="section-heading section-heading-left">
-                    <h2>SẢN PHẨM MỚI VỀ</h2>
-                    <p>Khám phá những sản phẩm mới nhất vừa cập bến tại {{ $siteName ?? 'ZEK SHOP' }}.</p>
-                    <span class="heading-underline"></span>
-                </div>
-                <div class="home-product-carousel-controls flex-shrink-0">
-                    <button type="button" data-carousel-direction="prev" aria-label="Xem sản phẩm mới trước"><i class="fas fa-chevron-left"></i></button>
-                    <button type="button" data-carousel-direction="next" aria-label="Xem sản phẩm mới tiếp theo"><i class="fas fa-chevron-right"></i></button>
-                </div>
+            <div class="section-heading text-center mb-5">
+                <h2>SẢN PHẨM MỚI VỀ</h2>
+                <p>Khám phá những sản phẩm mới nhất vừa cập bến tại {{ $siteName ?? 'ZEK SHOP' }}.</p>
+                <span class="heading-underline"></span>
             </div>
-            <div class="home-product-carousel" data-product-carousel>
+            <div class="row g-4">
                 @forelse(($newest ?? []) as $product)
                     @include('products.partials.card', ['product' => $product])
                 @empty
                     <p class="text-center text-muted">Chưa có sản phẩm mới.</p>
                 @endforelse
-            </div>
-            <div class="d-flex justify-content-center mt-3">
-                <a href="{{ route('products.newest') }}" class="btn btn-outline-primary">Xem tất cả sản phẩm mới</a>
             </div>
         </div>
     </section>
@@ -471,22 +402,5 @@
         </div>
     </section>
 </div>
+
 @endsection
-
-@push('scripts')
-<script>
-    document.querySelectorAll('[data-product-carousel]').forEach((carousel) => {
-        const controls = carousel.previousElementSibling?.querySelectorAll('[data-carousel-direction]');
-
-        controls?.forEach((control) => {
-            control.addEventListener('click', () => {
-                const distance = carousel.clientWidth * 0.85;
-                carousel.scrollBy({
-                    left: control.dataset.carouselDirection === 'next' ? distance : -distance,
-                    behavior: 'smooth',
-                });
-            });
-        });
-    });
-</script>
-@endpush

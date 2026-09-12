@@ -69,4 +69,12 @@ class ProductController extends Controller
 
         return view('products.index', ['products' => $products, 'category' => null, 'allCategories' => $allCategories]);
     }
+
+    public function featured(): View
+    {
+        $products = $this->productService->homepageSections()['featured'];
+        $allCategories = $this->categoryRepository->getTree($this->languageService->currentLanguageId());
+
+        return view('products.index', ['products' => $products, 'category' => null, 'allCategories' => $allCategories]);
+    }
 }
