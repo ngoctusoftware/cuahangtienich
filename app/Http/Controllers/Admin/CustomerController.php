@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
+use App\Services\ExcelImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -12,6 +13,19 @@ use Illuminate\View\View;
 
 class CustomerController extends Controller
 {
+    public function downloadTemplate(ExcelImportService $excel): mixed
+    {
+        return $excel->downloadTemplate('customers');
+    }
+
+    public function import(Request $request, ExcelImportService $excel): RedirectResponse
+    {
+        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $count = $excel->import('customers', $request->file('file'));
+
+        return back()->with('success', "Đã import {$count} khách hàng.");
+    }
+
     public function index(Request $request): View
     {
         $customers = Customer::with('group')
@@ -23,7 +37,7 @@ class CustomerController extends Controller
 
     public function create(): View
     {
-        return view('admin.customers.form', ['customer' => new Customer(), 'groups' => CustomerGroup::all()]);
+        return view('admin.customers.form', ['customer' => new Customer, 'groups' => CustomerGroup::all()]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -53,14 +67,14 @@ class CustomerController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:customers,email,' . $customer->id,
+            'email' => 'required|email|unique:customers,email,'.$customer->id,
             'phone' => 'nullable|string|max:20',
             'password' => 'nullable|min:6',
             'customer_group_id' => 'nullable|exists:customer_groups,id',
             'is_active' => 'nullable|boolean',
         ]);
         $data['is_active'] = $request->boolean('is_active');
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $data['password'] = Hash::make($data['password']);
         } else {
             unset($data['password']);

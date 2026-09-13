@@ -222,6 +222,148 @@ a { color: inherit; }
 .alert .btn-close { filter: invert(1) grayscale(1) brightness(2); }
 
 /* ---------------------------------------------------------------------- */
+/* Excel import modal                                                     */
+/* ---------------------------------------------------------------------- */
+.excel-import-modal {
+    --excel-ink: #f1faf8;
+    --excel-muted: rgba(241, 250, 248, .68);
+    --excel-line: rgba(151, 232, 216, .24);
+    --excel-panel: rgba(31, 55, 62, .96);
+}
+.excel-import-modal .modal-dialog { max-width: 510px; }
+.excel-import-modal .modal-content {
+    overflow: hidden;
+    color: var(--excel-ink);
+    background: var(--excel-panel);
+    border: 1px solid var(--excel-line);
+    border-radius: 18px;
+    box-shadow: 0 28px 80px rgba(3, 14, 19, .55), 0 0 0 1px rgba(255,255,255,.025) inset;
+    backdrop-filter: blur(18px);
+}
+.excel-import-modal .modal-header {
+    position: relative;
+    align-items: center;
+    padding: 22px 24px 20px;
+    border-bottom: 1px solid rgba(255,255,255,.07);
+    background: linear-gradient(135deg, rgba(93, 216, 190, .16), rgba(255,255,255,.02) 62%);
+}
+.excel-import-modal .modal-header::after {
+    position: absolute;
+    right: 24px;
+    bottom: -1px;
+    width: 72px;
+    height: 2px;
+    content: '';
+    background: linear-gradient(90deg, var(--accent), transparent);
+}
+.excel-import-heading { display: flex; align-items: center; gap: 13px; }
+.excel-import-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: #102d2a;
+    font-size: 19px;
+    background: linear-gradient(145deg, #8be7d3, var(--accent));
+    border-radius: 13px;
+    box-shadow: 0 8px 22px rgba(47,191,163,.22);
+}
+.excel-import-eyebrow {
+    display: block;
+    margin-bottom: 2px;
+    color: var(--accent);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1.4px;
+    text-transform: uppercase;
+}
+.excel-import-modal .modal-title { color: #fff; font-size: 18px; font-weight: 700; }
+.excel-import-modal .btn-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 31px;
+    height: 31px;
+    margin: 0;
+    margin-left: auto;
+    color: var(--excel-muted);
+    font-size: 14px;
+    background: rgba(255,255,255,.1);
+    border: 1px solid rgba(255,255,255,.14);
+    border-radius: 9px;
+    opacity: 1;
+    filter: none;
+}
+.excel-import-modal .btn-close:hover { color: #fff; background: rgba(255,255,255,.18); }
+.excel-import-modal .modal-body { padding: 24px; }
+.excel-import-intro h6 { margin: 0 0 5px; color: #fff; font-size: 14px; font-weight: 600; }
+.excel-import-intro p { margin: 0 0 18px; color: var(--excel-muted); font-size: 12px; }
+.excel-dropzone {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 23px 20px 19px;
+    text-align: center;
+    cursor: pointer;
+    background: rgba(255,255,255,.06);
+    border: 1px dashed rgba(151,232,216,.5);
+    border-radius: 13px;
+    transition: background .2s ease, border-color .2s ease, transform .2s ease;
+}
+.excel-dropzone:hover, .excel-dropzone:focus-within {
+    background: rgba(47,191,163,.08);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+}
+.excel-dropzone input { position: absolute; width: 1px; height: 1px; opacity: 0; }
+.excel-upload-icon { color: var(--accent); font-size: 25px; }
+.excel-dropzone-title { margin-top: 9px; color: #fff; font-size: 13px; font-weight: 600; }
+.excel-dropzone-hint { margin-top: 3px; color: var(--excel-muted); font-size: 11px; }
+.excel-file-name {
+    max-width: 100%;
+    margin-top: 12px;
+    padding: 5px 10px;
+    overflow: hidden;
+    color: var(--text-faint);
+    font-size: 11px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: rgba(0,0,0,.14);
+    border-radius: 6px;
+}
+.excel-file-name.has-file { color: #a9f3e4; background: rgba(47,191,163,.12); }
+.excel-format-note { margin-top: 10px; color: var(--text-faint); font-size: 10.5px; }
+.excel-format-note i { margin-right: 4px; color: var(--accent-2); }
+.excel-format-note strong { color: var(--excel-muted); font-weight: 600; }
+.excel-import-modal .js-import-error { margin-top: 15px; font-size: 12px; }
+.excel-import-modal .modal-footer {
+    align-items: center;
+    justify-content: space-between;
+    padding: 17px 24px 21px;
+    border-top: 1px solid rgba(255,255,255,.07);
+}
+.excel-template-btn {
+    color: var(--excel-muted);
+    font-size: 12px;
+    border: 1px solid rgba(255,255,255,.1);
+    border-radius: 8px;
+}
+.excel-template-btn:hover { color: #fff; background: rgba(255,255,255,.1); border-color: rgba(255,255,255,.25); }
+.excel-template-btn i { margin-right: 5px; color: var(--accent); }
+.excel-modal-actions { display: flex; gap: 9px; }
+.excel-submit-btn { padding: 8px 14px; font-size: 12px; border-radius: 8px; }
+.excel-submit-btn i { margin-right: 5px; }
+@media (max-width: 575.98px) {
+    .excel-import-modal .modal-dialog { margin: 12px; }
+    .excel-import-modal .modal-header, .excel-import-modal .modal-body, .excel-import-modal .modal-footer { padding-left: 18px; padding-right: 18px; }
+    .excel-import-modal .modal-footer { align-items: stretch; flex-direction: column; gap: 12px; }
+    .excel-template-btn { width: 100%; }
+    .excel-modal-actions { justify-content: flex-end; }
+}
+
+/* ---------------------------------------------------------------------- */
 /* Stat cards                                                              */
 /* ---------------------------------------------------------------------- */
 .stat-card {
@@ -441,6 +583,10 @@ select.form-select option { background: #1c2e37; color: #fff; }
     background: rgba(255,255,255,.05);
     border-color: rgba(255,255,255,.08);
     color: var(--text-muted);
+}
+.pagination svg {
+    width: 1rem;
+    height: 1rem;
 }
 .pagination .page-item.active .page-link { background: var(--accent); border-color: var(--accent); color: #062019; }
 .pagination .page-link:hover { background: rgba(255,255,255,.1); color: #fff; }

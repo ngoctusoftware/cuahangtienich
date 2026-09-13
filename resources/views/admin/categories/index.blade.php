@@ -4,7 +4,10 @@
 <div class="panel">
     <div class="panel-header d-flex justify-content-between align-items-center">
         Quản lý danh mục
-        <a href="{{ route('admin.categories.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm danh mục</a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#importExcelModal-categories"><i class="fas fa-file-import"></i> Import Excel</button>
+            <a href="{{ route('admin.categories.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm danh mục</a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table mb-0">
@@ -30,4 +33,6 @@
     </div>
     <div class="p-3">{{ $categories->links() }}</div>
 </div>
+@php($importType = 'categories')
+@include('admin.partials.excel-import-modal')
 @endsection

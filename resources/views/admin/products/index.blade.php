@@ -6,7 +6,19 @@
         <form class="d-flex gap-2" method="GET">
             <input type="text" name="search" class="form-control form-control-sm" placeholder="Tìm sản phẩm..." value="{{ request('search') }}">
         </form>
-        <a href="{{ route('admin.products.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
+        <div class="d-flex gap-2">
+            <div class="dropdown">
+                <button type="button" class="btn btn-outline-success btn-sm dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-file-excel"></i> Xuất Excel
+                </button>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{{ route('admin.products.export.current', request()->query()) }}"><i class="fas fa-list me-2"></i>Xuất danh sách hiện tại</a></li>
+                    <li><a class="dropdown-item" href="{{ route('admin.products.export.all') }}"><i class="fas fa-layer-group me-2"></i>Xuất tất cả danh sách</a></li>
+                </ul>
+            </div>
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#importExcelModal-products"><i class="fas fa-file-import"></i> Import Excel</button>
+            <a href="{{ route('admin.products.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
@@ -34,6 +46,8 @@
             </tbody>
         </table>
     </div>
-    <div class="p-3">{{ $products->links() }}</div>
+    <div class="p-3">{{ $products->links('pagination::bootstrap-5') }}</div>
 </div>
+@php($importType = 'products')
+@include('admin.partials.excel-import-modal')
 @endsection

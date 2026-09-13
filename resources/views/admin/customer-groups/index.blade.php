@@ -4,7 +4,10 @@
 <div class="panel">
     <div class="panel-header d-flex justify-content-between align-items-center">
         Nhóm khách hàng
-        <a href="{{ route('admin.customer-groups.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm nhóm</a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#importExcelModal-customer-groups"><i class="fas fa-file-import"></i> Import Excel</button>
+            <a href="{{ route('admin.customer-groups.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm nhóm</a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table mb-0">
@@ -28,4 +31,6 @@
         </table>
     </div>
 </div>
+@php($importType = 'customer-groups')
+@include('admin.partials.excel-import-modal')
 @endsection

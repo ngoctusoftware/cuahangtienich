@@ -3,7 +3,7 @@
 @section('title', (($searchQuery ?? null) ? 'Tìm kiếm: ' . $searchQuery : ($category?->translation()?->name ?? 'Sản phẩm')) . ' - ' . ($siteName ?? 'ZEK SHOP'))
 
 @section('content')
-<div class="container py-5">
+<div class="container category-page py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
@@ -37,7 +37,7 @@
             </div>
             @if ($products instanceof \Illuminate\Contracts\Pagination\Paginator)
                 <div class="mt-4">
-                    {{ $products->links() }}
+                    {{ $products->links('pagination::bootstrap-5') }}
                 </div>
             @endif
         </div>

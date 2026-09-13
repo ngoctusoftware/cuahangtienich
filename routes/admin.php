@@ -69,10 +69,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->middleware('permission:languages.view');
 
         // Danh mục
+        Route::get('categories/import-template', [CategoryController::class, 'downloadTemplate'])->name('categories.import-template')->middleware('permission:categories.view');
+        Route::post('categories/import', [CategoryController::class, 'import'])->name('categories.import')->middleware('permission:categories.view');
         Route::resource('categories', CategoryController::class)->except(['show'])
             ->middleware('permission:categories.view');
 
         // Sản phẩm
+        Route::get('products/import-template', [ProductController::class, 'downloadTemplate'])->name('products.import-template')->middleware('permission:products.view');
+        Route::post('products/import', [ProductController::class, 'import'])->name('products.import')->middleware('permission:products.view');
+        Route::get('products/export/current', [ProductController::class, 'exportCurrent'])->name('products.export.current')->middleware('permission:products.view');
+        Route::get('products/export/all', [ProductController::class, 'exportAll'])->name('products.export.all')->middleware('permission:products.view');
         Route::resource('products', ProductController::class)->except(['show'])
             ->middleware('permission:products.view');
 
@@ -86,8 +92,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('payments/{payment}/status', [PaymentController::class, 'updateStatus'])->name('payments.updateStatus')->middleware('permission:payments.update');
 
         // Nhóm khách hàng & khách hàng
+        Route::get('customer-groups/import-template', [CustomerGroupController::class, 'downloadTemplate'])->name('customer-groups.import-template')->middleware('permission:customers.view');
+        Route::post('customer-groups/import', [CustomerGroupController::class, 'import'])->name('customer-groups.import')->middleware('permission:customers.view');
         Route::resource('customer-groups', CustomerGroupController::class)->except(['show'])
             ->middleware('permission:customers.view');
+        Route::get('customers/import-template', [CustomerController::class, 'downloadTemplate'])->name('customers.import-template')->middleware('permission:customers.view');
+        Route::post('customers/import', [CustomerController::class, 'import'])->name('customers.import')->middleware('permission:customers.view');
         Route::resource('customers', CustomerController::class)->except(['show'])
             ->middleware('permission:customers.view');
 

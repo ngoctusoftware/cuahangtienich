@@ -4,12 +4,26 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\CustomerGroup;
+use App\Services\ExcelImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CustomerGroupController extends Controller
 {
+    public function downloadTemplate(ExcelImportService $excel): mixed
+    {
+        return $excel->downloadTemplate('customer-groups');
+    }
+
+    public function import(Request $request, ExcelImportService $excel): RedirectResponse
+    {
+        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $count = $excel->import('customer-groups', $request->file('file'));
+
+        return back()->with('success', "Đã import {$count} nhóm khách hàng.");
+    }
+
     public function index(): View
     {
         return view('admin.customer-groups.index', ['groups' => CustomerGroup::withCount('customers')->get()]);
@@ -17,7 +31,7 @@ class CustomerGroupController extends Controller
 
     public function create(): View
     {
-        return view('admin.customer-groups.form', ['group' => new CustomerGroup()]);
+        return view('admin.customer-groups.form', ['group' => new CustomerGroup]);
     }
 
     public function store(Request $request): RedirectResponse

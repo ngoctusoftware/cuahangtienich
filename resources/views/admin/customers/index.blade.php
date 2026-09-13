@@ -4,7 +4,10 @@
 <div class="panel">
     <div class="panel-header d-flex justify-content-between align-items-center">
         <form method="GET"><input type="text" name="search" class="form-control form-control-sm" placeholder="Tìm khách hàng..." value="{{ request('search') }}"></form>
-        <a href="{{ route('admin.customers.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm khách hàng</a>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-success btn-sm" data-bs-toggle="modal" data-bs-target="#importExcelModal-customers"><i class="fas fa-file-import"></i> Import Excel</button>
+            <a href="{{ route('admin.customers.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm khách hàng</a>
+        </div>
     </div>
     <div class="table-responsive">
         <table class="table mb-0">
@@ -31,4 +34,6 @@
     </div>
     <div class="p-3">{{ $customers->links() }}</div>
 </div>
+@php($importType = 'customers')
+@include('admin.partials.excel-import-modal')
 @endsection
