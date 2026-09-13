@@ -1621,7 +1621,46 @@ body {
 
 .home-page .testimonial-card,
 .home-page .news-card {
-    padding: 26px;
+    padding: 22px 20px;
+}
+
+.home-page .testimonial-section {
+    background: #f5f3ff !important;
+}
+
+.home-page .testimonial-card {
+    border-radius: 16px;
+    min-height: 210px;
+    padding: 22px 20px;
+}
+
+.home-page .testimonial-card-top {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 12px;
+}
+
+.home-page .testimonial-card p {
+    color: #343547;
+    font-size: .92rem;
+    line-height: 1.55;
+    margin-bottom: 0;
+}
+
+.home-page .testimonial-rating {
+    color: #f5b544;
+    display: flex;
+    font-size: .78rem;
+    gap: 3px;
+}
+
+.home-page .testimonial-rating .is-empty {
+    color: #e6e3ef;
+}
+
+.home-page .testimonial-avatar {
+    object-fit: cover;
 }
 
 .home-page .quote-icon {

@@ -8,9 +8,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Content extends Model
 {
-    protected $fillable = ['key', 'type', 'image', 'is_active'];
+    protected $fillable = ['key', 'type', 'image', 'rating', 'is_active'];
 
-    protected $casts = ['is_active' => 'boolean'];
+    protected $casts = ['rating' => 'integer', 'is_active' => 'boolean'];
 
     public function translations(): HasMany
     {

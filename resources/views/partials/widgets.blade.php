@@ -10,3 +10,8 @@
         <i class="fas fa-phone-alt"></i>
     </a>
 </div>
+<style>
+    a {
+        text-decoration: none;
+    }
+</style>

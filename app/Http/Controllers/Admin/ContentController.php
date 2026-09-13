@@ -31,6 +31,7 @@ class ContentController extends Controller
         $content = Content::create([
             'key' => $data['key'],
             'type' => $data['type'],
+            'rating' => $data['rating'] ?? 5,
             'is_active' => $request->boolean('is_active'),
             'image' => $request->hasFile('image') ? $request->file('image')->store('contents', 'public') : null,
         ]);
@@ -55,6 +56,7 @@ class ContentController extends Controller
         $content->update([
             'key' => $data['key'],
             'type' => $data['type'],
+            'rating' => $data['rating'] ?? 5,
             'is_active' => $request->boolean('is_active'),
             'image' => $request->hasFile('image') ? $request->file('image')->store('contents', 'public') : $content->image,
         ]);
@@ -77,7 +79,8 @@ class ContentController extends Controller
     {
         return $request->validate([
             'key' => 'required|string|unique:contents,key,'.$ignoreId,
-            'type' => 'required|in:page,block,news',
+            'type' => 'required|in:page,block,news,testimonial',
+            'rating' => 'nullable|integer|min:1|max:5',
             'image' => 'nullable|image|max:2048',
             'translations' => 'required|array',
             'translations.*.title' => 'required|string|max:255',

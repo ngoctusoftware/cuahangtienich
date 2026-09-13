@@ -14,6 +14,7 @@ class DatabaseSeeder extends Seeder
             LanguageSeeder::class,
             HeaderMenuSeeder::class,
             AboutContentSeeder::class,
+            TestimonialsSeeder::class,
             CategoryProductSeeder::class,
             BannerSeeder::class,
         ]);

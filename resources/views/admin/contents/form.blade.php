@@ -20,11 +20,17 @@
                     <option value="page" {{ $content->type === 'page' ? 'selected' : '' }}>Trang</option>
                     <option value="block" {{ $content->type === 'block' ? 'selected' : '' }}>Khối nội dung</option>
                     <option value="news" {{ $content->type === 'news' ? 'selected' : '' }}>Tin tức</option>
+                    <option value="testimonial" {{ $content->type === 'testimonial' ? 'selected' : '' }}>Cảm nhận khách hàng</option>
                 </select>
             </div>
             <div class="col-md-3">
                 <label class="form-label">Ảnh đại diện</label>
                 <input type="file" name="image" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label">Số sao đánh giá</label>
+                <input type="number" name="rating" class="form-control" min="1" max="5" value="{{ old('rating', $content->rating ?? 5) }}">
+                <small class="text-muted">Áp dụng cho cảm nhận khách hàng.</small>
             </div>
         </div>
 

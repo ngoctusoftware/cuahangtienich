@@ -8,13 +8,14 @@
     </div>
     <div class="table-responsive">
         <table class="table mb-0">
-            <thead><tr><th>Key</th><th>Loại</th><th>Tiêu đề</th><th>Trạng thái</th><th></th></tr></thead>
+            <thead><tr><th>Key</th><th>Loại</th><th>Tiêu đề</th><th>Đánh giá</th><th>Trạng thái</th><th></th></tr></thead>
             <tbody>
                 @foreach($contents as $c)
                     <tr>
                         <td>{{ $c->key }}</td>
                         <td>{{ $c->type }}</td>
                         <td>{{ $c->translation()?->title }}</td>
+                        <td>{{ $c->type === 'testimonial' ? str_repeat('★', $c->rating) : '-' }}</td>
                         <td>{!! $c->is_active ? '<span class="badge bg-success">Hiển thị</span>' : '<span class="badge bg-secondary">Ẩn</span>' !!}</td>
                         <td>
                             <a href="{{ route('admin.contents.edit', $c) }}" class="btn btn-sm btn-outline-primary"><i class="fas fa-edit"></i></a>
