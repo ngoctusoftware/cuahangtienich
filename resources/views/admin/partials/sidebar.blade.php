@@ -17,6 +17,9 @@
         <a href="{{ route('admin.contents.index') }}" class="{{ request()->routeIs('admin.contents.*') ? 'active' : '' }}">
             <i class="fas fa-file-alt"></i> Quản lý nội dung
         </a>
+        <a href="{{ route('admin.testimonials.index') }}" class="{{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}">
+            <i class="fas fa-comment-dots"></i> Cảm nhận khách hàng
+        </a>
         <a href="{{ route('admin.banners.index') }}" class="{{ request()->routeIs('admin.banners.*') ? 'active' : '' }}">
             <i class="fas fa-images"></i> Quản lý banner
         </a>

@@ -1,8 +1,7 @@
     <section class="products-section py-5">
         <div class="container">
             <div class="d-flex align-items-end justify-content-between gap-3 mb-4">
-                <div class="section-heading section-heading-left">
-                    <span class="d-block text-uppercase fw-bold text-primary small mb-2">Được yêu thích nhất</span>
+                <div class="section-heading section-heading-left">                    
                     <h2>SẢN PHẨM NỔI BẬT</h2>
                     <p>Những lựa chọn được khách hàng tin yêu và săn đón mỗi ngày.</p>
                     <span class="heading-underline"></span>

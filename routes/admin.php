@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\SearchController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\StoreBenefitController;
+use App\Http\Controllers\Admin\TestimonialController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\AdminAuthController;
 use Illuminate\Support\Facades\Route;
@@ -54,6 +55,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Nội dung (CMS)
         Route::resource('contents', ContentController::class)->except(['show'])
+            ->middleware('permission:contents.view');
+
+        // Cảm nhận khách hàng
+        Route::resource('testimonials', TestimonialController::class)->except(['show'])
+            ->parameters(['testimonials' => 'testimonial'])
             ->middleware('permission:contents.view');
 
         // Banner trang chủ

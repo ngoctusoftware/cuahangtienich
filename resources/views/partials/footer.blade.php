@@ -1,12 +1,12 @@
 <footer class="site-footer">
     <div class="container py-5">
         <div class="row g-4">
-            <div class="col-lg-4">
-                <img src="{{ asset('images/logo-white.png') }}" alt="" height="40" onerror="this.style.display='none'">
+            <div class="col-lg-3 col-md-4">
+                <img src="{{ asset('images/admin_logo.png') }}" alt="" height="40" onerror="this.style.display='none'">
                 <h5 class="text-white mt-2">{{ $siteName ?? 'ZEK SHOP' }}</h5>
-                <p class="mb-1"><i class="fas fa-phone-alt me-2"></i>{{ $setting('hotline', '0812.119.111') }}</p>
+                {{-- <p class="mb-1"><i class="fas fa-phone-alt me-2"></i>{{ $setting('hotline', '0812.119.111') }}</p>
                 <p class="mb-1"><i class="fas fa-envelope me-2"></i>{{ $setting('email', 'contact@zekshop.vn') }}</p>
-                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>{{ $setting('address', '16 Nguyễn Như Kom Tum, Thanh Xuân, Hà Nội') }}</p>
+                <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>{{ $setting('address', '16 Nguyễn Như Kom Tum, Thanh Xuân, Hà Nội') }}</p> --}}
             </div>
             <div class="col-lg-3 col-md-4">
                 <h6 class="text-uppercase text-white mb-3">Về chúng tôi</h6>

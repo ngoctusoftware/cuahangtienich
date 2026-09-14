@@ -17,11 +17,11 @@ class HomeController extends Controller
 
     public function index(): View
     {
-        $listLanguages = Language::orderBy('name', 'asc')->get();
-        $settings = Setting::all()->pluck('value', 'key')->toArray();
-        $sections = $this->productService->homepageSections();
-        $banners = Banner::with('translations')->where('is_active', true)->orderBy('sort_order')->get();
-        $benefits = StoreBenefit::with('translations')->where('is_active', true)->orderBy('sort_order')->get();
+        $listLanguages  = Language::orderBy('name', 'asc')->get();
+        $settings       = Setting::all()->pluck('value', 'key')->toArray();
+        $sections       = $this->productService->homepageSections();
+        $banners        = Banner::with('translations')->where('is_active', true)->orderBy('sort_order')->get();
+        $benefits       = StoreBenefit::with('translations')->where('is_active', true)->orderBy('sort_order')->get();
 
         $testimonials = Content::with('translations')
             ->where('type', 'testimonial')
@@ -29,7 +29,7 @@ class HomeController extends Controller
             ->latest()
             ->limit(3)
             ->get();
-        $news = Content::with('translations')->where('type', 'news')->where('is_active', true)->latest()->limit(3)->get();
+        $news = Content::with('translations')->where('type', 'news')->where('is_active', true)->latest()->limit(3)->get();        
         $data = [
             'testimonials' => $testimonials,
             'news' => $news,
