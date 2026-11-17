@@ -45,9 +45,12 @@ class Product extends Model
 
     public function translation(?int $languageId = null): ?ProductTranslation
     {
-        $languageId ??= app(LanguageService::class)->currentLanguageId();
+        $languageService = app(LanguageService::class);
+        $languageId ??= $languageService->currentLanguageId();
 
-        return $this->translations->firstWhere('language_id', $languageId);
+        return $this->translations->firstWhere('language_id', $languageId)
+            ?? $this->translations->firstWhere('language_id', $languageService->fallbackLanguageId())
+            ?? $this->translations->first();
     }
 
     public function getFinalPriceAttribute(): float

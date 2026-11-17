@@ -1,13 +1,13 @@
 @extends('layouts.app')
 
-@section('title', ($product->translation()?->name ?? 'Sản phẩm') . ' - ' . ($siteName ?? 'ZEK SHOP'))
+@section('title', ($product->translation()?->name ?? __('storefront.products.fallback_name')) . ' - ' . ($siteName ?? 'ZEK SHOP'))
 @section('meta_description', $product->translation()?->meta_description)
 
 @section('content')
 <div class="container py-5">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{{ route('home') }}">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('storefront.products.home') }}</a></li>
             <li class="breadcrumb-item"><a href="{{ route('products.byCategory', $product->category->translation()?->slug) }}">{{ $product->category->translation()?->name }}</a></li>
             <li class="breadcrumb-item active">{{ $product->translation()?->name }}</li>
         </ol>
@@ -42,17 +42,17 @@
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <input type="number" name="quantity" value="1" min="1" max="{{ $product->stock }}" class="form-control" style="width: 90px">
                 <button type="submit" class="btn btn-hero-cta">
-                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ hàng
+                    <i class="fas fa-cart-plus"></i> {{ __('storefront.products.add_to_cart') }}
                 </button>
             </form>
 
-            <p class="text-success"><i class="fas fa-check"></i> Còn hàng ({{ $product->stock }} sản phẩm)</p>
+            <p class="text-success"><i class="fas fa-check"></i> {{ __('storefront.products.in_stock', ['count' => $product->stock]) }}</p>
         </div>
     </div>
 
     <div class="row mt-5">
         <div class="col-lg-9">
-            <h4>Mô tả chi tiết</h4>
+            <h4>{{ __('storefront.products.description') }}</h4>
             <div class="product-description">
                 {!! $product->translation()?->description !!}
             </div>

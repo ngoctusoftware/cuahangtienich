@@ -10,7 +10,7 @@
                         data-bs-slide-to="{{ $index }}"
                         class="{{ $index === 0 ? 'active' : '' }}"
                         aria-current="{{ $index === 0 ? 'true' : 'false' }}"
-                        aria-label="Slide {{ $index + 1 }}"></button>
+                        aria-label="{{ __('storefront.home.slide_number', ['number' => $index + 1]) }}"></button>
             @endforeach
         </div>
         @endif
@@ -53,7 +53,7 @@
                                             </a>
                                         @else
                                             <a href="{{ $slide['cta_link'] ?? '#' }}" class="btn btn-hero-cta">
-                                                {{ $slide['cta_text'] ?? 'MUA SẮM NGAY' }}
+                                                {{ $slide['cta_text'] ?? __('storefront.home.buy_now') }}
                                                 <i class="bi bi-arrow-right ms-1"></i>
                                             </a>
                                         @endif
@@ -82,11 +82,11 @@
         @if(count($slides) > 1)
         <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
             <span class="hero-control-icon"><i class="fa fa-arrow-left" aria-hidden="true"></i></span>
-            <span class="visually-hidden">Previous</span>
+            <span class="visually-hidden">{{ __('storefront.home.previous') }}</span>
         </button>
         <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
             <span class="hero-control-icon"><i class="fas fa-arrow-right" aria-hidden="true"></i></span>
-            <span class="visually-hidden">Next</span>
+            <span class="visually-hidden">{{ __('storefront.home.next') }}</span>
         </button>
         @endif
 

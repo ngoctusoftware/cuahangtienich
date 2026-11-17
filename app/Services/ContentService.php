@@ -3,20 +3,21 @@
 namespace App\Services;
 
 use App\Models\Content;
-use Illuminate\Support\Facades\Cache;
+use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
 
-// Lấy nội dung tĩnh (banner, giới thiệu, tin tức...) do Admin quản lý, có cache Redis
+// Cache nội dung tĩnh theo tag khi cache store hỗ trợ.
 class ContentService
 {
-    public function __construct(protected LanguageService $languageService)
-    {
-    }
+    use HandlesTaggedCache;
+
+    public function __construct(protected LanguageService $languageService) {}
 
     public function byKey(string $key): ?object
     {
         $languageId = $this->languageService->currentLanguageId();
 
-        return Cache::tags(['contents'])->remember(
+        return $this->rememberTagged(
+            ['contents'],
             "content:{$key}:{$languageId}",
             now()->addHour(),
             fn () => Content::with('translations')
@@ -29,7 +30,8 @@ class ContentService
     {
         $languageId = $this->languageService->currentLanguageId();
 
-        return Cache::tags(['contents'])->remember(
+        return $this->rememberTagged(
+            ['contents'],
             "contents:type:{$type}:{$languageId}:{$limit}",
             now()->addHour(),
             fn () => Content::with('translations')

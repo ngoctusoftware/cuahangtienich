@@ -5,6 +5,7 @@ namespace App\Repositories\Eloquent;
 use App\Models\Product;
 use App\Repositories\Contracts\ProductRepositoryInterface;
 use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
+use App\Services\LanguageService;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -20,8 +21,20 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function findBySlug(string $slug, int $languageId): ?object
     {
-        return $this->model
+        $product = $this->model
             ->whereHas('translations', fn ($q) => $q->where('slug', $slug)->where('language_id', $languageId))
+            ->with(['translations', 'images', 'category.translations'])
+            ->where('is_active', true)
+            ->first();
+
+        if ($product) {
+            return $product;
+        }
+
+        $fallbackLanguageId = app(LanguageService::class)->fallbackLanguageId();
+
+        return $this->model
+            ->whereHas('translations', fn ($q) => $q->where('slug', $slug)->where('language_id', $fallbackLanguageId))
             ->with(['translations', 'images', 'category.translations'])
             ->where('is_active', true)
             ->first();
@@ -68,12 +81,17 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
     public function search(string $query, int $languageId, int $perPage = 20)
     {
+        $languageIds = array_unique([
+            $languageId,
+            app(LanguageService::class)->fallbackLanguageId(),
+        ]);
+
         return $this->model->with('translations', 'category.translations')
             ->where('is_active', true)
-            ->where(function ($products) use ($query, $languageId) {
+            ->where(function ($products) use ($query, $languageIds) {
                 $products->where('sku', 'like', "%{$query}%")
-                    ->orWhereHas('translations', function ($translations) use ($query, $languageId) {
-                        $translations->where('language_id', $languageId)
+                    ->orWhereHas('translations', function ($translations) use ($query, $languageIds) {
+                        $translations->whereIn('language_id', $languageIds)
                             ->where('name', 'like', "%{$query}%");
                     });
             })
@@ -96,6 +114,10 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
      */
     protected function rememberCollection(string $key, \Closure $callback, int $minutes = 30): Collection
     {
+        if (! $this->supportsTaggedCache()) {
+            return $callback();
+        }
+
         $store = Cache::tags(['products']);
 
         try {

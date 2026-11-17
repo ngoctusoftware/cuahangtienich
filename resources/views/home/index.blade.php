@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', ($siteName ?? 'ZEK SHOP') . ' - Trang chủ')
+@section('title', ($siteName ?? 'ZEK SHOP') . ' - ' . __('storefront.products.home'))
 @section('content')
 <div class="home-page">
     @php

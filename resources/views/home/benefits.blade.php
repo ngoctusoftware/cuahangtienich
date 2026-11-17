@@ -35,19 +35,19 @@
 <div class="stats-banner">
   <div class="stat-item">
     <div class="stat-number" data-target="200">0+</div>
-    <div class="stat-label">Sản phẩm đã bán</div>
+    <div class="stat-label">{{ __('storefront.home.products_sold') }}</div>
   </div>
   <div class="stat-item">
     <div class="stat-number" data-target="600">0+</div>
-    <div class="stat-label">Phụ huynh quan tâm</div>
+    <div class="stat-label">{{ __('storefront.home.interested_parents') }}</div>
   </div>
   <div class="stat-item">
     <div class="stat-number" data-target="400">0+</div>
-    <div class="stat-label">Phụ huynh đã mua</div>
+    <div class="stat-label">{{ __('storefront.home.parents_purchased') }}</div>
   </div>
   <div class="stat-item">
     <div class="stat-number" data-target="400">0+</div>
-    <div class="stat-label">Phụ huynh hài lòng</div>
+    <div class="stat-label">{{ __('storefront.home.satisfied_parents') }}</div>
   </div>
 </div>
 

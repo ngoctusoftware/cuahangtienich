@@ -5,10 +5,8 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="contact-info-panel">
-                            <h2>Thông tin liên hệ</h2>
-                            <p>Để lại thông tin, đội ngũ Happy Home Kindergarten sẽ liên hệ tư vấn lộ trình học phù hợp
-                                nhất
-                                cho bé.</p>
+                            <h2>{{ __('storefront.home.contact_title') }}</h2>
+                            <p>{{ __('storefront.home.contact_description') }}</p>
 
                             <div class="contact-item">
                                 <div class="contact-icon">
@@ -44,37 +42,37 @@
                         </div>
 
                         <div class="contact-form-panel">
-                            <h1>Đăng ký tư vấn</h1>
+                            <h1>{{ __('storefront.home.consultation_title') }}</h1>
                             <form id="consultForm">
                                 <div class="field">                                    
-                                    <input type="text" name="parent_name" placeholder="Họ và tên phụ huynh *" required>
+                                    <input type="text" name="parent_name" placeholder="{{ __('storefront.home.parent_name') }}" required>
                                 </div>
                                 <div class="field">                                    
-                                    <input type="tel" name="phone" placeholder="Số điện thoại *" required>
+                                    <input type="tel" name="phone" placeholder="{{ __('storefront.home.phone') }}" required>
                                 </div>
                                 <div class="field">                                    
-                                    <input type="text" name="child_name" placeholder="Họ và tên bé">
+                                    <input type="text" name="child_name" placeholder="{{ __('storefront.home.child_name') }}">
                                 </div>
 
                                 <div class="field">                                    
-                                    <input type="email" name="email" placeholder="Email">
+                                    <input type="email" name="email" placeholder="{{ __('storefront.home.email') }}">
                                 </div>
 
                                 <div class="field">                                    
-                                    <textarea name="message" placeholder="Lời nhắn"></textarea>
+                                    <textarea name="message" placeholder="{{ __('storefront.home.message') }}"></textarea>
                                 </div>
 
-                                <button type="submit" class="btn-submit">Gửi đăng ký</button>
+                                <button type="submit" class="btn-submit">{{ __('storefront.home.send_request') }}</button>
                                 <div class="status-msg" id="statusMsg"></div>
                             </form>
-                            <div class="divider">Hoặc</div>
+                            <div class="divider">{{ __('storefront.home.or') }}</div>
                             <button type="button" class="btn-call" onclick="window.location.href='tel:0969702893'">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                     stroke-linecap="round" stroke-linejoin="round">
                                     <path
                                         d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z" />
                                 </svg>
-                                Gọi ngay tư vấn
+                                {{ __('storefront.home.call_consultation') }}
                             </button>
                         </div>
                     </div>
@@ -94,7 +92,7 @@
             e.preventDefault();
             const status = document.getElementById('statusMsg');
             if (status) {
-                status.textContent = 'Đã gửi đăng ký thành công! Chúng tôi sẽ liên hệ sớm nhất.';
+                status.textContent = @json(__('storefront.home.request_sent'));
             }
             this.reset();
         });

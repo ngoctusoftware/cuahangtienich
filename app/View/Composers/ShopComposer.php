@@ -28,7 +28,7 @@ class ShopComposer
         $view->with([
             'siteName' => $settings['site_name'] ?? 'ZEK SHOP',
             'setting' => fn ($key, $default = null) => $settings[$key] ?? $default,
-            'languages' => $this->languageService->active(),
+            'languages' => $this->languageService->storefrontLanguages(),
             'menuCategories' => $this->categoryRepository->getTree($this->languageService->currentLanguageId()),
             'headerMenuItems' => HeaderMenuItem::with('translations')
                 ->where('is_active', true)

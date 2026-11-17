@@ -10,9 +10,7 @@ use Illuminate\View\View;
 
 class CartController extends Controller
 {
-    public function __construct(protected CartService $cartService)
-    {
-    }
+    public function __construct(protected CartService $cartService) {}
 
     public function index(): View
     {
@@ -31,7 +29,7 @@ class CartController extends Controller
 
         $this->cartService->add($data['product_id'], $data['quantity'] ?? 1);
 
-        return back()->with('success', 'Đã thêm sản phẩm vào giỏ hàng.');
+        return back()->with('success', __('storefront.cart.added'));
     }
 
     public function update(Request $request): RedirectResponse

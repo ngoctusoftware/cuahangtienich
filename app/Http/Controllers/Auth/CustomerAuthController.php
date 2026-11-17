@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Repositories\Contracts\OrderRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,7 +32,7 @@ class CustomerAuthController extends Controller
             return redirect()->intended(route('home'));
         }
 
-        return back()->withErrors(['email' => 'Email hoặc mật khẩu không đúng.']);
+        return back()->withErrors(['email' => __('storefront.auth.invalid_credentials')]);
     }
 
     public function showRegister(): View
@@ -71,7 +72,7 @@ class CustomerAuthController extends Controller
 
     public function orders(Request $request): View
     {
-        $orders = app(\App\Repositories\Contracts\OrderRepositoryInterface::class)
+        $orders = app(OrderRepositoryInterface::class)
             ->getByCustomer(Auth::guard('customer')->id());
 
         return view('auth.customer.orders', compact('orders'));

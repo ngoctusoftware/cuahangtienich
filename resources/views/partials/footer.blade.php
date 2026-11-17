@@ -9,16 +9,16 @@
                 <p class="mb-0"><i class="fas fa-map-marker-alt me-2"></i>{{ $setting('address', '16 Nguyễn Như Kom Tum, Thanh Xuân, Hà Nội') }}</p> --}}
             </div>
             <div class="col-lg-3 col-md-4">
-                <h6 class="text-uppercase text-white mb-3">Về chúng tôi</h6>
+                <h6 class="text-uppercase text-white mb-3">{{ __('storefront.footer.about') }}</h6>
                 <ul class="list-unstyled footer-links">
-                    <li><a href="{{ route('about') }}">Giới thiệu</a></li>
-                    <li><a href="{{ route('page.show', 'tuyen-dung') }}">Tuyển dụng</a></li>
-                    <li><a href="{{ route('page.show', 'chinh-sach-bao-mat') }}">Chính sách bảo mật</a></li>
-                    <li><a href="{{ route('page.show', 'chinh-sach-doi-tra') }}">Chính sách đổi trả</a></li>
+                    <li><a href="{{ route('about') }}">{{ __('storefront.footer.introduction') }}</a></li>
+                    <li><a href="{{ route('page.show', 'tuyen-dung') }}">{{ __('storefront.footer.careers') }}</a></li>
+                    <li><a href="{{ route('page.show', 'chinh-sach-bao-mat') }}">{{ __('storefront.footer.privacy_policy') }}</a></li>
+                    <li><a href="{{ route('page.show', 'chinh-sach-doi-tra') }}">{{ __('storefront.footer.returns_policy') }}</a></li>
                 </ul>
             </div>
             <div class="col-lg-3 col-md-4">
-                <h6 class="text-uppercase text-white mb-3">Danh mục</h6>
+                <h6 class="text-uppercase text-white mb-3">{{ __('storefront.footer.categories') }}</h6>
                 <ul class="list-unstyled footer-links">
                     @if (!empty($menuCategories))
                         @foreach($menuCategories ?? [] as $cat)
@@ -28,7 +28,7 @@
                 </ul>
             </div>
             <div class="col-lg-2 col-md-4">
-                <h6 class="text-uppercase text-white mb-3">Kết nối</h6>
+                <h6 class="text-uppercase text-white mb-3">{{ __('storefront.footer.connect') }}</h6>
                 <div class="social-icons">
                     <a href="#"><i class="fab fa-facebook-f"></i></a>
                     <a href="#"><i class="fab fa-youtube"></i></a>
@@ -38,6 +38,6 @@
         </div>
     </div>
     <div class="footer-bottom py-3 text-center">
-        <small>&copy; {{ date('Y') }} {{ $siteName ?? 'ZEK SHOP' }}. All rights reserved.</small>
+        <small>&copy; {{ date('Y') }} {{ $siteName ?? 'ZEK SHOP' }}. {{ __('storefront.footer.rights_reserved') }}</small>
     </div>
 </footer>

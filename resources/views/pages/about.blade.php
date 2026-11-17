@@ -2,7 +2,7 @@
 
 @php($translation = $content->translation())
 
-@section('title', ($translation?->title ?? 'Về chúng tôi') . ' - ' . ($siteName ?? 'ZEK SHOP'))
+@section('title', ($translation?->title ?? __('storefront.pages.about')) . ' - ' . ($siteName ?? 'ZEK SHOP'))
 
 @section('content')
     <section class="about-page py-5">

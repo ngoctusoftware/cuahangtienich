@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Services\LanguageService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -35,9 +36,11 @@ class Category extends Model
     // Lấy bản dịch theo ngôn ngữ hiện tại (app()->getLocale() ánh xạ sang language_id ở Service)
     public function translation(?int $languageId = null): ?CategoryTranslation
     {
-        $languageId ??= app(\App\Services\LanguageService::class)->currentLanguageId();
+        $languageService = app(LanguageService::class);
+        $languageId ??= $languageService->currentLanguageId();
 
         return $this->translations->firstWhere('language_id', $languageId)
+            ?? $this->translations->firstWhere('language_id', $languageService->fallbackLanguageId())
             ?? $this->translations->first();
     }
 }

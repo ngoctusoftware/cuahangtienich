@@ -6,17 +6,19 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Language;
 use App\Models\Product;
+use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
 use App\Services\ExcelImportService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ProductController extends Controller
 {
+    use HandlesTaggedCache;
+
     public function downloadTemplate(ExcelImportService $excel): mixed
     {
         return $excel->downloadTemplate('products');
@@ -174,6 +176,6 @@ class ProductController extends Controller
 
     protected function forgetCache(): void
     {
-        Cache::tags(['products'])->flush();
+        $this->flushTagged(['products']);
     }
 }

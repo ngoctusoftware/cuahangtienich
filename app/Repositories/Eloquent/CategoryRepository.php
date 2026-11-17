@@ -4,11 +4,14 @@ namespace App\Repositories\Eloquent;
 
 use App\Models\Category;
 use App\Repositories\Contracts\CategoryRepositoryInterface;
+use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
+use App\Services\LanguageService;
 use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Support\Facades\Cache;
 
 class CategoryRepository extends BaseRepository implements CategoryRepositoryInterface
 {
+    use HandlesTaggedCache;
+
     public function __construct(Category $model)
     {
         parent::__construct($model);
@@ -30,7 +33,8 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             ->orderBy('sort_order')
             ->get();
 
-        $categories = Cache::tags(['categories'])->remember(
+        $categories = $this->rememberTagged(
+            ['categories'],
             "categories:tree:v2:{$languageId}",
             now()->addHour(),
             $loadCategories
@@ -42,15 +46,26 @@ class CategoryRepository extends BaseRepository implements CategoryRepositoryInt
             return $categories;
         }
 
-        Cache::tags(['categories'])->forget("categories:tree:v2:{$languageId}");
+        $this->forgetTagged(['categories'], "categories:tree:v2:{$languageId}");
 
         return $loadCategories();
     }
 
     public function findBySlug(string $slug, int $languageId): ?object
     {
+        $category = $this->model
+            ->whereHas('translations', fn ($query) => $query->where('slug', $slug)->where('language_id', $languageId))
+            ->with('translations')
+            ->first();
+
+        if ($category) {
+            return $category;
+        }
+
+        $fallbackLanguageId = app(LanguageService::class)->fallbackLanguageId();
+
         return $this->model
-            ->whereHas('translations', fn ($q) => $q->where('slug', $slug)->where('language_id', $languageId))
+            ->whereHas('translations', fn ($query) => $query->where('slug', $slug)->where('language_id', $fallbackLanguageId))
             ->with('translations')
             ->first();
     }

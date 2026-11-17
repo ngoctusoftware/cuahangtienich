@@ -1,8 +1,8 @@
 <section class="news-section py-5">
     <div class="container">
         <div class="section-heading text-center mb-5">
-            <h2>TIN TỨC & KHUYẾN MÃI</h2>
-            <p>Cập nhật ưu đãi và những thông tin hữu ích dành riêng cho bạn.</p>
+            <h2>{{ __('storefront.home.news_title') }}</h2>
+            <p>{{ __('storefront.home.news_description') }}</p>
             <span class="heading-underline"></span>
         </div>
         <div class="row g-4">

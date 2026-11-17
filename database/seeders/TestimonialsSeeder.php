@@ -16,18 +16,21 @@ class TestimonialsSeeder extends Seeder
                 'key' => 'testimonial-linh-vuong',
                 'name' => 'Mrs. Linh Vương',
                 'body' => 'Sản phẩm chất lượng, giao hàng rất nhanh, sẽ ủng hộ shop lâu dài.',
+                'body_en' => 'Great product quality and fast delivery. I will definitely shop here again.',
                 'rating' => 5,
             ],
             [
                 'key' => 'testimonial-quan-lai',
                 'name' => 'Mr. Quân Lai',
                 'body' => 'Dịch vụ chăm sóc khách hàng rất tận tâm, tư vấn nhiệt tình.',
+                'body_en' => 'The customer service team is attentive and always happy to help.',
                 'rating' => 5,
             ],
             [
                 'key' => 'testimonial-nam-tran',
                 'name' => 'Mr. Nam Trần',
                 'body' => 'Giá cả hợp lý, đóng gói cẩn thận, rất hài lòng.',
+                'body_en' => 'Fair prices, careful packaging, and an excellent experience.',
                 'rating' => 5,
             ],
         ];
@@ -37,6 +40,8 @@ class TestimonialsSeeder extends Seeder
         if (! $language) {
             return;
         }
+
+        $englishLanguage = Language::where('code', 'en')->where('is_active', true)->first();
 
         foreach ($testimonials as $testimonial) {
             $content = Content::updateOrCreate(
@@ -56,6 +61,17 @@ class TestimonialsSeeder extends Seeder
                     'body' => $testimonial['body'],
                 ],
             );
+
+            if ($englishLanguage) {
+                $content->translations()->updateOrCreate(
+                    ['language_id' => $englishLanguage->id],
+                    [
+                        'title' => $testimonial['name'],
+                        'slug' => Str::slug($testimonial['name']),
+                        'body' => $testimonial['body_en'],
+                    ],
+                );
+            }
         }
     }
 }

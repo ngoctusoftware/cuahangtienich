@@ -27,7 +27,7 @@
                 @csrf
                 <input type="hidden" name="product_id" value="{{ $product->id }}">
                 <button type="submit" class="btn btn-add-cart w-100">
-                    <i class="fas fa-cart-plus"></i> Thêm vào giỏ
+                    <i class="fas fa-cart-plus"></i> {{ __('storefront.products.add_to_cart_short') }}
                 </button>
             </form>
         </div>

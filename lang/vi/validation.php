@@ -1,0 +1,38 @@
+<?php
+
+return [
+    'accepted' => ':attribute phải được chấp nhận.',
+    'confirmed' => ':attribute xác nhận không khớp.',
+    'email' => ':attribute phải là địa chỉ email hợp lệ.',
+    'exists' => ':attribute được chọn không hợp lệ.',
+    'in' => ':attribute được chọn không hợp lệ.',
+    'integer' => ':attribute phải là số nguyên.',
+    'max' => [
+        'array' => ':attribute không được có quá :max mục.',
+        'file' => ':attribute không được lớn hơn :max kilobyte.',
+        'numeric' => ':attribute không được lớn hơn :max.',
+        'string' => ':attribute không được dài hơn :max ký tự.',
+    ],
+    'min' => [
+        'array' => ':attribute phải có ít nhất :min mục.',
+        'file' => ':attribute phải có dung lượng tối thiểu :min kilobyte.',
+        'numeric' => ':attribute phải lớn hơn hoặc bằng :min.',
+        'string' => ':attribute phải có ít nhất :min ký tự.',
+    ],
+    'required' => 'Vui lòng nhập :attribute.',
+    'string' => ':attribute phải là chuỗi ký tự.',
+    'unique' => ':attribute đã được sử dụng.',
+    'attributes' => [
+        'address' => 'địa chỉ',
+        'email' => 'email',
+        'name' => 'họ tên',
+        'note' => 'ghi chú',
+        'password' => 'mật khẩu',
+        'password_confirmation' => 'xác nhận mật khẩu',
+        'payment_method' => 'phương thức thanh toán',
+        'phone' => 'số điện thoại',
+        'product_id' => 'sản phẩm',
+        'q' => 'từ khóa',
+        'quantity' => 'số lượng',
+    ],
+];

@@ -31,6 +31,14 @@ class CategoryProductSeeder extends Seeder
                     'description' => 'Thời trang nam nữ hiện đại, đa dạng phong cách.',
                 ]
             );
+            $category->translations()->updateOrCreate(
+                ['language_id' => $englishLanguage->id],
+                [
+                    'name' => 'Fashion',
+                    'slug' => 'fashion',
+                    'description' => 'Modern clothing for every style.',
+                ]
+            );
 
             $styles = [
                 'Áo thun cotton basic',

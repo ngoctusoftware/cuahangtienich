@@ -2,8 +2,8 @@
 <section class="testimonial-section bg-light py-5">
     <div class="container">
         <div class="section-heading text-center mb-5">
-            <h2>KHÁCH HÀNG NÓI GÌ VỀ CHÚNG TÔI</h2>
-            <p>Trải nghiệm thật, chia sẻ thật từ cộng đồng khách hàng.</p>
+            <h2>{{ __('storefront.home.testimonials_title') }}</h2>
+            <p>{{ __('storefront.home.testimonials_description') }}</p>
             <span class="heading-underline"></span>
         </div>
         <div class="row g-4">
@@ -20,10 +20,10 @@
                                 onerror="this.style.display='none'">
                             <div class="ms-2">
                                 <strong>{{ $translation?->title }}</strong>
-                                <div class="text-muted small">Phụ huynh</div>
+                                <div class="text-muted small">{{ __('storefront.home.parent') }}</div>
                             </div>
                         </div>
-                        <div class="testimonial-rating" aria-label="{{ $rating }} trên 5 sao">
+                        <div class="testimonial-rating" aria-label="{{ __('storefront.home.rating', ['rating' => $rating]) }}">
                             @for($star = 1; $star <= 5; $star++)
                                 <i class="fas fa-star {{ $star <= $rating ? '' : 'is-empty' }}" aria-hidden="true"></i>
                             @endfor

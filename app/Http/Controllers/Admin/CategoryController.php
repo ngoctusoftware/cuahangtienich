@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Language;
+use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
 use App\Services\ExcelImportService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class CategoryController extends Controller
 {
+    use HandlesTaggedCache;
+
     public function downloadTemplate(ExcelImportService $excel): mixed
     {
         return $excel->downloadTemplate('categories');
@@ -122,6 +124,6 @@ class CategoryController extends Controller
 
     protected function forgetCache(): void
     {
-        Cache::tags(['categories'])->flush();
+        $this->flushTagged(['categories']);
     }
 }

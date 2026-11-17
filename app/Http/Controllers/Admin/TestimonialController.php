@@ -5,14 +5,16 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Content;
 use App\Models\Language;
+use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class TestimonialController extends Controller
 {
+    use HandlesTaggedCache;
+
     public function index(): View
     {
         return view('admin.testimonials.index', [
@@ -48,7 +50,7 @@ class TestimonialController extends Controller
         ]);
 
         $this->syncTranslations($testimonial, $translations);
-        Cache::tags(['contents'])->flush();
+        $this->flushTagged(['contents']);
 
         return redirect()->route('admin.testimonials.index')->with('success', 'Đã thêm cảm nhận khách hàng.');
     }
@@ -80,7 +82,7 @@ class TestimonialController extends Controller
         ]);
 
         $this->syncTranslations($testimonial, $translations);
-        Cache::tags(['contents'])->flush();
+        $this->flushTagged(['contents']);
 
         return redirect()->route('admin.testimonials.index')->with('success', 'Đã cập nhật cảm nhận khách hàng.');
     }
@@ -89,7 +91,7 @@ class TestimonialController extends Controller
     {
         $this->ensureTestimonial($testimonial);
         $testimonial->delete();
-        Cache::tags(['contents'])->flush();
+        $this->flushTagged(['contents']);
 
         return back()->with('success', 'Đã xoá cảm nhận khách hàng.');
     }

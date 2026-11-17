@@ -1,22 +1,22 @@
 @extends('layouts.app')
 
-@section('title', 'Giỏ hàng - ' . ($siteName ?? 'ZEK SHOP'))
+@section('title', __('storefront.cart.title') . ' - ' . ($siteName ?? 'ZEK SHOP'))
 
 @section('content')
 <div class="container py-5">
-    <h2 class="mb-4">Giỏ hàng của bạn</h2>
+    <h2 class="mb-4">{{ __('storefront.cart.heading') }}</h2>
 
     @if(empty($items))
-        <p>Giỏ hàng đang trống. <a href="{{ route('home') }}">Tiếp tục mua sắm</a></p>
+        <p>{{ __('storefront.cart.empty') }} <a href="{{ route('home') }}">{{ __('storefront.cart.continue_shopping') }}</a></p>
     @else
         <div class="table-responsive">
             <table class="table align-middle">
                 <thead>
                     <tr>
-                        <th>Sản phẩm</th>
-                        <th>Đơn giá</th>
-                        <th>Số lượng</th>
-                        <th>Thành tiền</th>
+                        <th>{{ __('storefront.cart.product') }}</th>
+                        <th>{{ __('storefront.cart.unit_price') }}</th>
+                        <th>{{ __('storefront.cart.quantity') }}</th>
+                        <th>{{ __('storefront.cart.line_total') }}</th>
                         <th></th>
                     </tr>
                 </thead>
@@ -38,7 +38,7 @@
                                 <form action="{{ route('cart.remove') }}" method="POST">
                                     @csrf
                                     <input type="hidden" name="product_id" value="{{ $productId }}">
-                                    <button class="btn btn-sm btn-outline-danger"><i class="fas fa-trash"></i></button>
+                                    <button class="btn btn-sm btn-outline-danger" aria-label="{{ __('storefront.cart.remove') }}"><i class="fas fa-trash"></i></button>
                                 </form>
                             </td>
                         </tr>
@@ -49,10 +49,10 @@
         <div class="d-flex justify-content-end">
             <div class="cart-summary">
                 <div class="d-flex justify-content-between mb-2">
-                    <span>Tạm tính:</span>
+                    <span>{{ __('storefront.cart.subtotal') }}</span>
                     <strong>{{ number_format($total) }}₫</strong>
                 </div>
-                <a href="{{ route('checkout.index') }}" class="btn btn-hero-cta w-100">TIẾN HÀNH THANH TOÁN</a>
+                <a href="{{ route('checkout.index') }}" class="btn btn-hero-cta w-100">{{ __('storefront.cart.checkout') }}</a>
             </div>
         </div>
     @endif

@@ -11,8 +11,8 @@
 
                 {{-- Ô tìm kiếm: đổi action bên dưới thành route tìm kiếm thực tế của bạn --}}
                 <form class="header-search" action="{{ url('/tim-kiem') }}" method="GET">
-                    <input type="text" name="q" placeholder="Tìm kiếm sản phẩm..." value="{{ request('q') }}">
-                    <button type="submit" aria-label="Tìm kiếm"><i class="fas fa-search"></i></button>
+                    <input type="text" name="q" placeholder="{{ __('storefront.header.search_placeholder') }}" value="{{ request('q') }}">
+                    <button type="submit" aria-label="{{ __('storefront.header.search') }}"><i class="fas fa-search"></i></button>
                 </form>
             </div>
 
@@ -59,7 +59,7 @@
                     <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
                         @if ($currentLanguage)
                             <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
-                                alt="{{ $currentLanguage->name }}" style="width:26px; height:auto; border-radius:3px;"
+                                alt="{{ __('storefront.languages.' . $currentLanguage->code) }}" style="width:26px; height:auto; border-radius:3px;"
                                 onerror="this.style.display='none'">
                         @endif
                     </a>
@@ -68,9 +68,9 @@
                             <li>
                                 <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
                                     <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
-                                        alt="{{ $lang->name }}" style="width:26px; height:auto; border-radius:3px;"
+                                        alt="{{ __('storefront.languages.' . $lang->code) }}" style="width:26px; height:auto; border-radius:3px;"
                                         onerror="this.style.display='none'">
-                                    {{ $lang->name }}
+                                    {{ __('storefront.languages.' . $lang->code) }}
                                 </a>
                             </li>
                         @endforeach
@@ -86,7 +86,7 @@
                             <li>
                                 <a class="dropdown-item" href="{{ route('customer.orders') }}">
                                     <i class="fas fa-shopping-bag fa-sm"></i>
-                                    <span style="font-size:14px;">Đơn hàng của tôi</span>
+                                    <span style="font-size:14px;">{{ __('storefront.header.my_orders') }}</span>
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
@@ -94,7 +94,7 @@
                                 <form method="POST" action="{{ route('customer.logout') }}">@csrf
                                     <button class="dropdown-item">
                                         <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                        <span style="font-size:14px;">Đăng xuất</span>
+                                        <span style="font-size:14px;">{{ __('storefront.header.logout') }}</span>
                                     </button>
                                 </form>
                             </li>
@@ -120,7 +120,7 @@
                                     @forelse($menuCategories ?? [] as $cat)
                                         <li><a class="dropdown-item" href="{{ route('products.byCategory', $cat->translation()?->slug) }}">{{ $cat->translation()?->name }}</a></li>
                                     @empty
-                                        <li><span class="dropdown-item-text text-muted">{{ app()->getLocale() === 'en' ? 'No categories' : 'Chưa có danh mục' }}</span></li>
+                                        <li><span class="dropdown-item-text text-muted">{{ __('storefront.header.no_categories') }}</span></li>
                                     @endforelse
                                 </ul>
                             </li>
@@ -151,7 +151,7 @@
                         <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
                             @if ($currentLanguage)
                                 <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
-                                    alt="{{ $currentLanguage->name }}" style="width:30px; height:auto; border-radius:3px;"
+                                    alt="{{ __('storefront.languages.' . $currentLanguage->code) }}" style="width:30px; height:auto; border-radius:3px;"
                                     onerror="this.style.display='none'">
                             @endif
                         </a>
@@ -160,9 +160,9 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
                                         <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
-                                            alt="{{ $lang->name }}" style="width:30px; height:auto; border-radius:3px;"
+                                            alt="{{ __('storefront.languages.' . $lang->code) }}" style="width:30px; height:auto; border-radius:3px;"
                                             onerror="this.style.display='none'">
-                                        {{ $lang->name }}
+                                        {{ __('storefront.languages.' . $lang->code) }}
                                     </a>
                                 </li>
                             @endforeach
@@ -180,7 +180,7 @@
                                 <li>
                                     <a class="dropdown-item" href="{{ route('customer.orders') }}">
                                         <i class="fas fa-shopping-bag fa-sm"></i>
-                                        <span style="font-size:14px;">Đơn hàng của tôi</span>
+                                        <span style="font-size:14px;">{{ __('storefront.header.my_orders') }}</span>
                                     </a>
                                 </li>
                                 <li>
@@ -190,7 +190,7 @@
                                     <form method="POST" action="{{ route('customer.logout') }}">@csrf
                                         <button class="dropdown-item">
                                             <i class="fa fa-sign-out" aria-hidden="true"></i>
-                                            <span style="font-size:14px;">Đăng xuất</span>
+                                            <span style="font-size:14px;">{{ __('storefront.header.logout') }}</span>
                                         </button>
                                     </form>
                                 </li>

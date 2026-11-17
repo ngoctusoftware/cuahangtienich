@@ -34,6 +34,10 @@ class HeaderMenuItem extends Model
         $languageId ??= app(LanguageService::class)->currentLanguageId();
 
         return $this->translations->firstWhere('language_id', $languageId)
+            ?? $this->translations->firstWhere(
+                'language_id',
+                app(LanguageService::class)->fallbackLanguageId()
+            )
             ?? $this->translations->first();
     }
 

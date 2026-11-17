@@ -5,15 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Content;
 use App\Models\Language;
+use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 // Quản lý nội dung tĩnh: banner trang chủ, giới thiệu, tin tức, chính sách...
 class ContentController extends Controller
 {
+    use HandlesTaggedCache;
+
     public function index(): View
     {
         return view('admin.contents.index', ['contents' => Content::with('translations')->latest()->paginate(15)]);
@@ -37,7 +39,7 @@ class ContentController extends Controller
         ]);
 
         $this->syncTranslations($content, $data['translations']);
-        Cache::tags(['contents'])->flush();
+        $this->flushTagged(['contents']);
 
         return redirect()->route('admin.contents.index')->with('success', 'Đã thêm nội dung.');
     }
@@ -62,7 +64,7 @@ class ContentController extends Controller
         ]);
 
         $this->syncTranslations($content, $data['translations']);
-        Cache::tags(['contents'])->flush();
+        $this->flushTagged(['contents']);
 
         return redirect()->route('admin.contents.index')->with('success', 'Đã cập nhật nội dung.');
     }
@@ -70,7 +72,7 @@ class ContentController extends Controller
     public function destroy(Content $content): RedirectResponse
     {
         $content->delete();
-        Cache::tags(['contents'])->flush();
+        $this->flushTagged(['contents']);
 
         return back()->with('success', 'Đã xoá nội dung.');
     }
