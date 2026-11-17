@@ -989,6 +989,12 @@ body {
 --------------------------------------------- CSS Language -----------------------------------------
 
 /* ===== Dropdown danh mục sản phẩm ===== */
+.language-item .language-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
 .language-item .dropdown-menu {
     width: 280px;
     max-width: none !important;

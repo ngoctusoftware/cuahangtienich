@@ -8,6 +8,7 @@ return [
     'header' => [
         'search_placeholder' => 'Search products...',
         'search' => 'Search',
+        'change_language' => 'Change language',
         'my_orders' => 'My orders',
         'logout' => 'Log out',
         'no_categories' => 'No categories yet',
@@ -95,6 +96,7 @@ return [
         'in_stock' => ':count items in stock',
         'description' => 'Description',
         'fallback_name' => 'Product',
+        'partner' => 'Partner',
     ],
     'cart' => [
         'title' => 'Shopping cart',

@@ -47,6 +47,17 @@
                 </select>
             </div>
             <div class="col-md-4">
+                <label class="form-label">Đối tác</label>
+                <select name="partner_id" class="form-select">
+                    <option value="">-- Chưa gán đối tác --</option>
+                    @foreach($partners as $partner)
+                        <option value="{{ $partner->id }}" {{ old('partner_id', $product->partner_id) == $partner->id ? 'selected' : '' }}>
+                            {{ $partner->name }}{{ $partner->is_active ? '' : ' (Ngừng hoạt động)' }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="col-md-4">
                 <label class="form-label">Mã SKU</label>
                 <input type="text" name="sku" class="form-control" value="{{ old('sku', $product->sku) }}" required>
             </div>

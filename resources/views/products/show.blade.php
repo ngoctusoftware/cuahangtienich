@@ -27,6 +27,12 @@
         <div class="col-lg-6">
             <h1 class="product-title">{{ $product->translation()?->name }}</h1>
             <p class="text-muted">SKU: {{ $product->sku }}</p>
+            @if($product->partner)
+                <p class="text-muted">
+                    <i class="fas fa-handshake me-1"></i>
+                    {{ __('storefront.products.partner') }}: <strong>{{ $product->partner->name }}</strong>
+                </p>
+            @endif
             <div class="product-price-detail mb-3">
                 @if($product->sale_price)
                     <span class="price-sale fs-3">{{ number_format($product->sale_price) }}₫</span>

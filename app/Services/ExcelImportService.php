@@ -7,16 +7,52 @@ use App\Models\CategoryTranslation;
 use App\Models\Customer;
 use App\Models\CustomerGroup;
 use App\Models\Language;
+use App\Models\Partner;
 use App\Models\Product;
 use App\Models\ProductTranslation;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ExcelImportService
 {
+    public function exportPartners(iterable $partners, string $filename): StreamedResponse
+    {
+        $headers = ['name', 'contact_name', 'phone', 'email', 'address', 'notes', 'is_active'];
+
+        return response()->streamDownload(function () use ($headers, $partners): void {
+            echo '<?xml version="1.0"?>';
+            echo '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Partners"><Table>';
+            echo '<Row>';
+            foreach ($headers as $header) {
+                echo '<Cell><Data ss:Type="String">'.e($header).'</Data></Cell>';
+            }
+            echo '</Row>';
+
+            foreach ($partners as $partner) {
+                $values = [
+                    $partner->name,
+                    $partner->contact_name,
+                    $partner->phone,
+                    $partner->email,
+                    $partner->address,
+                    $partner->notes,
+                    $partner->is_active ? 1 : 0,
+                ];
+                echo '<Row>';
+                foreach ($values as $value) {
+                    echo '<Cell><Data ss:Type="String">'.e((string) ($value ?? '')).'</Data></Cell>';
+                }
+                echo '</Row>';
+            }
+
+            echo '</Table></Worksheet></Workbook>';
+        }, $filename, ['Content-Type' => 'application/vnd.ms-excel']);
+    }
+
     public function exportProducts(iterable $products, string $filename): StreamedResponse
     {
         $headers = ['SKU', 'Tên sản phẩm', 'Danh mục', 'Giá gốc', 'Giá khuyến mãi', 'Tồn kho', 'Nổi bật', 'Bán chạy', 'Trạng thái'];
@@ -58,6 +94,7 @@ class ExcelImportService
         $templates = [
             'categories' => ['name', 'parent_name', 'sort_order', 'is_active'],
             'products' => ['sku', 'name', 'category_name', 'price', 'sale_price', 'stock', 'is_featured', 'is_bestseller', 'is_active', 'short_description', 'description'],
+            'partners' => ['name', 'contact_name', 'phone', 'email', 'address', 'notes', 'is_active'],
             'customer-groups' => ['name', 'discount_percent'],
             'customers' => ['name', 'email', 'phone', 'password', 'customer_group_name', 'address', 'is_active'],
         ];
@@ -82,6 +119,7 @@ class ExcelImportService
         return match ($type) {
             'categories' => $this->importCategories($rows),
             'products' => $this->importProducts($rows),
+            'partners' => $this->importPartners($rows),
             'customer-groups' => $this->importCustomerGroups($rows),
             'customers' => $this->importCustomers($rows),
             default => throw ValidationException::withMessages(['file' => 'Loại dữ liệu import không hợp lệ.']),
@@ -165,6 +203,45 @@ class ExcelImportService
         });
     }
 
+    protected function importPartners(array $rows): int
+    {
+        return DB::transaction(function () use ($rows): int {
+            foreach ($rows as $index => $row) {
+                $this->requireColumns($row, ['name'], $index);
+
+                $activeValue = trim((string) ($row['is_active'] ?? ''));
+                $partnerData = [
+                    'name' => trim((string) $row['name']),
+                    'contact_name' => $this->nullableString($row['contact_name'] ?? null),
+                    'phone' => $this->nullableString($row['phone'] ?? null),
+                    'email' => $this->nullableString($row['email'] ?? null),
+                    'address' => $this->nullableString($row['address'] ?? null),
+                    'notes' => $this->nullableString($row['notes'] ?? null),
+                    'is_active' => $activeValue === '' ? true : $this->boolean($activeValue),
+                ];
+                $validator = Validator::make($partnerData, [
+                    'name' => 'required|string|max:255',
+                    'contact_name' => 'nullable|string|max:255',
+                    'phone' => 'nullable|string|max:30',
+                    'email' => 'nullable|email|max:255',
+                    'address' => 'nullable|string|max:1000',
+                    'notes' => 'nullable|string|max:2000',
+                    'is_active' => 'boolean',
+                ]);
+
+                if ($validator->fails()) {
+                    throw ValidationException::withMessages([
+                        'file' => 'Dòng '.($index + 2).': '.$validator->errors()->first(),
+                    ]);
+                }
+
+                Partner::updateOrCreate(['name' => $partnerData['name']], $partnerData);
+            }
+
+            return count($rows);
+        });
+    }
+
     protected function importCustomerGroups(array $rows): int
     {
         return DB::transaction(function () use ($rows): int {
@@ -223,5 +300,12 @@ class ExcelImportService
     protected function integer(mixed $value): int
     {
         return (int) ($value ?: 0);
+    }
+
+    protected function nullableString(mixed $value): ?string
+    {
+        $value = trim((string) $value);
+
+        return $value === '' ? null : $value;
     }
 }

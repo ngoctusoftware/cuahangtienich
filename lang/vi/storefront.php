@@ -8,6 +8,7 @@ return [
     'header' => [
         'search_placeholder' => 'Tìm kiếm sản phẩm...',
         'search' => 'Tìm kiếm',
+        'change_language' => 'Thay đổi ngôn ngữ',
         'my_orders' => 'Đơn hàng của tôi',
         'logout' => 'Đăng xuất',
         'no_categories' => 'Chưa có danh mục',
@@ -95,6 +96,7 @@ return [
         'in_stock' => 'Còn hàng (:count sản phẩm)',
         'description' => 'Mô tả chi tiết',
         'fallback_name' => 'Sản phẩm',
+        'partner' => 'Đối tác',
     ],
     'cart' => [
         'title' => 'Giỏ hàng',

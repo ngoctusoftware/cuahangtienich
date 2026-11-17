@@ -34,6 +34,9 @@
         <a href="{{ route('admin.categories.index') }}" class="{{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
             <i class="fas fa-sitemap"></i> Danh mục
         </a>
+        <a href="{{ route('admin.partners.index') }}" class="{{ request()->routeIs('admin.partners.*') ? 'active' : '' }}">
+            <i class="fas fa-handshake"></i> Đối tác
+        </a>
         <a href="{{ route('admin.products.index') }}" class="{{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
             <i class="fas fa-box"></i> Sản phẩm
         </a>

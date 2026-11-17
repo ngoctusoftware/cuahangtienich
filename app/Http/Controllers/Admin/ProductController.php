@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Language;
+use App\Models\Partner;
 use App\Models\Product;
 use App\Repositories\Eloquent\Concerns\HandlesTaggedCache;
 use App\Services\ExcelImportService;
@@ -42,7 +43,7 @@ class ProductController extends Controller
 
     public function exportAll(ExcelImportService $excel): StreamedResponse
     {
-        $products = Product::with('translations', 'category.translations')->latest()->get();
+        $products = Product::with('translations', 'category.translations', 'partner')->latest()->get();
 
         return $excel->exportProducts($products, 'products-all.xls');
     }
@@ -56,7 +57,7 @@ class ProductController extends Controller
 
     protected function productQuery(Request $request): Builder
     {
-        return Product::with('translations', 'category.translations')
+        return Product::with('translations', 'category.translations', 'partner')
             ->when($request->search, fn ($q) => $q->whereHas('translations', fn ($t) => $t->where('name', 'like', "%{$request->search}%")));
     }
 
@@ -65,6 +66,7 @@ class ProductController extends Controller
         return view('admin.products.form', [
             'product' => new Product,
             'categories' => Category::with('translations')->get(),
+            'partners' => Partner::orderBy('name')->get(),
             'languages' => Language::where('is_active', true)->get(),
         ]);
     }
@@ -75,6 +77,7 @@ class ProductController extends Controller
 
         $product = Product::create([
             'category_id' => $data['category_id'],
+            'partner_id' => $data['partner_id'] ?? null,
             'sku' => $data['sku'],
             'price' => $data['price'],
             'sale_price' => $data['sale_price'] ?? null,
@@ -98,6 +101,7 @@ class ProductController extends Controller
         return view('admin.products.form', [
             'product' => $product,
             'categories' => Category::with('translations')->get(),
+            'partners' => Partner::orderBy('name')->get(),
             'languages' => Language::where('is_active', true)->get(),
         ]);
     }
@@ -108,6 +112,7 @@ class ProductController extends Controller
 
         $product->update([
             'category_id' => $data['category_id'],
+            'partner_id' => $data['partner_id'] ?? null,
             'sku' => $data['sku'],
             'price' => $data['price'],
             'sale_price' => $data['sale_price'] ?? null,
@@ -136,6 +141,7 @@ class ProductController extends Controller
     {
         return $request->validate([
             'category_id' => 'required|exists:categories,id',
+            'partner_id' => 'nullable|exists:partners,id',
             'sku' => 'required|string|unique:products,sku,'.$ignoreId,
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0|lt:price',

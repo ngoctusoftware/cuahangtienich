@@ -23,7 +23,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
     {
         $product = $this->model
             ->whereHas('translations', fn ($q) => $q->where('slug', $slug)->where('language_id', $languageId))
-            ->with(['translations', 'images', 'category.translations'])
+            ->with(['translations', 'images', 'category.translations', 'partner'])
             ->where('is_active', true)
             ->first();
 
@@ -35,7 +35,7 @@ class ProductRepository extends BaseRepository implements ProductRepositoryInter
 
         return $this->model
             ->whereHas('translations', fn ($q) => $q->where('slug', $slug)->where('language_id', $fallbackLanguageId))
-            ->with(['translations', 'images', 'category.translations'])
+            ->with(['translations', 'images', 'category.translations', 'partner'])
             ->where('is_active', true)
             ->first();
     }

@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 class Product extends Model
 {
     protected $fillable = [
-        'category_id', 'sku', 'thumbnail', 'price', 'sale_price',
+        'category_id', 'partner_id', 'sku', 'thumbnail', 'price', 'sale_price',
         'stock', 'sold_count', 'is_featured', 'is_bestseller', 'is_active',
     ];
 
@@ -26,6 +26,11 @@ class Product extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function partner(): BelongsTo
+    {
+        return $this->belongsTo(Partner::class);
     }
 
     public function translations(): HasMany

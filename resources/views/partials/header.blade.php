@@ -1,3 +1,10 @@
+@php
+    $languageFlagIcons = [
+        'vi' => 'images/vn.jpg',
+        'en' => 'images/en.jpg',
+    ];
+@endphp
+
 <header class="site-header">
     {{-- Tầng trên: logo / tìm kiếm / liên hệ --}}
     <div class="header-top">
@@ -56,9 +63,11 @@
                         $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
                             ?? collect($languages ?? [])->firstWhere('is_default', true);
                     @endphp
-                    <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                    <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                        aria-label="{{ __('storefront.header.change_language') }}"
+                        title="{{ __('storefront.header.change_language') }}">
                         @if ($currentLanguage)
-                            <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
+                            <img src="{{ asset($languageFlagIcons[$currentLanguage->code] ?? $currentLanguage->flag_icon ?? ('images/' . $currentLanguage->code . '.jpg')) }}"
                                 alt="{{ __('storefront.languages.' . $currentLanguage->code) }}" style="width:26px; height:auto; border-radius:3px;"
                                 onerror="this.style.display='none'">
                         @endif
@@ -67,7 +76,7 @@
                         @foreach ($languages ?? [] as $lang)
                             <li>
                                 <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
-                                    <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
+                                    <img src="{{ asset($languageFlagIcons[$lang->code] ?? $lang->flag_icon ?? ('images/' . $lang->code . '.jpg')) }}"
                                         alt="{{ __('storefront.languages.' . $lang->code) }}" style="width:26px; height:auto; border-radius:3px;"
                                         onerror="this.style.display='none'">
                                     {{ __('storefront.languages.' . $lang->code) }}
@@ -148,9 +157,11 @@
                             $currentLanguage = collect($languages ?? [])->firstWhere('code', app()->getLocale())
                                 ?? collect($languages ?? [])->firstWhere('is_default', true);
                         @endphp
-                        <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown">
+                        <a class="nav-link language-toggle dropdown-toggle" href="#" data-bs-toggle="dropdown"
+                            aria-label="{{ __('storefront.header.change_language') }}"
+                            title="{{ __('storefront.header.change_language') }}">
                             @if ($currentLanguage)
-                                <img src="{{ !empty($currentLanguage->flag_icon) ? asset($currentLanguage->flag_icon) : asset('images/' . $currentLanguage->code . '.jpg') }}"
+                                <img src="{{ asset($languageFlagIcons[$currentLanguage->code] ?? $currentLanguage->flag_icon ?? ('images/' . $currentLanguage->code . '.jpg')) }}"
                                     alt="{{ __('storefront.languages.' . $currentLanguage->code) }}" style="width:30px; height:auto; border-radius:3px;"
                                     onerror="this.style.display='none'">
                             @endif
@@ -159,7 +170,7 @@
                             @foreach ($languages ?? [] as $lang)
                                 <li>
                                     <a class="dropdown-item" href="{{ route('lang.switch', ['code' => $lang->code]) }}">
-                                        <img src="{{ !empty($lang->flag_icon) ? asset($lang->flag_icon) : asset('images/' . $lang->code . '.jpg') }}"
+                                        <img src="{{ asset($languageFlagIcons[$lang->code] ?? $lang->flag_icon ?? ('images/' . $lang->code . '.jpg')) }}"
                                             alt="{{ __('storefront.languages.' . $lang->code) }}" style="width:30px; height:auto; border-radius:3px;"
                                             onerror="this.style.display='none'">
                                         {{ __('storefront.languages.' . $lang->code) }}

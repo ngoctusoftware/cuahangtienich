@@ -22,13 +22,14 @@
     </div>
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
-            <thead><tr><th>Ảnh</th><th>Tên</th><th>Danh mục</th><th>Giá</th><th>Kho</th><th>Nổi bật</th><th>Bán chạy</th><th>Trạng thái</th><th></th></tr></thead>
+            <thead><tr><th>Ảnh</th><th>Tên</th><th>Danh mục</th><th>Đối tác</th><th>Giá</th><th>Kho</th><th>Nổi bật</th><th>Bán chạy</th><th>Trạng thái</th><th></th></tr></thead>
             <tbody>
                 @foreach($products as $p)
                     <tr>
                         <td><img src="{{ $p->thumbnail_url }}" width="48" height="48" style="object-fit:cover;border-radius:6px"></td>
                         <td>{{ $p->translation()?->name }}</td>
                         <td>{{ $p->category->translation()?->name }}</td>
+                        <td>{{ $p->partner?->name ?? '—' }}</td>
                         <td>{{ number_format($p->price) }}₫</td>
                         <td>{{ $p->stock }}</td>
                         <td>{!! $p->is_featured ? '<i class="fas fa-check text-success"></i>' : '' !!}</td>

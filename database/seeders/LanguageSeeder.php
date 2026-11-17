@@ -17,7 +17,7 @@ class LanguageSeeder extends Seeder
             'is_default' => true,
             'is_active' => true,
             'sort_order' => 1,
-            'flag_icon' => 'images/flags/vn.png',
+            'flag_icon' => 'images/vn.jpg',
         ]);
         Language::updateOrCreate(['code' => 'en'], [
             'name' => 'Tiếng Anh',
@@ -27,7 +27,7 @@ class LanguageSeeder extends Seeder
             'is_default' => false,
             'is_active' => true,
             'sort_order' => 2,
-            'flag_icon' => 'images/flags/us.png',
+            'flag_icon' => 'images/en.jpg',
         ]);
     }
 }

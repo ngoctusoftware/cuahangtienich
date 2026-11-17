@@ -17,6 +17,7 @@ class RolePermissionSeeder extends Seeder
             'banners' => ['view', 'create', 'update', 'delete'],
             'store-benefits' => ['view', 'create', 'update', 'delete'],
             'categories' => ['view', 'create', 'update', 'delete'],
+            'partners' => ['view', 'create', 'update', 'delete'],
             'products' => ['view', 'create', 'update', 'delete'],
             'users' => ['view', 'create', 'update', 'delete'],
             'orders' => ['view', 'update'],

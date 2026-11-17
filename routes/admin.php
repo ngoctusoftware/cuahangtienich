@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\HeaderMenuController;
 use App\Http\Controllers\Admin\LanguageController;
 use App\Http\Controllers\Admin\OrderController;
+use App\Http\Controllers\Admin\PartnerController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\ProfileController;
@@ -79,6 +80,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('categories/import', [CategoryController::class, 'import'])->name('categories.import')->middleware('permission:categories.view');
         Route::resource('categories', CategoryController::class)->except(['show'])
             ->middleware('permission:categories.view');
+
+        // Đối tác
+        Route::get('partners/import-template', [PartnerController::class, 'downloadTemplate'])->name('partners.import-template')->middleware('permission:partners.view');
+        Route::post('partners/import', [PartnerController::class, 'import'])->name('partners.import')->middleware('permission:partners.view');
+        Route::get('partners/export/current', [PartnerController::class, 'exportCurrent'])->name('partners.export.current')->middleware('permission:partners.view');
+        Route::get('partners/export/all', [PartnerController::class, 'exportAll'])->name('partners.export.all')->middleware('permission:partners.view');
+        Route::resource('partners', PartnerController::class)->except(['show'])
+            ->middleware('permission:partners.view');
 
         // Sản phẩm
         Route::get('products/import-template', [ProductController::class, 'downloadTemplate'])->name('products.import-template')->middleware('permission:products.view');
