@@ -27,7 +27,7 @@ class ProductController extends Controller
 
     public function import(Request $request, ExcelImportService $excel): RedirectResponse
     {
-        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $request->validate(['file' => 'required|file|extensions:xls,xlsx,csv|max:10240']);
         $count = $excel->import('products', $request->file('file'));
 
         return back()->with('success', "Đã import {$count} sản phẩm.");
@@ -135,6 +135,18 @@ class ProductController extends Controller
         $this->forgetCache();
 
         return back()->with('success', 'Đã xoá sản phẩm.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|distinct|exists:products,id',
+        ]);
+        $deleted = Product::whereKey($data['ids'])->delete();
+        $this->forgetCache();
+
+        return back()->with('success', "Đã xoá {$deleted} sản phẩm.");
     }
 
     protected function validated(Request $request, ?int $ignoreId = null): array

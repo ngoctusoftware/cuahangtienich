@@ -140,6 +140,43 @@ body {
         white-space: nowrap;
         flex-wrap: nowrap;
     }
+
+    .main-nav,
+    .main-nav .container,
+    .main-nav .navbar-collapse,
+    .main-nav .navbar-nav {
+        min-height: 50px;
+    }
+
+    .main-nav .container,
+    .main-nav .navbar-collapse,
+    .main-nav .navbar-nav,
+    .main-nav .nav-item,
+    .main-nav .nav-link,
+    .main-nav .action-link,
+    .main-nav .language-toggle,
+    .main-nav .category-toggle {
+        display: flex;
+        align-items: center;
+    }
+
+    .main-nav .navbar-collapse,
+    .main-nav .navbar-nav {
+        height: 50px;
+    }
+
+    .main-nav .nav-item {
+        height: 50px;
+    }
+
+    .main-nav .nav-link,
+    .main-nav .action-link,
+    .main-nav .language-toggle,
+    .main-nav .category-toggle {
+        height: 50px;
+        padding-top: 0 !important;
+        padding-bottom: 0 !important;
+    }
 }
 
 .contact-item {

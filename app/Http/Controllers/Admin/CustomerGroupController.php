@@ -18,7 +18,7 @@ class CustomerGroupController extends Controller
 
     public function import(Request $request, ExcelImportService $excel): RedirectResponse
     {
-        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $request->validate(['file' => 'required|file|extensions:xls,xlsx,csv|max:10240']);
         $count = $excel->import('customer-groups', $request->file('file'));
 
         return back()->with('success', "Đã import {$count} nhóm khách hàng.");
@@ -58,6 +58,17 @@ class CustomerGroupController extends Controller
         $customerGroup->delete();
 
         return back()->with('success', 'Đã xoá nhóm khách hàng.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|distinct|exists:customer_groups,id',
+        ]);
+        $deleted = CustomerGroup::whereKey($data['ids'])->delete();
+
+        return back()->with('success', "Đã xoá {$deleted} nhóm khách hàng.");
     }
 
     protected function validated(Request $request): array

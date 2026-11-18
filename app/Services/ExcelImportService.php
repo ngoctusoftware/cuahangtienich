@@ -89,26 +89,70 @@ class ExcelImportService
         }, $filename, ['Content-Type' => 'application/vnd.ms-excel']);
     }
 
+    public function exportCategories(iterable $categories, string $filename): StreamedResponse
+    {
+        $headers = ['Tên danh mục', 'Danh mục cha', 'Thứ tự', 'Trạng thái'];
+
+        return response()->streamDownload(function () use ($headers, $categories): void {
+            echo '<?xml version="1.0"?>';
+            echo '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Categories"><Table>';
+            echo '<Row>';
+            foreach ($headers as $header) {
+                echo '<Cell><Data ss:Type="String">'.e($header).'</Data></Cell>';
+            }
+            echo '</Row>';
+
+            foreach ($categories as $category) {
+                $values = [
+                    $category->translation()?->name,
+                    $category->parent?->translation()?->name,
+                    $category->sort_order,
+                    $category->is_active ? 'Hoạt động' : 'Ẩn',
+                ];
+                echo '<Row>';
+                foreach ($values as $value) {
+                    echo '<Cell><Data ss:Type="String">'.e((string) ($value ?? '')).'</Data></Cell>';
+                }
+                echo '</Row>';
+            }
+
+            echo '</Table></Worksheet></Workbook>';
+        }, $filename, ['Content-Type' => 'application/vnd.ms-excel']);
+    }
+
     public function downloadTemplate(string $type): StreamedResponse
     {
         $templates = [
-            'categories' => ['name', 'parent_name', 'sort_order', 'is_active'],
+            'categories' => ['Tên danh mục', 'Danh mục cha', 'Thứ tự', 'Trạng thái'],
             'products' => ['sku', 'name', 'category_name', 'price', 'sale_price', 'stock', 'is_featured', 'is_bestseller', 'is_active', 'short_description', 'description'],
             'partners' => ['name', 'contact_name', 'phone', 'email', 'address', 'notes', 'is_active'],
             'customer-groups' => ['name', 'discount_percent'],
             'customers' => ['name', 'email', 'phone', 'password', 'customer_group_name', 'address', 'is_active'],
         ];
+        $exampleRows = [
+            'categories' => [['Google Gemini', '', '1', 'Hoạt động']],
+        ];
 
         abort_unless(isset($templates[$type]), 404);
         $headers = $templates[$type];
 
-        return response()->streamDownload(function () use ($headers): void {
+        return response()->streamDownload(function () use ($headers, $exampleRows, $type): void {
             echo '<?xml version="1.0"?>';
             echo '<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"><Worksheet ss:Name="Import"><Table><Row>';
             foreach ($headers as $header) {
                 echo '<Cell><Data ss:Type="String">'.e($header).'</Data></Cell>';
             }
-            echo '</Row></Table></Worksheet></Workbook>';
+            echo '</Row>';
+
+            foreach ($exampleRows[$type] ?? [] as $exampleRow) {
+                echo '<Row>';
+                foreach ($exampleRow as $value) {
+                    echo '<Cell><Data ss:Type="String">'.e($value).'</Data></Cell>';
+                }
+                echo '</Row>';
+            }
+
+            echo '</Table></Worksheet></Workbook>';
         }, $type.'-import-template.xls', ['Content-Type' => 'application/vnd.ms-excel']);
     }
 
@@ -128,17 +172,19 @@ class ExcelImportService
 
     protected function readRows(UploadedFile $file): array
     {
+        $extension = strtolower($file->getClientOriginalExtension());
         $contents = file_get_contents($file->getRealPath());
-        if (strtolower($file->getClientOriginalExtension()) === 'csv' || ! str_contains($contents, '<Workbook')) {
-            $handle = fopen($file->getRealPath(), 'r');
-            $headers = fgetcsv($handle) ?: [];
-            $rows = [];
-            while (($values = fgetcsv($handle)) !== false) {
-                $rows[] = array_combine($headers, array_pad($values, count($headers), '')) ?: [];
-            }
-            fclose($handle);
 
-            return $rows;
+        if ($extension === 'csv') {
+            return $this->readCsvRows($file->getRealPath());
+        }
+
+        if ($extension === 'xlsx') {
+            return $this->readXlsxRows($file->getRealPath());
+        }
+
+        if (! str_contains($contents, '<Workbook')) {
+            return $this->readCsvRows($file->getRealPath());
         }
 
         $xml = simplexml_load_string($contents);
@@ -166,16 +212,150 @@ class ExcelImportService
         return $rows;
     }
 
+    protected function readCsvRows(string $path): array
+    {
+        $handle = fopen($path, 'r');
+        $headers = fgetcsv($handle) ?: [];
+        $rows = [];
+        while (($values = fgetcsv($handle)) !== false) {
+            $rows[] = array_combine($headers, array_pad($values, count($headers), '')) ?: [];
+        }
+        fclose($handle);
+
+        return $rows;
+    }
+
+    protected function readXlsxRows(string $path): array
+    {
+        $zip = new \ZipArchive;
+        if ($zip->open($path) !== true) {
+            throw ValidationException::withMessages(['file' => 'File Excel không đúng định dạng.']);
+        }
+
+        $sharedStrings = [];
+        if ($zip->locateName('xl/sharedStrings.xml') !== false) {
+            $sharedStringsXml = simplexml_load_string((string) $zip->getFromName('xl/sharedStrings.xml'));
+            if ($sharedStringsXml !== false) {
+                foreach ($sharedStringsXml->si as $sharedString) {
+                    $pieces = [];
+                    foreach ($sharedString->children('http://schemas.openxmlformats.org/spreadsheetml/2006/main')->t as $text) {
+                        $pieces[] = (string) $text;
+                    }
+                    $sharedStrings[] = trim(implode('', $pieces) ?: (string) $sharedString->t);
+                }
+            }
+        }
+
+        $sheetName = null;
+        for ($index = 0; $index < $zip->numFiles; $index++) {
+            $name = $zip->getNameIndex($index);
+            if (preg_match('#^xl/worksheets/sheet\d+\.xml$#', $name ?? '') === 1) {
+                $sheetName = $name;
+
+                break;
+            }
+        }
+
+        if ($sheetName === null) {
+            $zip->close();
+            throw ValidationException::withMessages(['file' => 'File Excel không đúng định dạng.']);
+        }
+
+        $sheetXml = simplexml_load_string((string) $zip->getFromName($sheetName));
+        $zip->close();
+        if ($sheetXml === false) {
+            throw ValidationException::withMessages(['file' => 'File Excel không đúng định dạng.']);
+        }
+
+        $rows = [];
+        $headers = [];
+        foreach ($sheetXml->sheetData->row as $row) {
+            $values = [];
+            foreach ($row->c as $cell) {
+                $cellReference = (string) $cell['r'];
+                $columnIndex = $this->xlsxColumnIndex($cellReference);
+                $values[$columnIndex] = $this->xlsxCellValue($cell, $sharedStrings);
+            }
+            ksort($values);
+            $rowValues = array_values($values);
+
+            if ($headers === []) {
+                $headers = $rowValues;
+
+                continue;
+            }
+
+            if (count(array_filter($rowValues, fn ($value) => $value !== '')) > 0) {
+                $rows[] = array_combine($headers, array_pad($rowValues, count($headers), '')) ?: [];
+            }
+        }
+
+        return $rows;
+    }
+
+    protected function xlsxColumnIndex(string $cellReference): int
+    {
+        preg_match('/([A-Z]+)/i', strtoupper($cellReference), $matches);
+        $column = $matches[1] ?? 'A';
+        $index = 0;
+        foreach (str_split($column) as $character) {
+            $index = $index * 26 + (ord($character) - 64);
+        }
+
+        return $index - 1;
+    }
+
+    protected function xlsxCellValue(\SimpleXMLElement $cell, array $sharedStrings): string
+    {
+        $cellType = (string) $cell['t'];
+
+        if ($cellType === 'inlineStr') {
+            return trim((string) $cell->is->t);
+        }
+
+        if ($cellType === 's') {
+            $sharedIndex = (int) trim((string) $cell->v);
+
+            return $sharedStrings[$sharedIndex] ?? '';
+        }
+
+        if ($cellType === 'b') {
+            $value = strtolower(trim((string) $cell->v));
+
+            return $value === '1' || $value === 'true' ? '1' : '0';
+        }
+
+        return trim((string) $cell->v);
+    }
+
     protected function importCategories(array $rows): int
     {
         $language = Language::where('is_active', true)->orderByDesc('is_default')->firstOrFail();
+        $columnAliases = [
+            'Tên danh mục' => 'name',
+            'Danh mục cha' => 'parent_name',
+            'Thứ tự' => 'sort_order',
+            'Trạng thái' => 'is_active',
+        ];
 
-        return DB::transaction(function () use ($rows, $language): int {
+        return DB::transaction(function () use ($rows, $language, $columnAliases): int {
             foreach ($rows as $index => $row) {
+                foreach ($columnAliases as $label => $column) {
+                    if (array_key_exists($label, $row) && ! array_key_exists($column, $row)) {
+                        $row[$column] = $row[$label];
+                    }
+                }
+
                 $this->requireColumns($row, ['name'], $index);
                 $translation = $this->findTranslation('category', $row['name'], $language->id);
                 $category = $translation ? Category::find($translation->category_id) : Category::create([]);
-                $category->update(['parent_id' => $this->categoryId($row['parent_name'] ?? null, $language->id), 'sort_order' => $this->integer($row['sort_order'] ?? 0), 'is_active' => $this->boolean($row['is_active'] ?? true)]);
+                $activeValue = $row['is_active'] ?? true;
+                $isActive = match (Str::lower(trim((string) $activeValue))) {
+                    'hoạt động' => true,
+                    'ẩn' => false,
+                    default => $this->boolean($activeValue),
+                };
+                $category->update(['parent_id' => $this->categoryId($row['parent_name'] ?? null, $language->id), 'sort_order' => $this->integer($row['sort_order'] ?? 0), 'is_active' => $isActive]);
                 $category->translations()->updateOrCreate(['language_id' => $language->id], ['name' => $row['name'], 'slug' => Str::slug($row['name'])]);
             }
 

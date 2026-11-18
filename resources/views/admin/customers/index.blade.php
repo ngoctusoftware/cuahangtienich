@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 @section('title', 'Khách hàng')
 @section('content')
+@php($bulkDeleteFormId = 'bulk-delete-customers')
 <div class="panel">
     <div class="panel-header d-flex justify-content-between align-items-center">
         <form method="GET"><input type="text" name="search" class="form-control form-control-sm" placeholder="Tìm khách hàng..." value="{{ request('search') }}"></form>
@@ -9,12 +10,14 @@
             <a href="{{ route('admin.customers.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm khách hàng</a>
         </div>
     </div>
+    @include('admin.partials.bulk-delete-toolbar', ['formId' => $bulkDeleteFormId, 'routeName' => 'admin.customers.bulk-destroy'])
     <div class="table-responsive">
         <table class="table mb-0">
-            <thead><tr><th>Tên</th><th>Email</th><th>SĐT</th><th>Nhóm</th><th>Trạng thái</th><th></th></tr></thead>
+            <thead><tr><th><input type="checkbox" class="form-check-input" data-bulk-select="{{ $bulkDeleteFormId }}" aria-label="Chọn tất cả trên trang"></th><th>Tên</th><th>Email</th><th>SĐT</th><th>Nhóm</th><th>Trạng thái</th><th></th></tr></thead>
             <tbody>
                 @foreach($customers as $c)
                     <tr>
+                        <td><input type="checkbox" class="form-check-input" name="ids[]" value="{{ $c->id }}" form="{{ $bulkDeleteFormId }}" data-bulk-delete-form="{{ $bulkDeleteFormId }}" aria-label="Chọn khách hàng {{ $c->name }}"></td>
                         <td>{{ $c->name }}</td>
                         <td>{{ $c->email }}</td>
                         <td>{{ $c->phone }}</td>

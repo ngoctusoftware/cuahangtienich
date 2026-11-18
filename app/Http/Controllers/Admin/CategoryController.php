@@ -11,6 +11,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CategoryController extends Controller
 {
@@ -23,10 +24,25 @@ class CategoryController extends Controller
 
     public function import(Request $request, ExcelImportService $excel): RedirectResponse
     {
-        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $request->validate(['file' => 'required|file|extensions:xls,xlsx,csv|max:10240']);
         $count = $excel->import('categories', $request->file('file'));
 
         return back()->with('success', "Đã import {$count} danh mục.");
+    }
+
+    public function exportCurrent(Request $request, ExcelImportService $excel): StreamedResponse
+    {
+        $page = $request->integer('page', 1);
+        $categories = Category::with('translations', 'parent.translations')->orderBy('sort_order')->paginate(15, ['*'], 'page', $page)->getCollection();
+
+        return $excel->exportCategories($categories, 'categories-page-'.$page.'.xls');
+    }
+
+    public function exportAll(ExcelImportService $excel): StreamedResponse
+    {
+        $categories = Category::with('translations', 'parent.translations')->orderBy('sort_order')->get();
+
+        return $excel->exportCategories($categories, 'categories-all.xls');
     }
 
     public function index(): View
@@ -94,6 +110,18 @@ class CategoryController extends Controller
         return back()->with('success', 'Đã xoá danh mục.');
     }
 
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|distinct|exists:categories,id',
+        ]);
+        $deleted = Category::whereKey($data['ids'])->delete();
+        $this->forgetCache();
+
+        return back()->with('success', "Đã xoá {$deleted} danh mục.");
+    }
+
     protected function validated(Request $request): array
     {
         return $request->validate([
@@ -124,6 +152,6 @@ class CategoryController extends Controller
 
     protected function forgetCache(): void
     {
-        $this->flushTagged(['categories']);
+        $this->flushTagged(['categories', 'products']);
     }
 }

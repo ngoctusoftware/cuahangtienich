@@ -82,7 +82,7 @@
                         <span class="text-muted ms-1" style="font-size:11px">{{ $topProduct->category?->translation()?->name }}</span>
                     </div>
                     <div class="row mt-3">
-                        <div class="col-6 border-end" style="border-color:rgba(255,255,255,.08) !important">
+                        <div class="col-6 border-end" style="border-color:#e4eaf1 !important">
                             <div class="stat-value" style="font-size:19px">{{ $topProduct->sold_count }}</div>
                             <div class="stat-label">Đã bán</div>
                         </div>
@@ -112,7 +112,7 @@
                 <div class="donut-legend mt-3">
                     @foreach($orderStatus as $i => $s)
                         <div class="d-flex justify-content-between align-items-center mb-1" style="font-size:12.5px">
-                            <span class="text-muted"><span class="dot" style="background:{{ ['#2fbfa3','#34c9ea','#f2b84b','#6fb7ff','#f2637a'][$i % 5] }}"></span>{{ $s['label'] }}</span>
+                            <span class="text-muted"><span class="dot" style="background:{{ ['#b85c38','#367d86','#bd8123','#5a7bb6','#c34f5c'][$i % 5] }}"></span>{{ $s['label'] }}</span>
                             <span class="text-white fw-semibold">{{ $s['value'] }}</span>
                         </div>
                     @endforeach
@@ -206,25 +206,25 @@
             labels: revenueLabels,
             datasets: [{
                 data: revenueData,
-                borderColor: '#2fbfa3',
+                borderColor: '#b85c38',
                 backgroundColor: (ctx) => {
                     const g = ctx.chart.ctx.createLinearGradient(0, 0, 0, 260);
-                    g.addColorStop(0, 'rgba(47,191,163,.45)');
-                    g.addColorStop(1, 'rgba(47,191,163,0)');
+                    g.addColorStop(0, 'rgba(184,92,56,.3)');
+                    g.addColorStop(1, 'rgba(184,92,56,0)');
                     return g;
                 },
                 fill: true,
                 tension: 0.4,
                 pointRadius: 3,
-                pointBackgroundColor: '#2fbfa3',
+                pointBackgroundColor: '#b85c38',
                 borderWidth: 2,
             }]
         },
         options: {
             plugins: { legend: { display: false } },
             scales: {
-                x: { grid: { color: 'rgba(255,255,255,.06)' } },
-                y: { grid: { color: 'rgba(255,255,255,.06)' }, ticks: { callback: v => (v/1000) + 'k' } }
+                x: { grid: { color: 'rgba(37,50,71,.08)' } },
+                y: { grid: { color: 'rgba(37,50,71,.08)' }, ticks: { callback: v => (v/1000) + 'k' } }
             }
         }
     });
@@ -235,7 +235,7 @@
             labels: @json($orderStatus->pluck('label')),
             datasets: [{
                 data: @json($orderStatus->pluck('value')),
-                backgroundColor: ['#2fbfa3','#34c9ea','#f2b84b','#6fb7ff','#f2637a'],
+                backgroundColor: ['#b85c38','#367d86','#bd8123','#5a7bb6','#c34f5c'],
                 borderWidth: 0,
             }]
         },

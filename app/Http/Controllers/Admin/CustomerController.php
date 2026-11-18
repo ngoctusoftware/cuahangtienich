@@ -20,7 +20,7 @@ class CustomerController extends Controller
 
     public function import(Request $request, ExcelImportService $excel): RedirectResponse
     {
-        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $request->validate(['file' => 'required|file|extensions:xls,xlsx,csv|max:10240']);
         $count = $excel->import('customers', $request->file('file'));
 
         return back()->with('success', "Đã import {$count} khách hàng.");
@@ -90,5 +90,16 @@ class CustomerController extends Controller
         $customer->delete();
 
         return back()->with('success', 'Đã xoá khách hàng.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|distinct|exists:customers,id',
+        ]);
+        $deleted = Customer::whereKey($data['ids'])->delete();
+
+        return back()->with('success', "Đã xoá {$deleted} khách hàng.");
     }
 }

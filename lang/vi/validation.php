@@ -5,6 +5,8 @@ return [
     'confirmed' => ':attribute xác nhận không khớp.',
     'email' => ':attribute phải là địa chỉ email hợp lệ.',
     'exists' => ':attribute được chọn không hợp lệ.',
+    'extensions' => ':attribute phải có phần mở rộng là một trong các loại: :values.',
+    'file' => ':attribute phải là tệp tin.',
     'in' => ':attribute được chọn không hợp lệ.',
     'integer' => ':attribute phải là số nguyên.',
     'max' => [
@@ -19,12 +21,14 @@ return [
         'numeric' => ':attribute phải lớn hơn hoặc bằng :min.',
         'string' => ':attribute phải có ít nhất :min ký tự.',
     ],
+    'mimes' => ':attribute phải là tệp tin thuộc một trong các loại: :values.',
     'required' => 'Vui lòng nhập :attribute.',
     'string' => ':attribute phải là chuỗi ký tự.',
     'unique' => ':attribute đã được sử dụng.',
     'attributes' => [
         'address' => 'địa chỉ',
         'email' => 'email',
+        'file' => 'tệp tin',
         'name' => 'họ tên',
         'note' => 'ghi chú',
         'password' => 'mật khẩu',

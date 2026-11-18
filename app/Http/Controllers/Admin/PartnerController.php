@@ -19,7 +19,7 @@ class PartnerController extends Controller
 
     public function import(Request $request, ExcelImportService $excel): RedirectResponse
     {
-        $request->validate(['file' => 'required|file|mimes:xls,csv|max:10240']);
+        $request->validate(['file' => 'required|file|extensions:xls,xlsx,csv|max:10240']);
         $count = $excel->import('partners', $request->file('file'));
 
         return back()->with('success', "Đã import {$count} đối tác.");
@@ -82,6 +82,22 @@ class PartnerController extends Controller
         $partner->delete();
 
         return back()->with('success', 'Đã xóa đối tác.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|distinct|exists:partners,id',
+        ]);
+
+        if (Partner::whereKey($data['ids'])->whereHas('products')->exists()) {
+            return back()->withErrors(['ids' => 'Không thể xóa đối tác đang được gắn với sản phẩm.']);
+        }
+
+        $deleted = Partner::whereKey($data['ids'])->delete();
+
+        return back()->with('success', "Đã xóa {$deleted} đối tác.");
     }
 
     protected function validated(Request $request): array

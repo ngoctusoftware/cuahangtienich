@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 @section('title', 'Sản phẩm')
 @section('content')
+@php($bulkDeleteFormId = 'bulk-delete-products')
 <div class="panel">
     <div class="panel-header d-flex justify-content-between align-items-center">
         <form class="d-flex gap-2" method="GET">
@@ -20,12 +21,14 @@
             <a href="{{ route('admin.products.create') }}" class="btn btn-admin-primary btn-sm"><i class="fas fa-plus"></i> Thêm sản phẩm</a>
         </div>
     </div>
+    @include('admin.partials.bulk-delete-toolbar', ['formId' => $bulkDeleteFormId, 'routeName' => 'admin.products.bulk-destroy'])
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
-            <thead><tr><th>Ảnh</th><th>Tên</th><th>Danh mục</th><th>Đối tác</th><th>Giá</th><th>Kho</th><th>Nổi bật</th><th>Bán chạy</th><th>Trạng thái</th><th></th></tr></thead>
+            <thead><tr><th><input type="checkbox" class="form-check-input" data-bulk-select="{{ $bulkDeleteFormId }}" aria-label="Chọn tất cả trên trang"></th><th>Ảnh</th><th>Tên</th><th>Danh mục</th><th>Đối tác</th><th>Giá</th><th>Kho</th><th>Nổi bật</th><th>Bán chạy</th><th>Trạng thái</th><th></th></tr></thead>
             <tbody>
                 @foreach($products as $p)
                     <tr>
+                        <td><input type="checkbox" class="form-check-input" name="ids[]" value="{{ $p->id }}" form="{{ $bulkDeleteFormId }}" data-bulk-delete-form="{{ $bulkDeleteFormId }}" aria-label="Chọn sản phẩm {{ $p->translation()?->name }}"></td>
                         <td><img src="{{ $p->thumbnail_url }}" width="48" height="48" style="object-fit:cover;border-radius:6px"></td>
                         <td>{{ $p->translation()?->name }}</td>
                         <td>{{ $p->category->translation()?->name }}</td>

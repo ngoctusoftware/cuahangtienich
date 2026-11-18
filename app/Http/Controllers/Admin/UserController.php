@@ -19,7 +19,7 @@ class UserController extends Controller
 
     public function create(): View
     {
-        return view('admin.users.form', ['user' => new User(), 'roles' => Role::all()]);
+        return view('admin.users.form', ['user' => new User, 'roles' => Role::all()]);
     }
 
     public function store(Request $request): RedirectResponse
@@ -51,7 +51,7 @@ class UserController extends Controller
     {
         $data = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'email' => 'required|email|unique:users,email,'.$user->id,
             'password' => 'nullable|min:6',
             'roles' => 'array',
             'is_active' => 'nullable|boolean',
@@ -60,7 +60,7 @@ class UserController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->is_active = $request->boolean('is_active');
-        if (!empty($data['password'])) {
+        if (! empty($data['password'])) {
             $user->password = Hash::make($data['password']);
         }
         $user->save();
@@ -76,5 +76,21 @@ class UserController extends Controller
         $user->delete();
 
         return back()->with('success', 'Đã xoá người dùng.');
+    }
+
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|integer|distinct|exists:users,id',
+        ]);
+
+        if (in_array((int) auth()->id(), array_map('intval', $data['ids']), true)) {
+            return back()->withErrors(['ids' => 'Không thể tự xoá tài khoản đang đăng nhập.']);
+        }
+
+        $deleted = User::whereKey($data['ids'])->delete();
+
+        return back()->with('success', "Đã xoá {$deleted} người dùng.");
     }
 }

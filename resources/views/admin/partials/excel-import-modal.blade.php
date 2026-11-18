@@ -25,9 +25,9 @@
                             <span class="excel-dropzone-title">Chọn file để tải lên</span>
                             <span class="excel-dropzone-hint">Kéo thả hoặc nhấn để duyệt file</span>
                             <span class="excel-file-name">Chưa chọn file</span>
-                            <input id="{{ $modalId }}-file" type="file" name="file" accept=".xls,.csv" required>
+                            <input id="{{ $modalId }}-file" type="file" name="file" accept=".xls,.xlsx,.csv" required>
                         </label>
-                        <div class="excel-format-note"><i class="fas fa-circle-info"></i> Hỗ trợ Excel <strong>.xls</strong> và <strong>.csv</strong>, tối đa 10 MB.</div>
+                        <div class="excel-format-note"><i class="fas fa-circle-info"></i> Hỗ trợ Excel <strong>.xls</strong>, <strong>.xlsx</strong> và <strong>.csv</strong>, tối đa 10 MB.</div>
                     </div>
                     <div class="js-import-error alert alert-danger d-none mb-0"></div>
                 </div>

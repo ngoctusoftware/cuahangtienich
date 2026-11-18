@@ -1,6 +1,7 @@
 @extends('admin.layouts.app')
 @section('title', 'Đối tác')
 @section('content')
+@php($bulkDeleteFormId = 'bulk-delete-partners')
 <div class="panel">
     <div class="panel-header d-flex justify-content-between align-items-center">
         Quản lý đối tác
@@ -22,10 +23,12 @@
             </a>
         </div>
     </div>
+    @include('admin.partials.bulk-delete-toolbar', ['formId' => $bulkDeleteFormId, 'routeName' => 'admin.partners.bulk-destroy'])
     <div class="table-responsive">
         <table class="table mb-0 align-middle">
             <thead>
                 <tr>
+                    <th><input type="checkbox" class="form-check-input" data-bulk-select="{{ $bulkDeleteFormId }}" aria-label="Chọn tất cả trên trang"></th>
                     <th>Tên đối tác</th>
                     <th>Người liên hệ</th>
                     <th>Điện thoại</th>
@@ -38,6 +41,7 @@
             <tbody>
                 @forelse($partners as $partner)
                     <tr>
+                        <td><input type="checkbox" class="form-check-input" name="ids[]" value="{{ $partner->id }}" form="{{ $bulkDeleteFormId }}" data-bulk-delete-form="{{ $bulkDeleteFormId }}" aria-label="Chọn đối tác {{ $partner->name }}"></td>
                         <td>{{ $partner->name }}</td>
                         <td>{{ $partner->contact_name ?? '—' }}</td>
                         <td>{{ $partner->phone ?? '—' }}</td>
@@ -61,7 +65,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center text-muted py-4">Chưa có đối tác nào.</td>
+                        <td colspan="8" class="text-center text-muted py-4">Chưa có đối tác nào.</td>
                     </tr>
                 @endforelse
             </tbody>

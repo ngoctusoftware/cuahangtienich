@@ -78,6 +78,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Danh mục
         Route::get('categories/import-template', [CategoryController::class, 'downloadTemplate'])->name('categories.import-template')->middleware('permission:categories.view');
         Route::post('categories/import', [CategoryController::class, 'import'])->name('categories.import')->middleware('permission:categories.view');
+        Route::get('categories/export/current', [CategoryController::class, 'exportCurrent'])->name('categories.export.current')->middleware('permission:categories.view');
+        Route::get('categories/export/all', [CategoryController::class, 'exportAll'])->name('categories.export.all')->middleware('permission:categories.view');
+        Route::delete('categories/bulk-delete', [CategoryController::class, 'bulkDestroy'])->name('categories.bulk-destroy')->middleware('permission:categories.view');
         Route::resource('categories', CategoryController::class)->except(['show'])
             ->middleware('permission:categories.view');
 
@@ -86,6 +89,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('partners/import', [PartnerController::class, 'import'])->name('partners.import')->middleware('permission:partners.view');
         Route::get('partners/export/current', [PartnerController::class, 'exportCurrent'])->name('partners.export.current')->middleware('permission:partners.view');
         Route::get('partners/export/all', [PartnerController::class, 'exportAll'])->name('partners.export.all')->middleware('permission:partners.view');
+        Route::delete('partners/bulk-delete', [PartnerController::class, 'bulkDestroy'])->name('partners.bulk-destroy')->middleware('permission:partners.view');
         Route::resource('partners', PartnerController::class)->except(['show'])
             ->middleware('permission:partners.view');
 
@@ -94,6 +98,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('products/import', [ProductController::class, 'import'])->name('products.import')->middleware('permission:products.view');
         Route::get('products/export/current', [ProductController::class, 'exportCurrent'])->name('products.export.current')->middleware('permission:products.view');
         Route::get('products/export/all', [ProductController::class, 'exportAll'])->name('products.export.all')->middleware('permission:products.view');
+        Route::delete('products/bulk-delete', [ProductController::class, 'bulkDestroy'])->name('products.bulk-destroy')->middleware('permission:products.view');
         Route::resource('products', ProductController::class)->except(['show'])
             ->middleware('permission:products.view');
 
@@ -109,14 +114,17 @@ Route::prefix('admin')->name('admin.')->group(function () {
         // Nhóm khách hàng & khách hàng
         Route::get('customer-groups/import-template', [CustomerGroupController::class, 'downloadTemplate'])->name('customer-groups.import-template')->middleware('permission:customers.view');
         Route::post('customer-groups/import', [CustomerGroupController::class, 'import'])->name('customer-groups.import')->middleware('permission:customers.view');
+        Route::delete('customer-groups/bulk-delete', [CustomerGroupController::class, 'bulkDestroy'])->name('customer-groups.bulk-destroy')->middleware('permission:customers.view');
         Route::resource('customer-groups', CustomerGroupController::class)->except(['show'])
             ->middleware('permission:customers.view');
         Route::get('customers/import-template', [CustomerController::class, 'downloadTemplate'])->name('customers.import-template')->middleware('permission:customers.view');
         Route::post('customers/import', [CustomerController::class, 'import'])->name('customers.import')->middleware('permission:customers.view');
+        Route::delete('customers/bulk-delete', [CustomerController::class, 'bulkDestroy'])->name('customers.bulk-destroy')->middleware('permission:customers.view');
         Route::resource('customers', CustomerController::class)->except(['show'])
             ->middleware('permission:customers.view');
 
         // Người dùng & phân quyền
+        Route::delete('users/bulk-delete', [UserController::class, 'bulkDestroy'])->name('users.bulk-destroy')->middleware('permission:users.view');
         Route::resource('users', UserController::class)->except(['show'])
             ->middleware('permission:users.view');
         Route::resource('roles', RoleController::class)->except(['show'])
