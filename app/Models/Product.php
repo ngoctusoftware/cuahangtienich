@@ -66,7 +66,7 @@ class Product extends Model
     public function getThumbnailUrlAttribute(): string
     {
         if (! $this->thumbnail) {
-            return asset('images/product-placeholder.jpg');
+            return asset('images/noImage.png');
         }
 
         return Str::startsWith($this->thumbnail, ['http://', 'https://'])

@@ -124,7 +124,7 @@ class ExcelImportService
     {
         $templates = [
             'categories' => ['Tên danh mục', 'Danh mục cha', 'Thứ tự', 'Trạng thái'],
-            'products' => ['sku', 'name', 'category_name', 'price', 'sale_price', 'stock', 'is_featured', 'is_bestseller', 'is_active', 'short_description', 'description'],
+            'products' => ['Mã SKU', 'Tên sản phẩm', 'Tên sản phẩm tiếng Anh', 'Danh mục', 'Tên đối tác', 'Giá gốc', 'Giá khuyến mãi', 'Tồn kho', 'Nổi bật', 'Bán chạy', 'Trạng thái', 'Mô tả ngắn', 'Mô tả chi tiết'],
             'partners' => ['name', 'contact_name', 'phone', 'email', 'address', 'notes', 'is_active'],
             'customer-groups' => ['name', 'discount_percent'],
             'customers' => ['name', 'email', 'phone', 'password', 'customer_group_name', 'address', 'is_active'],
@@ -196,16 +196,24 @@ class ExcelImportService
         $spreadsheetNamespace = 'urn:schemas-microsoft-com:office:spreadsheet';
         foreach ($xml->children($spreadsheetNamespace)->Worksheet->Table->Row as $row) {
             $values = [];
+            $nextColumnIndex = 0;
             foreach ($row->children($spreadsheetNamespace)->Cell as $cell) {
-                $values[] = trim((string) $cell->children($spreadsheetNamespace)->Data);
+                $attributes = $cell->attributes($spreadsheetNamespace);
+                $columnIndex = isset($attributes['Index'])
+                    ? ((int) $attributes['Index']) - 1
+                    : $nextColumnIndex;
+                $values[$columnIndex] = trim((string) $cell->children($spreadsheetNamespace)->Data);
+                $nextColumnIndex = $columnIndex + 1;
             }
+            ksort($values);
+            $values = $this->normalizeIndexedValues($values);
             if ($headers === []) {
                 $headers = $values;
 
                 continue;
             }
             if (count(array_filter($values, fn ($value) => $value !== '')) > 0) {
-                $rows[] = array_combine($headers, array_pad($values, count($headers), '')) ?: [];
+                $rows[] = $this->combineRow($headers, $values);
             }
         }
 
@@ -215,10 +223,13 @@ class ExcelImportService
     protected function readCsvRows(string $path): array
     {
         $handle = fopen($path, 'r');
-        $headers = fgetcsv($handle) ?: [];
+        $headers = fgetcsv($handle, null, ',', '"', '') ?: [];
+        if ($headers !== []) {
+            $headers[0] = ltrim((string) $headers[0], "\xEF\xBB\xBF");
+        }
         $rows = [];
-        while (($values = fgetcsv($handle)) !== false) {
-            $rows[] = array_combine($headers, array_pad($values, count($headers), '')) ?: [];
+        while (($values = fgetcsv($handle, null, ',', '"', '')) !== false) {
+            $rows[] = $this->combineRow($headers, $values);
         }
         fclose($handle);
 
@@ -277,7 +288,7 @@ class ExcelImportService
                 $values[$columnIndex] = $this->xlsxCellValue($cell, $sharedStrings);
             }
             ksort($values);
-            $rowValues = array_values($values);
+            $rowValues = $this->normalizeIndexedValues($values);
 
             if ($headers === []) {
                 $headers = $rowValues;
@@ -286,11 +297,49 @@ class ExcelImportService
             }
 
             if (count(array_filter($rowValues, fn ($value) => $value !== '')) > 0) {
-                $rows[] = array_combine($headers, array_pad($rowValues, count($headers), '')) ?: [];
+                $rows[] = $this->combineRow($headers, $rowValues);
             }
         }
 
         return $rows;
+    }
+
+    protected function normalizeIndexedValues(array $values): array
+    {
+        if ($values === []) {
+            return [];
+        }
+
+        $normalized = [];
+        $lastIndex = max(array_keys($values));
+        for ($index = 0; $index <= $lastIndex; $index++) {
+            $normalized[$index] = $values[$index] ?? '';
+        }
+
+        return array_values($normalized);
+    }
+
+    protected function combineRow(array $headers, array $values): array
+    {
+        $headers = array_map(
+            fn ($header) => trim((string) $header),
+            array_values($headers),
+        );
+        if ($headers !== []) {
+            $headers[0] = ltrim($headers[0], "\xEF\xBB\xBF");
+        }
+
+        $columnCount = count($headers);
+        if ($columnCount === 0) {
+            return [];
+        }
+
+        $values = array_map(
+            fn ($value) => trim((string) $value),
+            array_slice(array_pad(array_values($values), $columnCount, ''), 0, $columnCount),
+        );
+
+        return array_combine($headers, $values) ?: [];
     }
 
     protected function xlsxColumnIndex(string $cellReference): int
@@ -366,17 +415,56 @@ class ExcelImportService
     protected function importProducts(array $rows): int
     {
         $language = Language::where('is_active', true)->orderByDesc('is_default')->firstOrFail();
+        $englishLanguage = Language::where('code', 'en')->first();
+        $columnAliases = [
+            'Mã SKU' => 'sku',
+            'Tên sản phẩm' => 'name',
+            'Tên sản phẩm tiếng Anh' => 'name_en',
+            'Danh mục' => 'category_name',
+            'Tên đối tác' => 'partner_name',
+            'Giá gốc' => 'price',
+            'Giá khuyến mãi' => 'sale_price',
+            'Tồn kho' => 'stock',
+            'Nổi bật' => 'is_featured',
+            'Bán chạy' => 'is_bestseller',
+            'Trạng thái' => 'is_active',
+            'Mô tả ngắn' => 'short_description',
+            'Mô tả chi tiết' => 'description',
+        ];
 
-        return DB::transaction(function () use ($rows, $language): int {
+        return DB::transaction(function () use ($rows, $language, $englishLanguage, $columnAliases): int {
             foreach ($rows as $index => $row) {
+                foreach ($columnAliases as $label => $column) {
+                    if (array_key_exists($label, $row) && ! array_key_exists($column, $row)) {
+                        $row[$column] = $row[$label];
+                    }
+                }
+
                 $this->requireColumns($row, ['sku', 'name', 'category_name', 'price'], $index);
                 $categoryId = $this->categoryId($row['category_name'], $language->id);
                 if (! $categoryId) {
                     throw ValidationException::withMessages(['file' => 'Dòng '.($index + 2).': không tìm thấy danh mục.']);
                 }
+                $partnerName = $this->nullableString($row['partner_name'] ?? null);
+                $partnerId = $partnerName === null ? null : Partner::where('name', $partnerName)->value('id');
+                if ($partnerName !== null && $partnerId === null) {
+                    throw ValidationException::withMessages(['file' => 'Dòng '.($index + 2).': không tìm thấy đối tác.']);
+                }
+
+                $englishName = $this->nullableString($row['name_en'] ?? null) ?? Str::ascii($row['name']);
+                if ($englishLanguage === null) {
+                    throw ValidationException::withMessages(['file' => 'Dòng '.($index + 2).': chưa cấu hình ngôn ngữ tiếng Anh.']);
+                }
+
                 $product = Product::firstOrNew(['sku' => $row['sku']]);
-                $product->fill(['category_id' => $categoryId, 'price' => $row['price'], 'sale_price' => $row['sale_price'] ?: null, 'stock' => $this->integer($row['stock'] ?? 0), 'is_featured' => $this->boolean($row['is_featured'] ?? false), 'is_bestseller' => $this->boolean($row['is_bestseller'] ?? false), 'is_active' => $this->boolean($row['is_active'] ?? true)])->save();
+                $productData = ['category_id' => $categoryId, 'price' => $row['price'], 'sale_price' => $row['sale_price'] ?: null, 'stock' => $this->integer($row['stock'] ?? 0), 'is_featured' => $this->boolean($row['is_featured'] ?? false), 'is_bestseller' => $this->boolean($row['is_bestseller'] ?? false), 'is_active' => $this->boolean($row['is_active'] ?? true)];
+                if ($partnerName !== null) {
+                    $productData['partner_id'] = $partnerId;
+                }
+                $product->fill($productData)->save();
                 $product->translations()->updateOrCreate(['language_id' => $language->id], ['name' => $row['name'], 'slug' => Str::slug($row['name']).'-'.$product->id, 'short_description' => $row['short_description'] ?? null, 'description' => $row['description'] ?? null]);
+
+                $product->translations()->updateOrCreate(['language_id' => $englishLanguage->id], ['name' => $englishName, 'slug' => Str::slug($englishName).'-'.$product->id]);
             }
 
             return count($rows);

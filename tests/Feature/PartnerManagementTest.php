@@ -169,6 +169,51 @@ class PartnerManagementTest extends TestCase
             ->assertDownload('partners-import-template.xls');
     }
 
+    public function test_product_import_template_includes_partner_and_english_name_fields(): void
+    {
+        $vietnameseLanguage = $this->createLanguage();
+        $englishLanguage = Language::create([
+            'code' => 'en',
+            'name' => 'Tiếng Anh',
+            'name_en' => 'English',
+            'locale' => 'en-US',
+            'direction' => 'ltr',
+            'is_active' => true,
+        ]);
+        $category = $this->createCategory($vietnameseLanguage);
+        $partner = Partner::factory()->create(['name' => 'Đối tác nhập']);
+        $admin = $this->createSuperAdmin();
+        $template = $this->actingAs($admin)
+            ->get(route('admin.products.import-template'))
+            ->assertDownload('products-import-template.xls')
+            ->streamedContent();
+
+        $this->assertStringContainsString('Tên sản phẩm</Data></Cell><Cell><Data ss:Type="String">Tên sản phẩm tiếng Anh', $template);
+        $this->assertStringContainsString('Tên đối tác', $template);
+
+        $file = UploadedFile::fake()->createWithContent(
+            'products.csv',
+            "Mã SKU,Tên sản phẩm,Tên sản phẩm tiếng Anh,Danh mục,Tên đối tác,Giá gốc,Giá khuyến mãi,Tồn kho,Nổi bật,Bán chạy,Trạng thái,Mô tả ngắn,Mô tả chi tiết\nSKU-IMPORT,Áo mẫu,,{$category->translation()->name},{$partner->name},150,100,2,1,0,1,,\n"
+        );
+
+        $this->actingAs($admin)
+            ->post(route('admin.products.import'), ['file' => $file])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('products', [
+            'sku' => 'SKU-IMPORT',
+            'partner_id' => $partner->id,
+        ]);
+        $this->assertDatabaseHas('product_translations', [
+            'language_id' => $vietnameseLanguage->id,
+            'name' => 'Áo mẫu',
+        ]);
+        $this->assertDatabaseHas('product_translations', [
+            'language_id' => $englishLanguage->id,
+            'name' => 'Ao mau',
+        ]);
+    }
+
     public function test_current_partner_page_can_be_exported(): void
     {
         Partner::factory()->create();
@@ -206,6 +251,13 @@ class PartnerManagementTest extends TestCase
             'sku' => 'PARTNER-001',
             'partner_id' => $partner->id,
         ]);
+    }
+
+    public function test_product_without_a_thumbnail_uses_the_no_image_asset(): void
+    {
+        $product = new Product;
+
+        $this->assertSame(asset('images/noImage.png'), $product->thumbnail_url);
     }
 
     public function test_product_detail_query_loads_its_partner(): void
