@@ -125,7 +125,7 @@ class ExcelImportService
         $templates = [
             'categories' => ['Tên danh mục', 'Danh mục cha', 'Thứ tự', 'Trạng thái'],
             'products' => ['Mã SKU', 'Tên sản phẩm', 'Tên sản phẩm tiếng Anh', 'Danh mục', 'Tên đối tác', 'Giá gốc', 'Giá khuyến mãi', 'Tồn kho', 'Nổi bật', 'Bán chạy', 'Trạng thái', 'Mô tả ngắn', 'Mô tả chi tiết'],
-            'partners' => ['name', 'contact_name', 'phone', 'email', 'address', 'notes', 'is_active'],
+            'partners' => ['Tên đối tác', 'Người liên hệ', 'Điện thoại', 'Email', 'Địa chỉ', 'Ghi chú', 'Trạng thái'],
             'customer-groups' => ['name', 'discount_percent'],
             'customers' => ['name', 'email', 'phone', 'password', 'customer_group_name', 'address', 'is_active'],
         ];
@@ -473,11 +473,33 @@ class ExcelImportService
 
     protected function importPartners(array $rows): int
     {
-        return DB::transaction(function () use ($rows): int {
+        $columnAliases = [
+            'Tên đối tác' => 'name',
+            'Người liên hệ' => 'contact_name',
+            'Điện thoại' => 'phone',
+            'Email' => 'email',
+            'Địa chỉ' => 'address',
+            'Ghi chú' => 'notes',
+            'Trạng thái' => 'is_active',
+        ];
+
+        return DB::transaction(function () use ($rows, $columnAliases): int {
             foreach ($rows as $index => $row) {
+                foreach ($columnAliases as $label => $column) {
+                    if (array_key_exists($label, $row) && ! array_key_exists($column, $row)) {
+                        $row[$column] = $row[$label];
+                    }
+                }
+
                 $this->requireColumns($row, ['name'], $index);
 
                 $activeValue = trim((string) ($row['is_active'] ?? ''));
+                $isActive = match (Str::lower($activeValue)) {
+                    'hoạt động' => true,
+                    'ngừng hoạt động' => false,
+                    'ẩn' => false,
+                    default => $activeValue === '' ? true : $this->boolean($activeValue),
+                };
                 $partnerData = [
                     'name' => trim((string) $row['name']),
                     'contact_name' => $this->nullableString($row['contact_name'] ?? null),
@@ -485,7 +507,7 @@ class ExcelImportService
                     'email' => $this->nullableString($row['email'] ?? null),
                     'address' => $this->nullableString($row['address'] ?? null),
                     'notes' => $this->nullableString($row['notes'] ?? null),
-                    'is_active' => $activeValue === '' ? true : $this->boolean($activeValue),
+                    'is_active' => $isActive,
                 ];
                 $validator = Validator::make($partnerData, [
                     'name' => 'required|string|max:255',

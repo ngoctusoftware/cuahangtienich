@@ -164,9 +164,34 @@ class PartnerManagementTest extends TestCase
 
     public function test_partner_import_template_is_downloadable(): void
     {
-        $this->actingAs($this->createSuperAdmin())
+        $admin = $this->createSuperAdmin();
+        $template = $this->actingAs($admin)
             ->get(route('admin.partners.import-template'))
-            ->assertDownload('partners-import-template.xls');
+            ->assertDownload('partners-import-template.xls')
+            ->streamedContent();
+
+        $this->assertStringContainsString('Tên đối tác', $template);
+        $this->assertStringContainsString('Người liên hệ', $template);
+        $this->assertStringContainsString('Điện thoại', $template);
+        $this->assertStringContainsString('Email', $template);
+        $this->assertStringContainsString('Địa chỉ', $template);
+        $this->assertStringContainsString('Ghi chú', $template);
+        $this->assertStringContainsString('Trạng thái', $template);
+
+        $file = UploadedFile::fake()->createWithContent(
+            'partners.csv',
+            "Tên đối tác,Người liên hệ,Điện thoại,Email,Địa chỉ,Ghi chú,Trạng thái\nĐối tác nhập,Liên hệ mới,0900000000,import@example.com,Hà Nội,Ghi chú,Hoạt động\n"
+        );
+
+        $this->actingAs($admin)
+            ->post(route('admin.partners.import'), ['file' => $file])
+            ->assertRedirect();
+
+        $this->assertDatabaseHas('partners', [
+            'name' => 'Đối tác nhập',
+            'contact_name' => 'Liên hệ mới',
+            'is_active' => true,
+        ]);
     }
 
     public function test_product_import_template_includes_partner_and_english_name_fields(): void
