@@ -21,7 +21,7 @@ class ExcelImportService
 {
     public function exportPartners(iterable $partners, string $filename): StreamedResponse
     {
-        $headers = ['name', 'contact_name', 'phone', 'email', 'address', 'notes', 'is_active'];
+        $headers = ['Tên đối tác', 'Link Zalo/ Telegrams', 'Người liên hệ Zalo', 'Link hỗ trợ Tele', 'Điện thoại', 'Email', 'Địa chỉ', 'Ghi chú', 'Trạng thái'];
 
         return response()->streamDownload(function () use ($headers, $partners): void {
             echo '<?xml version="1.0"?>';
@@ -35,12 +35,14 @@ class ExcelImportService
             foreach ($partners as $partner) {
                 $values = [
                     $partner->name,
+                    $partner->zalo_telegram_link,
                     $partner->contact_name,
+                    $partner->telegram_support_link,
                     $partner->phone,
                     $partner->email,
                     $partner->address,
                     $partner->notes,
-                    $partner->is_active ? 1 : 0,
+                    $partner->is_active ? 'Hoạt động' : 'Ngừng hoạt động',
                 ];
                 echo '<Row>';
                 foreach ($values as $value) {
@@ -125,7 +127,7 @@ class ExcelImportService
         $templates = [
             'categories' => ['Tên danh mục', 'Danh mục cha', 'Thứ tự', 'Trạng thái'],
             'products' => ['Mã SKU', 'Tên sản phẩm', 'Tên sản phẩm tiếng Anh', 'Danh mục', 'Tên đối tác', 'Giá gốc', 'Giá khuyến mãi', 'Tồn kho', 'Nổi bật', 'Bán chạy', 'Trạng thái', 'Mô tả ngắn', 'Mô tả chi tiết'],
-            'partners' => ['Tên đối tác', 'Người liên hệ', 'Điện thoại', 'Email', 'Địa chỉ', 'Ghi chú', 'Trạng thái'],
+            'partners' => ['Tên đối tác', 'Link Zalo/ Telegrams', 'Người liên hệ Zalo', 'Link hỗ trợ Tele', 'Điện thoại', 'Email', 'Địa chỉ', 'Ghi chú', 'Trạng thái'],
             'customer-groups' => ['name', 'discount_percent'],
             'customers' => ['name', 'email', 'phone', 'password', 'customer_group_name', 'address', 'is_active'],
         ];
@@ -475,7 +477,11 @@ class ExcelImportService
     {
         $columnAliases = [
             'Tên đối tác' => 'name',
+            'Link Zalo/ Telegrams' => 'zalo_telegram_link',
+            'Link Zalo/ Telegram' => 'zalo_telegram_link',
+            'Người liên hệ Zalo' => 'contact_name',
             'Người liên hệ' => 'contact_name',
+            'Link hỗ trợ Tele' => 'telegram_support_link',
             'Điện thoại' => 'phone',
             'Email' => 'email',
             'Địa chỉ' => 'address',
@@ -502,7 +508,9 @@ class ExcelImportService
                 };
                 $partnerData = [
                     'name' => trim((string) $row['name']),
+                    'zalo_telegram_link' => $this->nullableString($row['zalo_telegram_link'] ?? null),
                     'contact_name' => $this->nullableString($row['contact_name'] ?? null),
+                    'telegram_support_link' => $this->nullableString($row['telegram_support_link'] ?? null),
                     'phone' => $this->nullableString($row['phone'] ?? null),
                     'email' => $this->nullableString($row['email'] ?? null),
                     'address' => $this->nullableString($row['address'] ?? null),
@@ -511,7 +519,9 @@ class ExcelImportService
                 ];
                 $validator = Validator::make($partnerData, [
                     'name' => 'required|string|max:255',
+                    'zalo_telegram_link' => 'nullable|string|max:2048',
                     'contact_name' => 'nullable|string|max:255',
+                    'telegram_support_link' => 'nullable|string|max:2048',
                     'phone' => 'nullable|string|max:30',
                     'email' => 'nullable|email|max:255',
                     'address' => 'nullable|string|max:1000',

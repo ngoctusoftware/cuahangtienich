@@ -155,11 +155,19 @@ class PartnerManagementTest extends TestCase
 
     public function test_partner_export_route_downloads_an_excel_file(): void
     {
-        Partner::factory()->create();
+        Partner::factory()->create([
+            'zalo_telegram_link' => 'https://zalo.me/doitac',
+            'telegram_support_link' => 'https://t.me/doitac',
+        ]);
 
-        $this->actingAs($this->createSuperAdmin())
+        $export = $this->actingAs($this->createSuperAdmin())
             ->get(route('admin.partners.export.all'))
             ->assertDownload('partners-all.xls');
+        $content = $export->streamedContent();
+
+        $this->assertStringContainsString('Link Zalo/ Telegrams', $content);
+        $this->assertStringContainsString('https://zalo.me/doitac', $content);
+        $this->assertStringContainsString('https://t.me/doitac', $content);
     }
 
     public function test_partner_import_template_is_downloadable(): void
@@ -171,7 +179,9 @@ class PartnerManagementTest extends TestCase
             ->streamedContent();
 
         $this->assertStringContainsString('Tên đối tác', $template);
-        $this->assertStringContainsString('Người liên hệ', $template);
+        $this->assertStringContainsString('Link Zalo/ Telegrams', $template);
+        $this->assertStringContainsString('Người liên hệ Zalo', $template);
+        $this->assertStringContainsString('Link hỗ trợ Tele', $template);
         $this->assertStringContainsString('Điện thoại', $template);
         $this->assertStringContainsString('Email', $template);
         $this->assertStringContainsString('Địa chỉ', $template);
@@ -180,7 +190,7 @@ class PartnerManagementTest extends TestCase
 
         $file = UploadedFile::fake()->createWithContent(
             'partners.csv',
-            "Tên đối tác,Người liên hệ,Điện thoại,Email,Địa chỉ,Ghi chú,Trạng thái\nĐối tác nhập,Liên hệ mới,0900000000,import@example.com,Hà Nội,Ghi chú,Hoạt động\n"
+            "Tên đối tác,Link Zalo/ Telegrams,Người liên hệ Zalo,Link hỗ trợ Tele,Điện thoại,Email,Địa chỉ,Ghi chú,Trạng thái\nĐối tác nhập,https://zalo.me/doitac,Liên hệ Zalo,https://t.me/doitac,0900000000,import@example.com,Hà Nội,Ghi chú,Hoạt động\n"
         );
 
         $this->actingAs($admin)
@@ -189,7 +199,13 @@ class PartnerManagementTest extends TestCase
 
         $this->assertDatabaseHas('partners', [
             'name' => 'Đối tác nhập',
-            'contact_name' => 'Liên hệ mới',
+            'zalo_telegram_link' => 'https://zalo.me/doitac',
+            'contact_name' => 'Liên hệ Zalo',
+            'telegram_support_link' => 'https://t.me/doitac',
+            'phone' => '0900000000',
+            'email' => 'import@example.com',
+            'address' => 'Hà Nội',
+            'notes' => 'Ghi chú',
             'is_active' => true,
         ]);
     }

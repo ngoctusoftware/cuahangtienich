@@ -12,7 +12,9 @@ class Partner extends Model
 
     protected $fillable = [
         'name',
+        'zalo_telegram_link',
         'contact_name',
+        'telegram_support_link',
         'phone',
         'email',
         'address',

@@ -15,8 +15,16 @@
                 <input id="partner-name" type="text" name="name" class="form-control" value="{{ old('name', $partner->name) }}" required>
             </div>
             <div class="col-md-6">
-                <label for="partner-contact-name" class="form-label">Người liên hệ</label>
+                <label for="partner-zalo-telegram-link" class="form-label">Link Zalo/ Telegrams</label>
+                <input id="partner-zalo-telegram-link" type="text" name="zalo_telegram_link" class="form-control" value="{{ old('zalo_telegram_link', $partner->zalo_telegram_link) }}">
+            </div>
+            <div class="col-md-6">
+                <label for="partner-contact-name" class="form-label">Người liên hệ Zalo</label>
                 <input id="partner-contact-name" type="text" name="contact_name" class="form-control" value="{{ old('contact_name', $partner->contact_name) }}">
+            </div>
+            <div class="col-md-6">
+                <label for="partner-telegram-support-link" class="form-label">Link hỗ trợ Tele</label>
+                <input id="partner-telegram-support-link" type="text" name="telegram_support_link" class="form-control" value="{{ old('telegram_support_link', $partner->telegram_support_link) }}">
             </div>
             <div class="col-md-6">
                 <label for="partner-phone" class="form-label">Điện thoại</label>

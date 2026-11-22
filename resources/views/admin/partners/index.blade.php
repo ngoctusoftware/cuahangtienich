@@ -71,7 +71,7 @@
             </tbody>
         </table>
     </div>
-    <div class="p-3">{{ $partners->links() }}</div>
+    <div class="px-3">{{ $partners->links('pagination::bootstrap-5') }}</div>
 </div>
 @php($importType = 'partners')
 @include('admin.partials.excel-import-modal')

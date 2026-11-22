@@ -104,7 +104,9 @@ class PartnerController extends Controller
     {
         return $request->validate([
             'name' => 'required|string|max:255',
+            'zalo_telegram_link' => 'nullable|string|max:2048',
             'contact_name' => 'nullable|string|max:255',
+            'telegram_support_link' => 'nullable|string|max:2048',
             'phone' => 'nullable|string|max:30',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string|max:1000',
